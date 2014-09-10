@@ -11,6 +11,7 @@
 	1. [Structs](#anchor1.1)
 	2. [Arrays](#anchor1.2)
 	3. [Pointers](#anchor1.3)
+	4. [Pointers to Structs](#anchor1.4)
 
 ---
 ---
@@ -112,3 +113,135 @@
 	char **argv
 	
 	// argv -> "arglist" -> "hello" -> welcome" -> "happy"
+	
+---
+
+## 9/9/14
+
+## [Pointers to Structs](id:anchor1.4)
+
+	struct Point *p;
+	struct Point point;
+	
+	p = &point;
+	p -> x
+	
+### Unions
+
+	Union F {
+		int ipart;
+		char cpart(sizeof(int));
+	} u = 3;
+	
+	u.ipart = 37;
+	
+- The initializer of the union is defined as the frst member of the union
+- The size of the the union is the size of the largest member of the union
+
+### Enumeration Types
+
+	enum boolean {False, True};
+	enum Trafficlight{red, yellow, green};
+	enum Trafficlight a, b, c;
+	
+	a = red;
+	b = green;
+	
+	enum Months {
+		jan = 1; feb, mar, apr, may, jun
+		};
+		
+	enum boolean TF;
+	int x;
+	
+	TF = true;
+	x = TF;
+	TF = x;
+	TF = 5; // C lets you do this
+	
+### Typedefs
+
+	typedef char *charptr;
+	charptr s;
+	s = "hello";
+	
+	typedef int length;
+	length a, b;
+	length* ptr;
+	typedef char* string;
+	string p;
+	
+### Functions
+
+	int gcd(int a, int b) {
+		if (b == 0)
+			return a;
+		else
+			return gcd(b, a%b);
+	}
+	
+- Functions in C are *pass-by-value*: they duplicate a copy of the value being sent in the receiving function.
+- In order to modify the value of a variable, you must pass in a pointer to the address of that variable
+
+		void F(int *p) {
+			*p = 3;
+		}
+		
+		x = 7;
+		F(&x);
+		
+- Do not return a pointer to the local variable, return the local variable
+
+### Arrow Notation
+
+	p->x
+	(*px).x
+	
+The above two statements are equivalent.
+
+
+### Pointer Arithmetic
+
+	int x;
+	int *p;
+	
+	p = &x;
+	
+	p = p + 1;
+	p = p + sizeof(x);
+	
+The last two statements are equivalent
+
+#### List of Pointer Operators
+
+	++p
+	--p
+	p++
+	p--
+	*p
+	p1 = p2
+	p1 == p2
+	p1 != p2
+	p += i
+	p -= i
+	p + i
+	i + p
+	p1 - p2
+	p[i]
+	
+- C does not care if you put in negative subscripts
+
+		p = &x;
+		p = p + 1;
+		p[-1] = 7; // x = 7
+		
+### Pointer to Function
+
+	int x;
+	int f(int)
+	int (*pg)(int);
+	int *f2(int);
+	
+	pg = f;
+	x = (*pg)(3);
+	x = pg(3);
