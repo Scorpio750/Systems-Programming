@@ -238,10 +238,9 @@ The last two statements are equivalent
 ### Pointer to Function
 
 	int x;
-	int f(int)
+	int f(int);
 	int (*pg)(int);
 	int *f2(int);
 	
-	pg = f;
-	x = (*pg)(3);
-	x = pg(3);
+	pg = f; // pg now points to f
+	x = (*pg)(3); // assigns to x the return value of the dereferenced function
