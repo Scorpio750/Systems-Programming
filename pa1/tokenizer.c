@@ -8,6 +8,8 @@
  */
 
 struct TokenizerT_ {
+	char *delimiters;
+	char *tokenstream;
 };
 
 typedef struct TokenizerT_ TokenizerT;
@@ -27,8 +29,12 @@ typedef struct TokenizerT_ TokenizerT;
  */
 
 TokenizerT *TKCreate(char *separators, char *ts) {
-
-  return NULL;
+	delimiters = separators;
+	tokenstream = ts;
+	if (Tokenizer != NULL)
+		return TokenizerT;
+	else
+		return NULL;
 }
 
 /*
@@ -67,6 +73,6 @@ char *TKGetNextToken(TokenizerT *tk) {
  */
 
 int main(int argc, char **argv) {
-
-  return 0;
+	
+	return 0;
 }
