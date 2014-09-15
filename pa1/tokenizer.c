@@ -32,8 +32,14 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	TokenizerT *Tokimonsta;
 	
 	Tokimonsta = (TokenizerT*)malloc(sizeof(TokenizerT));
-	Tokimonsta->delimiters = separators;
-	Tokimonsta->tokenstream = ts;
+	Tokimonsta->delimiters = (char*)malloc(sizeof(separators));
+	Tokimonsta->tokenstream = (char*)malloc(sizeof(ts));
+
+	// copy strings into TKinstance so they are immutable
+	strcpy(Tokimonsta->delimiters, separators);
+	strcpy(Tokimonsta->tokenstream, ts);
+
+
 	if (Tokimonsta != NULL)
 		return Tokimonsta;
 	else
@@ -48,6 +54,9 @@ TokenizerT *TKCreate(char *separators, char *ts) {
  */
 
 void TKDestroy(TokenizerT *tk) {
+	free(tk->delimiters);
+	free(tk->tokenstream);
+	free(tk);
 }
 
 /*
