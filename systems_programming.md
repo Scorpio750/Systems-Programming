@@ -244,3 +244,49 @@ The last two statements are equivalent
 	
 	pg = f; // pg now points to f
 	x = (*pg)(3); // assigns to x the return value of the dereferenced function
+	
+---
+
+## 9/11/14
+
+	# include <stdio.h>
+	
+	int printf(const char *EMT,...);
+	
+	"This is a char %c \n";
+
+
+$$\begin{matrix} \%c \;\text{char} & \%u \;\text{unsigned integer} & \%f \;\text{float} & \%\% \;\text{percent} \\\ \%s \;\text{string} & \%o & \%g \\\ \%d \;\text{decimal} & & \%e \end{matrix}$$
+
+
+### List of String Commands
+
+	#include <string.h>
+	
+	strcpy(char *DST, const char *src);
+	// copies first n characters from the first string into the second string 
+	strncpy
+	// concatenates strings
+	// concatenates first n characters from first string with second string. Returns string. 	
+	strcat 	
+	strncat
+	// same thing as in java 
+	strcmp 
+	
+### Standard Library
+
+	#include <stdlib.h>
+	
+	void* malloc(size_T size);
+	//changes size of previously malloc-ed memory
+	void* realloc(void*ptr, size_T size); 
+	//same as malloc but clears memory first
+	void* calloc();
+	void free(void*);
+	
+	// example
+	char *s;
+	s = (char *)malloc(strlen(argv[3] + 1);
+	
+- argv[0] tells you the file size
+- Free everything you malloc, otherwise you create a *memory leak*

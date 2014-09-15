@@ -29,10 +29,13 @@ typedef struct TokenizerT_ TokenizerT;
  */
 
 TokenizerT *TKCreate(char *separators, char *ts) {
-	delimiters = separators;
-	tokenstream = ts;
-	if (Tokenizer != NULL)
-		return TokenizerT;
+	TokenizerT *Tokimonsta;
+	
+	Tokimonsta = (TokenizerT*)malloc(sizeof(TokenizerT));
+	Tokimonsta->delimiters = separators;
+	Tokimonsta->tokenstream = ts;
+	if (Tokimonsta != NULL)
+		return Tokimonsta;
 	else
 		return NULL;
 }
