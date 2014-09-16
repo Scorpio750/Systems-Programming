@@ -100,8 +100,54 @@ char *TKGetNextToken(TokenizerT *tk) {
 }
 
 char *escapeKeys(char *token) {
+	char* esc_token = (char*)malloc(sizeof(token));
+	char temp;
+	int j = 0;
+
 	for (int i = 0; i < strlen(token); i++) {
-		if (token[i] == "\n"	
+		if (token[i] == '\\') {
+			if (token[i+1] == '\\') {
+				temp = 0x5c;
+			}
+			else if (token[i+1] == 'n') {
+				temp = 0x0a;
+				i++;
+			}
+			else if (token[i+1] == 't') {
+				temp = 0x09;
+				i++;
+			}
+			else if (token[i+1] == 'v') {
+				temp = 0x0b;
+				i++;
+			}
+			else if (token[i+1] == 'b') {
+				temp = 0x08;
+				i++;
+			}
+			else if (token[i+1] == 'r') {
+				temp = 0x0d;
+				i++;
+			}
+			else if (token[i+1] == 'f') {
+				temp = 0x0c;
+				i++;
+			}
+			else if (token[i+1] == 'a') {
+				temp = 0x07;
+				i++;
+			}
+			else if (token[i+1] == '\"') {
+				temp = 0x22;
+				i++;
+			}
+		}
+		else {
+			temp = token[i];
+		}
+		
+		esc_token[j] = temp;
+		j++;
 	}
 }
 
