@@ -2,6 +2,12 @@
  * tokenizer.c
  */
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define true 1
+#define false 0
+typedef unsigned char bool;
 
 /*
  * Tokenizer type.  You need to fill in the type as part of your implementation.
@@ -10,6 +16,7 @@
 struct TokenizerT_ {
 	char *delimiters;
 	char *tokenstream;
+	int tkstart;
 };
 
 typedef struct TokenizerT_ TokenizerT;
@@ -30,7 +37,7 @@ typedef struct TokenizerT_ TokenizerT;
 
 TokenizerT *TKCreate(char *separators, char *ts) {
 	TokenizerT *Tokimonsta;
-	
+
 	Tokimonsta = (TokenizerT*)malloc(sizeof(TokenizerT));
 	Tokimonsta->delimiters = (char*)malloc(sizeof(separators));
 	Tokimonsta->tokenstream = (char*)malloc(sizeof(ts));
@@ -38,7 +45,7 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	// copy strings into TKinstance so they are immutable
 	strcpy(Tokimonsta->delimiters, separators);
 	strcpy(Tokimonsta->tokenstream, ts);
-
+	Tokimonsta->tkstart = 0;
 
 	if (Tokimonsta != NULL)
 		return Tokimonsta;
@@ -56,6 +63,7 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 void TKDestroy(TokenizerT *tk) {
 	free(tk->delimiters);
 	free(tk->tokenstream);
+	free(tk->tkstart);
 	free(tk);
 }
 
@@ -70,10 +78,31 @@ void TKDestroy(TokenizerT *tk) {
  *
  * You need to fill in this function as part of your implementation.
  */
-
 char *TKGetNextToken(TokenizerT *tk) {
+	char *nextToken;
+	bool found_delim;
+	int tkptr = tk->tkstart;
 
-  return NULL;
+	do {
+		for (int i = 0; i < strlen(tk->delimiters); i++) {
+			if (tk->delimiters[i] == tk->tokenstream[tkptr]) {
+				strncpy(nextToken, tk->tokenstream, tkptr - tk->tkstart);
+				found_delim = true;
+			}
+		}
+		tkptr++;
+	} while (found_delim == false);
+
+	nextToken = escapeKeys(nextToken);
+
+	tk->tkstart = tkptr;
+	return nextToken;
+}
+
+char *escapeKeys(char *token) {
+	for (int i = 0; i < strlen(token); i++) {
+		if (token[i] == "\n"	
+	}
 }
 
 /*
@@ -85,6 +114,8 @@ char *TKGetNextToken(TokenizerT *tk) {
  */
 
 int main(int argc, char **argv) {
-	
+	TokenizerT *TokiMonsta = TKCreate(argv[1], argv[2]);
+
+	TKDestroy(TokiMonsta);
 	return 0;
 }
