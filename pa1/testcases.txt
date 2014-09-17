@@ -1,0 +1,47 @@
+Assignment 1
+
+Patrick Wu
+
+1.	cmd input:	"\n"	"hello\nworld"
+	You get:	"\n"	"hello\nworld"
+	Output:		hello
+				world
+
+2.	cmd input:	"m"		"mmmmmm"
+	You get:	"m"		"mmmmmm"
+	Output:		
+
+3.	cmd input:	"e\v\t"	"hel\vlo \tworld"
+	You get:	"e\v\t"	"hel\vlo \tworld"
+	Output:		h
+				l
+				lo
+
+				world
+
+4.	cmd input:	""	"You have to print out hex of \a"
+	You get:		""	"You have to print out hex of \a"
+	Output:		You have to print out hex of [0x07]
+
+5.	cmd input:	"\n"	""
+	You get:	"\n"	""
+	Output:		
+
+6.	cmd input:	"\k"	"hello\kworld"
+	You get:	"\k"	"hello\kworld"
+	Output:		hello
+				world
+
+7.	cmd input:	"k"		"hello\kworld"
+	You get:	"k"		"hello\kworld"
+	Output:		hello
+				world
+
+8.	cmd input: "\\\\"	"\\\\\\hello\\\\\\world\\\\"
+	You get:	"\\"	"\\\hello\\\world\\"
+	Output:		hello
+				world
+
+9.	cmd input:	""	"\\\""
+	You get:	""	"\""
+	Output: [0x22]

@@ -81,13 +81,15 @@ void TKDestroy(TokenizerT *tk) {
  * You need to fill in this function as part of your implementation.
  */
 char *TKGetNextToken(TokenizerT *tk) {
-	char *nextToken = NULL;
+	char *nextToken;
 	bool found_delim;
 	int tkptr = tk->tkstart, i;
 
 	do {
 		for (i = 0; i < strlen(tk->delimiters); i++) {
+			/* finds delimiter match */
 			if (tk->delimiters[i] == tk->tokenstream[tkptr]) {
+				nextToken = malloc(sizeof(char) * 100);
 				strncpy(nextToken, tk->tokenstream, tkptr - tk->tkstart);
 				found_delim = true;
 			}
@@ -96,7 +98,12 @@ char *TKGetNextToken(TokenizerT *tk) {
 	} while (found_delim == false);
 
 	tk->tkstart = tkptr;
-	return nextToken;
+	if (nextToken != NULL)	{
+		return nextToken;
+	}
+	else {
+		return 0;
+	}
 }
 
 char *escapeKeys(char *token) {
@@ -162,7 +169,12 @@ char *escapeKeys(char *token) {
 
 int main(int argc, char **argv) {
 	TokenizerT *TokiMonsta = TKCreate(argv[1], argv[2]);
-
+	while (TokiMonsta->tkstart < strlen(TokiMonsta->tokenstream)) {
+		char * delim_token = (char*)TKGetNextToken(TokiMonsta);
+		if (!strcmp(delim_token,"0"))	{
+			printf("%s\n", delim_token);
+		}
+	}
 	TKDestroy(TokiMonsta);
 	return 0;
 }
