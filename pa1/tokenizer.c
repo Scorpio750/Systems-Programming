@@ -35,6 +35,8 @@ typedef struct TokenizerT_ TokenizerT;
  * You need to fill in this function as part of your implementation.
  */
 
+char* escapeKeys(char *token);
+
 TokenizerT *TKCreate(char *separators, char *ts) {
 	TokenizerT *Tokimonsta;
 
@@ -42,10 +44,11 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	Tokimonsta->delimiters = (char*)malloc(sizeof(separators));
 	Tokimonsta->tokenstream = (char*)malloc(sizeof(ts));
 
-	// copy strings into TKinstance so they are immutable
+	/* copy strings into TKinstance so they are immutable */
 	strcpy(Tokimonsta->delimiters, separators);
 	strcpy(Tokimonsta->tokenstream, ts);
 	Tokimonsta->tkstart = 0;
+	Tokimonsta->tokenstream = escapeKeys(Tokimonsta->tokenstream);
 
 	if (Tokimonsta != NULL)
 		return Tokimonsta;
@@ -63,7 +66,6 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 void TKDestroy(TokenizerT *tk) {
 	free(tk->delimiters);
 	free(tk->tokenstream);
-	free(tk->tkstart);
 	free(tk);
 }
 
@@ -79,12 +81,12 @@ void TKDestroy(TokenizerT *tk) {
  * You need to fill in this function as part of your implementation.
  */
 char *TKGetNextToken(TokenizerT *tk) {
-	char *nextToken;
+	char *nextToken = NULL;
 	bool found_delim;
-	int tkptr = tk->tkstart;
+	int tkptr = tk->tkstart, i;
 
 	do {
-		for (int i = 0; i < strlen(tk->delimiters); i++) {
+		for (i = 0; i < strlen(tk->delimiters); i++) {
 			if (tk->delimiters[i] == tk->tokenstream[tkptr]) {
 				strncpy(nextToken, tk->tokenstream, tkptr - tk->tkstart);
 				found_delim = true;
@@ -93,8 +95,6 @@ char *TKGetNextToken(TokenizerT *tk) {
 		tkptr++;
 	} while (found_delim == false);
 
-	nextToken = escapeKeys(nextToken);
-
 	tk->tkstart = tkptr;
 	return nextToken;
 }
@@ -102,9 +102,9 @@ char *TKGetNextToken(TokenizerT *tk) {
 char *escapeKeys(char *token) {
 	char* esc_token = (char*)malloc(sizeof(token));
 	char temp;
-	int j = 0;
+	int i = 0, j = 0;
 
-	for (int i = 0; i < strlen(token); i++) {
+	for (i = 0; i < strlen(token); i++) {
 		if (token[i] == '\\') {
 			if (token[i+1] == '\\') {
 				temp = 0x5c;
@@ -149,6 +149,7 @@ char *escapeKeys(char *token) {
 		esc_token[j] = temp;
 		j++;
 	}
+	return esc_token;
 }
 
 /*

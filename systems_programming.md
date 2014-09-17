@@ -167,8 +167,8 @@
 	
 	typedef int length;
 	length a, b;
-	length* ptr;
-	typedef char* string;
+	length *ptr;
+	typedef char *string;
 	string p;
 	
 ### Functions
@@ -178,7 +178,7 @@
 			return a;
 		else
 			return gcd(b, a%b);
-	}
+		}
 	
 - Functions in C are *pass-by-value*: they duplicate a copy of the value being sent in the receiving function.
 - In order to modify the value of a variable, you must pass in a pointer to the address of that variable
@@ -273,7 +273,7 @@ $$\begin{matrix} \%c \;\text{char} & \%u \;\text{unsigned integer} & \%f \;\text
 	// same thing as in java 
 	strcmp 
 	
-### Standard Library
+## Standard Library
 
 	#include <stdlib.h>
 	
@@ -290,3 +290,50 @@ $$\begin{matrix} \%c \;\text{char} & \%u \;\text{unsigned integer} & \%f \;\text
 	
 - argv[0] tells you the file size
 - Free everything you malloc, otherwise you create a *memory leak*
+
+---
+
+## 9/16/14
+
+## Quicksort in C
+
+- C provides a generic quicksort function, however you have to specify the following params:
+	
+		void qsort(void *base, \
+			size_T num_elems, \
+			size_T elem_size, \
+			int (*compar)(const void *, const void *))
+- In this case, the final param is a comparison function that you have to send it. The ugly syntax is necessary to cast the comparison function into a pointer to that function
+	
+- C has a comma operator which allows you to string a series of expressions together
+	- The value of that expression is the rightmost expression
+
+Example function:
+			
+	int main() {
+		float array[200];
+	
+		qsort( array, \
+			count, \
+			sizeof(float), \
+			(int (*)(const void *, const void *) )numcmp );
+		}
+
+### Header Files
+
+- In a C program there are two kinds of files, source files, and header files
+	- sources files are the *.c files
+	- header files are included as *.h files
+- **static** functions are used to prevent the modified function's access from other programs
+	- **static** can be used *inside* a function to modify variables. This means that the scope of that variable is limited to the function's it's within.
+	
+			static void foo() {
+				static int is_initialized = 0;
+				
+				if (!is_initialized) {
+					is_initialized = 1;
+					}
+					//do stuff
+				}
+
+	- When foo is called again, is_initialized will be the same variable in the same space in memory; the statement execution will be moved to the top of the memory instructions by the compiler. The actual *function* does not execute this statement.
