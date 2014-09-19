@@ -12,6 +12,11 @@
 	2. [Arrays](#anchor1.2)
 	3. [Pointers](#anchor1.3)
 	4. [Pointers to Structs](#anchor1.4)
+	5. [Strings](#anchor1.5)
+	6. [Quicksort in C](#anchor1.6)
+	7. [Memory Manipulation](#anchor1.7)
+	8. [Constants](#anchor1.8)
+	9. [Modularization](#anchor1.9)
 
 ---
 ---
@@ -249,6 +254,8 @@ The last two statements are equivalent
 
 ## 9/11/14
 
+## [Strings](id:anchor1.5)
+
 	# include <stdio.h>
 	
 	int printf(const char *EMT,...);
@@ -295,7 +302,7 @@ $$\begin{matrix} \%c \;\text{char} & \%u \;\text{unsigned integer} & \%f \;\text
 
 ## 9/16/14
 
-## Quicksort in C
+## [Quicksort in C](id:anchor1.6)
 
 - C provides a generic quicksort function, however you have to specify the following params:
 	
@@ -337,3 +344,59 @@ Example function:
 				}
 
 	- When foo is called again, is_initialized will be the same variable in the same space in memory; the statement execution will be moved to the top of the memory instructions by the compiler. The actual *function* does not execute this statement.
+
+---
+## 9/18/14
+
+## [Memory Manipulation](id:anchor1.7)
+
+	void * memcpy(void * dst, const void * src, size_t len);
+	int memcmp(const void * s1, const void * s2, size_t len);
+		/* Return values
+		<0 if s1 < s2
+		 0 if s1 == s2
+		>0 s1 > s2
+		
+	void * memset(void * s, int c, size_t len)
+		/ * sets 
+		
+### [Constants](id:anchor1.8)
+
+- **const** values *must* have an initializer
+
+		const int pi = 3.1415
+		const int * ptr = &pi;
+		int x = 35;
+		
+		ptr = &x; // NO
+		*ptr = 22/7 // YES
+		
+		const int * const ptr = &x;
+		/* cannot change the dereferenced value OR the pointer */
+
+## [Modularization](id:anchor1.9)
+
+- Advantages to modularization:
+	- Localization of specialization
+	- Makes changes much easier because of localization
+	- Manageability
+	- Allows for encapsulation
+	
+## Files
+
+	#include <stdio.h>
+	
+	FILE * fopen(const char * path, const char * mode);
+	flags:
+	
+	-r
+	-r+
+	-w
+	-w+
+	-a
+	-a+
+	
+	int fread(void * ptr, \
+			 	size_t size, \
+			 	size_t num_elems, \
+			 	file * stream);

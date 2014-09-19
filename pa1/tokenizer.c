@@ -49,6 +49,8 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	strcpy(Tokimonsta->tokenstream, ts);
 	Tokimonsta->tkstart = 0;
 	Tokimonsta->tokenstream = escapeKeys(Tokimonsta->tokenstream);
+	
+	printf("%s\n", Tokimonsta->tokenstream);
 
 	if (Tokimonsta != NULL)
 		return Tokimonsta;
@@ -86,6 +88,10 @@ char *TKGetNextToken(TokenizerT *tk) {
 	int tkptr = tk->tkstart, i;
 
 	do {
+		/* breaks out of while loop if it reaches end of stream */
+		if (tk->tokenstream[tkptr] == '\0') {
+			break;
+		}
 		for (i = 0; i < strlen(tk->delimiters); i++) {
 			/* finds delimiter match */
 			if (tk->delimiters[i] == tk->tokenstream[tkptr]) {
@@ -93,11 +99,14 @@ char *TKGetNextToken(TokenizerT *tk) {
 				strncpy(nextToken, tk->tokenstream, tkptr - tk->tkstart);
 				found_delim = true;
 			}
+			
 		}
 		tkptr++;
 	} while (found_delim == false);
 
+	/* sets starting token equal to pointer */
 	tk->tkstart = tkptr;
+	printf("%c\n", tk->tkstart); 
 	if (nextToken != NULL)	{
 		return nextToken;
 	}
@@ -168,11 +177,17 @@ char *escapeKeys(char *token) {
  */
 
 int main(int argc, char **argv) {
-	TokenizerT *TokiMonsta = TKCreate(argv[1], argv[2]);
+	TokenizerT *TokiMonsta;
+	
+	if (argc != 3) {
+		printf("Invalid arguments.\n");
+		return 0;
+	}
+	TokiMonsta  = TKCreate(argv[1], argv[2]);
 	while (TokiMonsta->tkstart < strlen(TokiMonsta->tokenstream)) {
 		char * delim_token = (char*)TKGetNextToken(TokiMonsta);
-		if (!strcmp(delim_token,"0"))	{
-			printf("%s\n", delim_token);
+		if ((strcmp(delim_token,"0")) != 0)	{
+			printf("%s\n%c", delim_token, TokiMonsta->tokenstream[TokiMonsta->tkstart]);
 		}
 	}
 	TKDestroy(TokiMonsta);
