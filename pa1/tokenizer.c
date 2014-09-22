@@ -42,8 +42,8 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	TokenizerT *Tokimonsta;
 
 	Tokimonsta = (TokenizerT*)malloc(sizeof(TokenizerT));
-	Tokimonsta->delimiters = (char*)malloc(sizeof(separators));
-	Tokimonsta->tokenstream = (char*)malloc(sizeof(ts));
+	Tokimonsta->delimiters = (char*)malloc(strlen(separators)+1);
+	Tokimonsta->tokenstream = (char*)malloc(strlen(ts)+1);
 
 	/* copy strings into TKinstance so they are immutable */
 	strcpy(Tokimonsta->delimiters, separators);
@@ -94,7 +94,7 @@ char *TKGetNextToken(TokenizerT *tk) {
 		/* breaks out of while loop if it reaches end of stream */
 		if (tk->tokenstream[tkptr] == '\0') {
 			nextToken = realloc(nextToken, sizeof(char) * 100);
-			strcpy(nextToken, tk->tokenstream[tk->tkstart]);
+			strcpy(nextToken, &tk->tokenstream[tk->tkstart]);
 			printf("%d", found_delim);
 
 			break;
