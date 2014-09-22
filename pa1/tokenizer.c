@@ -51,8 +51,6 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	Tokimonsta->tkstart = 0;
 	Tokimonsta->tokenstream = escapeKeys(Tokimonsta->tokenstream);
 
-	printf("%s\n", Tokimonsta->tokenstream);
-
 	if (Tokimonsta != NULL)
 		return Tokimonsta;
 	else
@@ -90,13 +88,10 @@ char *TKGetNextToken(TokenizerT *tk) {
 
 	do {
 
-		printf("%d\n", tkptr);
 		/* breaks out of while loop if it reaches end of stream */
 		if (tk->tokenstream[tkptr] == '\0') {
 			nextToken = realloc(nextToken, sizeof(char) * 100);
 			strcpy(nextToken, &tk->tokenstream[tk->tkstart]);
-			printf("%d", found_delim);
-
 			break;
 		}
 
@@ -104,9 +99,8 @@ char *TKGetNextToken(TokenizerT *tk) {
 			/* finds delimiter match */
 			if (tk->delimiters[i] == tk->tokenstream[tkptr]) {
 				nextToken = realloc(nextToken, sizeof(char) * 100);
-				strncpy(nextToken, tk->tokenstream, tkptr - tk->tkstart);
+				strncpy(nextToken, &tk->tokenstream[tk->tkstart], tkptr - tk->tkstart);
 				found_delim = true;
-				printf("%d", found_delim);
 			}
 
 		}
@@ -115,7 +109,6 @@ char *TKGetNextToken(TokenizerT *tk) {
 
 	/* sets starting token equal to pointer */
 	tk->tkstart = tkptr;
-	printf("%c\n", tk->tokenstream[tk->tkstart]); 
 	if (nextToken != NULL)	{
 		nextToken = return_delims(nextToken);
 		return nextToken;
