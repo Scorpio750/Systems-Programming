@@ -36,6 +36,7 @@ typedef struct TokenizerT_ TokenizerT;
  */
 
 char* escapeKeys(char *token);
+char* return_delims(char * token);
 
 TokenizerT *TKCreate(char *separators, char *ts) {
 	TokenizerT *Tokimonsta;
@@ -49,7 +50,7 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	strcpy(Tokimonsta->tokenstream, ts);
 	Tokimonsta->tkstart = 0;
 	Tokimonsta->tokenstream = escapeKeys(Tokimonsta->tokenstream);
-	
+
 	printf("%s\n", Tokimonsta->tokenstream);
 
 	if (Tokimonsta != NULL)
@@ -83,31 +84,40 @@ void TKDestroy(TokenizerT *tk) {
  * You need to fill in this function as part of your implementation.
  */
 char *TKGetNextToken(TokenizerT *tk) {
-	char *nextToken;
-	bool found_delim;
+	char *nextToken = malloc(sizeof(char) * 100);
+	bool found_delim = false;
 	int tkptr = tk->tkstart, i;
 
 	do {
+
+		printf("%d\n", tkptr);
 		/* breaks out of while loop if it reaches end of stream */
 		if (tk->tokenstream[tkptr] == '\0') {
+			nextToken = realloc(nextToken, sizeof(char) * 100);
+			strcpy(nextToken, tk->tokenstream[tk->tkstart]);
+			printf("%d", found_delim);
+
 			break;
 		}
+
 		for (i = 0; i < strlen(tk->delimiters); i++) {
 			/* finds delimiter match */
 			if (tk->delimiters[i] == tk->tokenstream[tkptr]) {
-				nextToken = malloc(sizeof(char) * 100);
+				nextToken = realloc(nextToken, sizeof(char) * 100);
 				strncpy(nextToken, tk->tokenstream, tkptr - tk->tkstart);
 				found_delim = true;
+				printf("%d", found_delim);
 			}
-			
+
 		}
 		tkptr++;
 	} while (found_delim == false);
 
 	/* sets starting token equal to pointer */
 	tk->tkstart = tkptr;
-	printf("%c\n", tk->tkstart); 
+	printf("%c\n", tk->tokenstream[tk->tkstart]); 
 	if (nextToken != NULL)	{
+		nextToken = return_delims(nextToken);
 		return nextToken;
 	}
 	else {
@@ -116,7 +126,7 @@ char *TKGetNextToken(TokenizerT *tk) {
 }
 
 char *escapeKeys(char *token) {
-	char* esc_token = (char*)malloc(sizeof(token));
+	char* esc_token = (char*)malloc(strlen(token) + 1);
 	char temp;
 	int i = 0, j = 0;
 
@@ -161,11 +171,19 @@ char *escapeKeys(char *token) {
 		else {
 			temp = token[i];
 		}
-		
+
 		esc_token[j] = temp;
 		j++;
 	}
 	return esc_token;
+}
+
+/* insert a string containing the hex values for the escape keys into the deliminited token */
+char *return_delims(char * token) {
+	char *delimed_token = malloc(strlen(token) + 1);
+	char * temp = (malloc(sizeof(char) * 100));
+	delimed_token = token;
+	return delimed_token;
 }
 
 /*
@@ -178,16 +196,16 @@ char *escapeKeys(char *token) {
 
 int main(int argc, char **argv) {
 	TokenizerT *TokiMonsta;
-	
+
 	if (argc != 3) {
 		printf("Invalid arguments.\n");
 		return 0;
 	}
 	TokiMonsta  = TKCreate(argv[1], argv[2]);
 	while (TokiMonsta->tkstart < strlen(TokiMonsta->tokenstream)) {
-		char * delim_token = (char*)TKGetNextToken(TokiMonsta);
+		char * delim_token = TKGetNextToken(TokiMonsta);
 		if ((strcmp(delim_token,"0")) != 0)	{
-			printf("%s\n%c", delim_token, TokiMonsta->tokenstream[TokiMonsta->tkstart]);
+			printf("%s\n", delim_token);
 		}
 	}
 	TKDestroy(TokiMonsta);
