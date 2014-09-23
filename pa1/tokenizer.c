@@ -49,7 +49,6 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	strcpy(Tokimonsta->delimiters, separators);
 	strcpy(Tokimonsta->tokenstream, ts);
 	Tokimonsta->tkstart = 0;
-	Tokimonsta->tokenstream = escapeKeys(Tokimonsta->tokenstream);
 
 	if (Tokimonsta != NULL)
 		return Tokimonsta;
@@ -110,6 +109,7 @@ char *TKGetNextToken(TokenizerT *tk) {
 	/* sets starting token equal to pointer */
 	tk->tkstart = tkptr;
 	if (nextToken != NULL)	{
+		tk->tokenstream = escapeKeys(tk->tokenstream);
 		nextToken = return_delims(nextToken);
 		return nextToken;
 	}
@@ -211,7 +211,6 @@ char *return_delims(char * token) {
 				buffer[0] = token[i];
 				buffer[1] = '\0';
 				temp = buffer;
-				printf("%s\n", temp);
 		}
 		strcat(delimed_token, temp);
 	}
