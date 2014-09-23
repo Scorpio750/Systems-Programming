@@ -174,8 +174,10 @@ char *escapeKeys(char *token) {
 /* insert a string containing the hex values for the escape keys into the deliminited token */
 char *return_delims(char * token) {
 	char *delimed_token = malloc(sizeof(char) * 100);
-	char * temp = (malloc(sizeof(char) * 10));
+	char * buffer = malloc(sizeof(char) * 10);
+	char* temp = NULL;
 	int i;
+	delimed_token[0] = '\0';
 	for (i = 0; i < strlen(token); i++) {
 		switch (token[i]) {
 			case 0x5c:
@@ -206,7 +208,10 @@ char *return_delims(char * token) {
 				temp = "[0x22]";
 				break;
 			default:
-				temp = &token[i];
+				buffer[0] = token[i];
+				buffer[1] = '\0';
+				temp = buffer;
+				printf("%s\n", temp);
 		}
 		strcat(delimed_token, temp);
 	}
