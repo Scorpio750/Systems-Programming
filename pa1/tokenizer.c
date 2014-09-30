@@ -49,6 +49,7 @@ TokenizerT *TKCreate(char *separators, char *ts) {
 	strcpy(Tokimonsta->delimiters, separators);
 	strcpy(Tokimonsta->tokenstream, ts);
 	Tokimonsta->tkstart = 0;
+	Tokimonsta->delimiters = escapeKeys(Tokimonsta->delimiters);
 
 	if (Tokimonsta != NULL)
 		return Tokimonsta;

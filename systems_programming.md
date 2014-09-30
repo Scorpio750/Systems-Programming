@@ -400,3 +400,87 @@ Example function:
 			 	size_t size, \
 			 	size_t num_elems, \
 			 	file * stream);
+			 	
+---
+## 9/24/14
+
+### Makefiles
+
+	#CC		= cc
+	CC		= gcc
+	ROOT	= /grad/users/morbius/cs214
+	#ROOT 	= /u
+	COMPILE	= $(CC)
+	
+	all: buncha shit
+	
+	calloc5: calloc5.c
+		$(COMPILE) -g -o calloc5 calloc5.c
+	
+	malloc5: malloc5.c
+		$(COMPILE) -g -o malloc5 malloc5.c
+	
+	factorial: main.o factorial.o
+		$(COMPILE) -g -o factorial main
+	
+	main.o: main.c factorial.h
+		$(COMPILE) -c -g main.c
+		
+	factorial.o: factorial.h factorial.c
+		$(COMPILE) -c -g factorial.c
+	
+	color: color.c
+		$(COMPILE) -g -o color color.c
+
+- Dependencies in a Makefile are *unordered*
+- Your shell looks for the following files when you execute *make*:
+	
+		makefile
+		Makefile
+		s.makefile
+		s.Makefile
+
+- You can give *make* the following flags:
+
+		make 	-i keep going even when a command fails
+				-f FILENAME
+				-n list all commands it will execute w/o running them
+
+### File Systems and their related shit
+
+
+- inode (index node) contains meta-information about the file
+	- Managed by the OS
+	- Includes information such as date created, date modified, user, etc.
+
+#### Directory library Commands
+
+	#include <dirent.h>
+	dir * opendir(const char *);
+	struct dirent * readdir(dir*);
+	void seekdir(dir *, long offset);
+	long telldir(dir *);
+	int closedir(dir *);
+
+
+##### Example file
+
+	#include <dirent.h>
+	#include <errno.h>
+	#include <stdio.h>
+	#include <string.h>
+	
+	/* print files listed in a directory. */
+	
+	int main(int argc, char ** argv) {
+		DIR * dir;
+		struct dirent *entry;
+		extern int errno;
+		
+		if (argc < 2) {
+			printf("Specify dirname");
+			}
+		else {
+			printf("begin dirinfo list");
+			while ( (entry = readdir(dir)) != 0 ) {
+					printf("d_ino %d, d_off %d 
