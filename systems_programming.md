@@ -17,6 +17,7 @@
 	7. [Memory Manipulation](#anchor1.7)
 	8. [Constants](#anchor1.8)
 	9. [Modularization](#anchor1.9)
+	10. [Libraries](#anchor1.10)
 
 ---
 ---
@@ -484,3 +485,35 @@ Example function:
 			printf("begin dirinfo list");
 			while ( (entry = readdir(dir)) != 0 ) {
 					printf("d_ino %d, d_off %d 
+				
+---
+## 9/30/14
+
+## [Libraries](id:anchor1.10)
+
+- Can be either *static* or *dynamic*
+	- When you link from a *static* library, your program will pull out a separate copy of the object file information
+	- When you link from a *dynamic* library, you get the object file information only when you start the process and store it in your process address space
+	- *Static* libraries take up a lot of space
+	
+			STATIC
+				gcc -c means.c
+				ar -rv libmeans.a means.co
+				
+				---
+			
+			DYNAMIC
+				gcc -c -FPIC meand.c
+				gcc -shared - o libmeand.s meand.c
+
+## [System Calls](id:anchor1.11)
+
+- All operating systems provide means for direct requests from the systeml
+	- In *nix systems, this is also called the **kernel**
+	
+			#include <errno.h>
+			
+			 char * strerror(int errnum);
+			 void perror(const char * message);
+	- In C, all IO is done through file descriptors. [0] is stdin [1] is stdout, and [2] is stderr
+	- Sockets are also parsed through file descriptors
