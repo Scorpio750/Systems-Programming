@@ -10,8 +10,8 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df) {
 }
 
 void SLDestroy(SortedListPtr list) {
-	Node ptr;
-	Node prev;
+	Node ptr = malloc(sizeof(struct Node));
+	Node prev = malloc(sizeof(struct Node));;
 	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
 		list->destruct(ptr->data);
 		if (ptr != list->head) {
@@ -27,7 +27,23 @@ int SLInsert(SortedListPtr list, void *newObj) {
 		return 0;
 	}
 	else {
-		
+		Node ptr = malloc(sizeof(struct Node));
+		Node newNode = malloc(sizeof(struct Node));
+		newNode->data = newObj;
+
+		int cmpresult;
+		/* for each node, compares it and increments it based on the return value */
+		for (ptr = list->head; ptr != NULL; ptr = list->next) {
+			cmpresult = list->comparator(newObj, ptr->data);
+			if (cmpresult == -1) {
+				continue;
+			}
+			else {
+				newNode->next = ptr->next;	
+				ptr->next = newNode;
+				break;
+			}
+		}
 	}
 }
 
