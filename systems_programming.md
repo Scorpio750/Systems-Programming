@@ -498,13 +498,13 @@ Example function:
 	
 			STATIC
 				gcc -c means.c
-				ar -rv libmeans.a means.co
+				ar -rv libmeans.a means.c
 				
 				---
 			
 			DYNAMIC
 				gcc -c -FPIC meand.c
-				gcc -shared - o libmeand.s meand.c
+				gcc -shared - o libmeand.so meand.c
 
 ## [System Calls](id:anchor1.11)
 
@@ -517,3 +517,22 @@ Example function:
 			 void perror(const char * message);
 	- In C, all IO is done through file descriptors. [0] is stdin [1] is stdout, and [2] is stderr
 	- Sockets are also parsed through file descriptors
+	
+---
+
+## 10/2/14
+
+## [Debugging](id:anchor1.12)
+
+- The -g flag enables it to be debugged
+	- Used to be highly machine-specific/compiler-specific
+
+#### gdb Commands
+
+	print <varname>	// prints value of specified varname
+	n 				// evaluates and prints the next line in the program
+	backtrace		// self-explanatory
+
+- Core dumps are baaaaad
+	- gives you a core file; an image of a dead process
+	- Will give you a look at the stack frame, memory, etc.

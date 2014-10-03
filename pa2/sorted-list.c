@@ -4,16 +4,15 @@
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df) {
 	SortedListPtr SL = malloc(sizeof(struct SortedList));
 	SL->comparator = cf;
-	SL->destruct = df;
-	SL->head = NULL;
+	SL->destructo_disc = df;
 	return SL;
 }
 
 void SLDestroy(SortedListPtr list) {
-	Node ptr = malloc(sizeof(struct Node));
-	Node prev = malloc(sizeof(struct Node));;
+	Node *ptr = malloc(sizeof(Node));
+	Node *prev = malloc(sizeof(Node));;
 	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
-		list->destruct(ptr->data);
+		list->destructo_disc(ptr->data);
 		if (ptr != list->head) {
 			prev->next = NULL;
 			free(prev);
@@ -27,13 +26,14 @@ int SLInsert(SortedListPtr list, void *newObj) {
 		return 0;
 	}
 	else {
-		Node ptr = malloc(sizeof(struct Node));
-		Node newNode = malloc(sizeof(struct Node));
+		Node* ptr = malloc(sizeof(struct Node_));
+		Node* newNode = malloc(sizeof(Node));
+		int cmpresult;
+
 		newNode->data = newObj;
 
-		int cmpresult;
 		/* for each node, compares it and increments it based on the return value */
-		for (ptr = list->head; ptr != NULL; ptr = list->next) {
+		for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
 			cmpresult = list->comparator(newObj, ptr->data);
 			if (cmpresult == -1) {
 				continue;
@@ -41,9 +41,10 @@ int SLInsert(SortedListPtr list, void *newObj) {
 			else {
 				newNode->next = ptr->next;	
 				ptr->next = newNode;
-				break;
+				return 1;
 			}
 		}
+		return 0;
 	}
 }
 
@@ -52,6 +53,7 @@ int SLRemove(SortedListPtr list, void *newObj) {
 }
 
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list) {
+	Node iter = malloc(sizeof(Node));
 
 }
 
@@ -63,6 +65,6 @@ void * SLGetItem(SortedListIteratorPtr iter) {
 
 }
 
-void * SLNextItem(SortedListIterPtr iter) {
+void * SLNextItem(SortedListIteratorPtr iter) {
 
 }

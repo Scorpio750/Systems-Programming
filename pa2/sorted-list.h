@@ -14,7 +14,7 @@ struct Node_ {
 		struct Node_*  next;
 };
 
-typedef Node_ Node;
+typedef struct Node_ Node;
 
 /*
  * Sorted list type.  You need to fill in the type as part of your implementation.
@@ -23,8 +23,8 @@ struct SortedList
 {
 	CompareFuncT comparator;
 	DestructFuncT destructo_disc;
-	Node head;
-} SL;
+	Node* head;
+};
 
 typedef struct SortedList* SortedListPtr;
 
