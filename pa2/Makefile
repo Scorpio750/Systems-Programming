@@ -1,20 +1,16 @@
-COMPILER = gcc
-CCFLAGS = -g -Wall
-LIBFLAGS = ar -cvq
+CC = gcc
+CFLAGS = -Wall -g
+CFILES = sorted-list.c main.c -c
 
-all: sl
+all: main archive
+	$(CC) sorted-list.o main.o -o sl
+	rm *.o
 
-sorted-list.o: sorted-list.c
-	${COMPILER} ${CCFLAGS} -o sorted-list.o -c sorted-list.c
+main:
+	$(CC) $(CFILES) $(CFLAGS)
 
-libsl.a: sorted-list.o
-	${LIBFLAGS} -libsl.a sorted-list.c
-
-main.o: main.c sorted-list.o
-	${COMPILER} ${CCFLAGS} -o main.o -c main.c
-
-sl: main.o
-	${COMPILER} -o sl main.o sorted-list.o
-
+archive: main
+	ar -r libsl.a sorted-list.o
 clean:
+	rm -f sl
 	rm -f *.o

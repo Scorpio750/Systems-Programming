@@ -47,25 +47,60 @@ void destroyBasicTypeNoAlloc(void *p) {
 int main(int argc, char** argv)
 {
 	SortedListPtr list = SLCreate(compareInts, destroyBasicTypeNoAlloc);
-	Node * ptr = malloc(sizeof(struct Node_));
+	Node * ptr;
 
 	int a = 1, b = 2, c = 3, d = 4;
 	
 	printf("Inserting elements %d\t %d\t %d\t %d\t\n", a, b, c, d);
-	SLInsert(list, &a);
-	SLInsert(list, &b);
-	SLInsert(list, &c);
 	SLInsert(list, &d);
+	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
+		printf("%d\t", *(int*)ptr->data);
+		}
+    printf("\n");
+	SLInsert(list, &b);
+	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
+		printf("%d\t", *(int*)ptr->data);
+		}
+    printf("\n");
+	SLInsert(list, &c);
+	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
+		printf("%d\t", *(int*)ptr->data);
+		}
+    printf("\n");
+	SLInsert(list, &a);
 	
 	/* prints all elements in list */
 	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
 		printf("%d\t", *(int*)ptr->data);
 		}
+    printf("\n");
+    SortedListIteratorPtr i = SLCreateIterator(list);
+    printf("%d\n", *(int*)SLGetItem(i));
+    printf("%d\n", *(int*)SLNextItem(i));
+    printf("%d\n", *(int*)SLNextItem(i));
+    printf("%d\n", *(int*)SLGetItem(i));
+    SLDestroyIterator(i);
+    SLRemove(list, &b);
+	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
+		printf("%d\t", *(int*)ptr->data);
+		}
+    printf("\n");
+    SLRemove(list, &c);
+	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
+		printf("%d\t", *(int*)ptr->data);
+		}
+    printf("\n");
+    SLRemove(list, &d);
+	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
+		printf("%d\t", *(int*)ptr->data);
+		}
+    printf("\n");
+    SLRemove(list, &a);
+	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
+		printf("%d\t", *(int*)ptr->data);
+		}
+    printf("\n");
 
 	SortedListIteratorPtr iter = SLCreateIterator(list);
-	int endoflist = 1;
-	while (endoflist) {
-		endoflist = (int)SLGetItem(iter);
-		SLNextItem(iter);
-	}
+    SLDestroy(list);
 }
