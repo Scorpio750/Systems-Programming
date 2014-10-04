@@ -4,6 +4,7 @@
 
 #include	<string.h>
 #include	"sorted-list.h"
+#include	<stdio.h>
 
 int compareInts(void *p1, void *p2)
 {
@@ -43,6 +44,28 @@ void destroyBasicTypeNoAlloc(void *p) {
 }
 
 
-int main()
+int main(int argc, char** argv)
 {
+	SortedListPtr list = SLCreate(compareInts, destroyBasicTypeNoAlloc);
+	Node * ptr = malloc(sizeof(struct Node_));
+
+	int a = 1, b = 2, c = 3, d = 4;
+	
+	printf("Inserting elements %d\t %d\t %d\t %d\t\n", a, b, c, d);
+	SLInsert(list, &a);
+	SLInsert(list, &b);
+	SLInsert(list, &c);
+	SLInsert(list, &d);
+	
+	/* prints all elements in list */
+	for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
+		printf("%d\t", *(int*)ptr->data);
+		}
+
+	SortedListIteratorPtr iter = SLCreateIterator(list);
+	int endoflist = 1;
+	while (endoflist) {
+		endoflist = (int)SLGetItem(iter);
+		SLNextItem(iter);
+	}
 }

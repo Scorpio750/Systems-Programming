@@ -10,8 +10,9 @@ typedef int (*CompareFuncT)( void *, void * );
 typedef void (*DestructFuncT)( void * );
 
 struct Node_ {
-		void * data;
-		struct Node_*  next;
+	void * data;
+	int refcount;
+	struct Node_*  next;
 };
 
 typedef struct Node_ Node;
