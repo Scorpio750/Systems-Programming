@@ -1,0 +1,8 @@
+Assignment 1
+
+Patrick Wu
+
+This program creates a Tokenizer struct which first takes a token stream and sets all the escape keys within it to their corresponding hex values. It then tokenizes the stream according to the corresponding delimiter char array.
+
+Running time: O(n^2)
+Space Complexity: O(n) where n is the size of the tokenstream.

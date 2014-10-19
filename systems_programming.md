@@ -18,6 +18,7 @@
 	8. [Constants](#anchor1.8)
 	9. [Modularization](#anchor1.9)
 	10. [Libraries](#anchor1.10)
+	11. [Forking Around](#anchor1.11)
 
 ---
 ---
@@ -508,7 +509,7 @@ Example function:
 
 ## [System Calls](id:anchor1.11)
 
-- All operating systems provide means for direct requests from the systeml
+- All operating systems provide means for direct requests from the system
 	- In *nix systems, this is also called the **kernel**
 	
 			#include <errno.h>
@@ -527,12 +528,132 @@ Example function:
 - The -g flag enables it to be debugged
 	- Used to be highly machine-specific/compiler-specific
 
-#### gdb Commands
+### gdb Commands
 
 	print <varname>	// prints value of specified varname
 	n 				// evaluates and prints the next line in the program
 	backtrace		// self-explanatory
 
-- Core dumps are baaaaad
-	- gives you a core file; an image of a dead process
-	- Will give you a look at the stack frame, memory, etc.
+### Core dumps are baaaaad
+
+- gives you a core file; an image of a dead process
+- Will give you a look at the stack frame, memory, etc.
+	
+---
+
+## 10/7/14
+
+## [Signals](id:anchor1.13)
+
+[ASK RUSSELL!]
+
+- Signals are inter-process communication in *NIX systems
+
+		SIGABRT	/* Abort (ANSI). */
+		SIGKILL	/* Kill, unblockable (POSIX) */
+		SIGUSR1	/* User-defined signal 1 (POSIX) */
+		
+		int SIGPROCMASK(INT, CONSTSIGSET_T * SET, SIGSET_T * OLDSET);
+	
+- After a signal is generated, it is now pending
+- A signal is *delivered* when
+
+### Signal Handlers 
+
+- Signals are managed by a **signal handler**
+	- A signal handler *returns*, but does not get called
+	- Signal handlers are not and should not be large.
+- Signal handlers are managed **asynchrously**
+- The signal that causes the signal handler is *blocked* to prevent infinite recursion
+- You can have multiple signal handlers for the same signal, but not at the same time
+
+		struct sigaction {
+			void (*sa_handler)(int);
+			void (*sa_sigaction)(int, siginfo_t*, void*);
+			SIGSET_T sigmask;
+			int sa-flags; 
+		};
+
+Dangerous vvvv
+
+	SA_NODEFER: Do not block signal in its own signal handler
+	
+---
+## 10/9/14
+
+### Signal Handler Uses
+
+- Can send multiple signals to the same signal handler
+- Can send timers to the signal handler, and SIGALARM will communicate with the program when the timer runs out
+- Signal handlers can control changes in the program's internal *state*
+- Efficient, proactive communication with other machines
+
+		setitimer(ITIMER_REAL, ITIMER_VIRTUAL, ITIMER_PROF
+		
+---
+## 10/14/14
+
+## [Valgrind](id:valgrind)
+
+- When you free a ptr that isn't malloc'ed, BAD THINGS WILL HAPPEN
+- Malloc returns a pointer behind which is a speicla data structure
+- When you free a ptr, it looks behind it to see what information to delink
+
+---
+## 10/16/14
+
+## [Forking Around](id:anchor1.11)
+
+	int main() {
+		pid_t pid;
+		pid = fork();
+		switch(pid);
+		{
+			case -1: //ERROR
+			case 0: //child
+			default: //parent
+	}
+
+- Once you fork, the parent and child are running *asynchronously*
+- Separate process addresses
+- All file descriptors are duplicated
+	- Position is also the same
+- Once a fork() is executed, the parent has to *wait()* for the child to return
+
+		pid_t wait(int *);
+		pid_t waitpid(pid_t, 
+						int *, 
+						int);
+
+- Will get *errno* back if it fails
+- Returns twice
+
+### Exit
+
+- Exits the process
+- Closes file descriptors
+- If the process has children, they get returned to the __init__ function
+- If a child calls exit, the parent gets sent a __sigchild__ 
+
+
+### Exec
+
+	int execl("pathname", "program name", 0)
+		execv()
+		execle()
+		execve()
+		execlp()
+		execvp()
+		
+- Can execute different programs in process
+
+		//execl() envarg test program
+		int main(int argc, char ** argv) {
+			printf("Process %s PID %d invoking envarg\n", argv[0], getpid() );
+			execl( "/grad/users/morbius/cs214/envarg", "envarg", 0);
+		}
+		
+
+- int main() can actually take a 3rd argument, char ** envp
+	- Retrieves environment variables
+- Exec does not return values unless there is an error, in which case it returns -1
