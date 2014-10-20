@@ -22,6 +22,7 @@ struct Prefix_Node_ {
 	struct Prefix_Node_ ** next;
 };
 
+
 typedef struct Prefix_Node_ Prefix_Node;
 
 struct Hash_Table_ {
@@ -31,9 +32,10 @@ struct Hash_Table_ {
 
 typedef struct Hash_Table_ Hash_Table;
 
-void insertHashTable(Hash_Table * hash, char * word, char * filename);
 Hash_Table * createTable();
-void dump_to_file(Hash_Table, char * filename);
+void insertHashTable(Hash_Table * hash, char * word, char * filename);
+int hash(char c);
+void dump_to_file(Hash_Table * inv-index, char * filename);
 
 int checkDir(char * file);
 int checkFile(char * file);
