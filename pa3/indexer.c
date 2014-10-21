@@ -67,7 +67,7 @@ int checkFile(char * file) {
 void readFile(Hash_Table * inv_index, char * path) {
 	FILE * filep = fopen(path, "r");
 	char c = '\0';
-	char * token[100];
+	char * token[256];
 	int acceptcount = 0;
 
 
@@ -115,21 +115,60 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 	}
 }
 
-void recursivePrintTree(
-
-void printTree(Prefix_Node * head) {
-	char * buffer[100];
-	Prefix_Node * ptr = head;
+/* Output functions */
+bool isEmpty(Prefix_Node ** ptr) {
 	
+	for (int i = 0; i < 35; i++) {
+		if (ptr[i] != NULL) return false;
+	}
+	return true;
+}
+
+char * formatOutput(char * buffer, File_Node * head) {
+	File_Node *ptr;
+	char *formatted_string = malloc((sizeof(char) * 2048) + 1);
+	char *filename_list = malloc((sizeof(char) * 100) + 1);;
+	
+	sprintf(formatted_string, "<list> %s\n ", buffer);
+
+	for (ptr = head; ptr != NULL; ptr = ptr->next) {
+		sprintf(filename_list,"%s %d ", ptr->filename, ptr->occurrences);
+		strcat(formatted_string, filename_list);
+	}
+	strcat(formatted_string, "\n</list>\n");
+	return formatted_string;
+}
+
+void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
+	int index;
+
+	bool is_empty = isEmpty(ptr->next);
+	if (is_empty) return;
+
+	for (int i = 35; i > 0; i--) {
+		if (ptr->next[i] == NULL)
+			continue;
+		index = ptr->next[i]->depth;
+		buffer[index] = (char)ptr->next[i]->c;
+		if(ptr->next[i]->isWord){
+			buffer[index+1] = '\0';
+			fputs(formatOutput(buffer,ptr->next[i]->head),file);
+		}
+		recursivePrintTree(buffer, ptr->next[i], file);
+	}
+}
+
+void printTree(Prefix_Node * head, FILE *file) {
+	char buffer[256];
+	Prefix_Node * headptr = head;
+	recursivePrintTree(buffer, headptr, file);
+
 
 }
 
 void dump_to_file(Hash_Table * inv_index, char * filename) {
 	FILE * file = fopen(filename, "w");
-	for (int i = 36; i > 0; i--) {
-		
-	}
-
+	printTree(inv_index->head, file);
 }
 
 int main(int argc, char ** argv) {

@@ -34,13 +34,20 @@ struct Hash_Table_ {
 
 typedef struct Hash_Table_ Hash_Table;
 
+/* Hash Table functions */
 Hash_Table * createTable();
 void insertHashTable(Hash_Table * hash, char c, char * filename);
 int hash(char c);
 void insertFileNode(char * filename, Hash_Table inv_index);
 void readFile(Hash_Table * hash, char * path);
+
+/* File System functions */
 void recurseDir(Hash_Table * hash, char * path);
 int checkDir(char * file);
 int checkFile(char * file);
+
+/* Output functions */
+bool isEmpty(Prefix_Node ** ptr);
+void recursivePrintTree(char * buffer, Prefix_Node * ptr, FILE * file);
 void dump_to_file(Hash_Table * inv_index, char * filename);
 #endif
