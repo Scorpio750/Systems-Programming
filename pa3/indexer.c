@@ -38,6 +38,19 @@ File_Node *createFileNode(char *filename) {
 	}
 }
 
+void destroyNode(Prefix_Node *node){
+	if (node == NULL)
+		return;
+	for (int i = 0; i < 26; i++){
+		if (node->next[i] == NULL)
+			continue;
+		destroyNode(node->next[i]);
+	}
+	free (node->children);
+	free(node);
+	return;
+}
+
 void swap(Prefix_Node *node, File_Node *small, File_Node *big){
 	if(small == node->head) {
 		small->next = big->next;
@@ -67,13 +80,9 @@ void swap(Prefix_Node *node, File_Node *small, File_Node *big){
 	return;
 }
 
-<<<<<<< HEAD
-void checkList(Prefix_Node *node, char *filename){
-=======
 /* checks to see if there is a linked list at that node. If there isn't, we create
  * a new fileNode head. Else, we traverse it to cmp filenames */
-void list(Prefix_Node *node, char *filename){
->>>>>>> f46dac4d8a7194265481bcf3c827e665e82ac3cc
+void checkList(Prefix_Node *node, char *filename){
 	File_Node *fileNode;
 	int prevOcc;
 	if (node->head == NULL){
@@ -117,11 +126,7 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 
 	Prefix_Node *ptr = table->head;
 	int index;
-<<<<<<< HEAD
 	int c = tolower(fgetc(file));
-=======
-	int c = tolower(fgetc(file)); 
->>>>>>> f46dac4d8a7194265481bcf3c827e665e82ac3cc
 
 	while (c != EOF){
 		if (isalpha(c) || isdigit(c)){
@@ -197,7 +202,7 @@ int checkFile(char * file) {
 	return S_ISREG(statbuff.st_mode);
 }
 
-<<<<<<< HEAD
+
 /*
 void readFile(Hash_Table * inv_index, char * path) {
 =======
@@ -217,9 +222,6 @@ void readFile(Hash_Table * inv_index, char * path) {
 <<<<<<< HEAD
 }-
 */
-=======
-} */
->>>>>>> f46dac4d8a7194265481bcf3c827e665e82ac3cc
 
 void recurseDir(Hash_Table * inv_index, char * dirname) {
 	if (checkDir(dirname)) {
