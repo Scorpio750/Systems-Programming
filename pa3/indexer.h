@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 
+#define true 1
+#define false 0
 typedef unsigned char bool;
 
 struct File_Node_ {
@@ -33,11 +35,12 @@ struct Hash_Table_ {
 typedef struct Hash_Table_ Hash_Table;
 
 Hash_Table * createTable();
-void insertHashTable(Hash_Table * hash, char * word, char * filename);
+void insertHashTable(Hash_Table * hash, char c, char * filename);
 int hash(char c);
-void dump_to_file(Hash_Table * inv-index, char * filename);
-
+void insertFileNode(char * filename, Hash_Table inv_index);
+void readFile(Hash_Table hash, char * path);
+void recurseDir(Hash_Table hash, char * path);
 int checkDir(char * file);
 int checkFile(char * file);
-
+void dump_to_file(Hash_Table * inv_index, char * filename);
 #endif
