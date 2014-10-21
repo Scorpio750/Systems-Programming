@@ -11,12 +11,12 @@ Hash_Table * createTable () {
 // void insertHashTable(Hash_Table * inv_index, char c, char * filename) {
 
 Prefix_Node *createNode(char c) {
-	Prefix_Node *node = (Prefix_Node*)(calloc(1, sizeof(Prefix_Node)));
+	Prefix_Node *node = (Prefix_Node*)calloc(1, sizeof(Prefix_Node));
 	node->c = c;
 	node->depth = 0;
 	node->isWord = false;
 	node->head = NULL;
-	node->next = (Prefix_Node**)(calloc(36, sizeof(Prefix_Node)));
+	node->next = (Prefix_Node**)calloc(36, sizeof(Prefix_Node));
 	return node;
 }
 
@@ -249,7 +249,6 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 
 /* Output functions */
 bool isEmpty(Prefix_Node ** ptr) {
-	
 	for (int i = 0; i < 35; i++) {
 		if (ptr[i] != NULL) return false;
 	}
@@ -274,7 +273,6 @@ char * formatOutput(char * buffer, File_Node * head) {
 
 void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	int index;
-
 	bool is_empty = isEmpty(ptr->next);
 	if (is_empty) return;
 
@@ -292,9 +290,10 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 }
 
 void printTree(Prefix_Node * head, FILE *file) {
-	char buffer[256];
+	char * buffer = calloc(256, sizeof(char));
 	Prefix_Node * headptr = head;
 	recursivePrintTree(buffer, headptr, file);
+	free(buffer);
 }
 
 void dump_to_file(Hash_Table * inv_index, char * filename) {
