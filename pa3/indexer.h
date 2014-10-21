@@ -44,10 +44,12 @@ typedef struct Hash_Table_ Hash_Table;
 
 /* Hash Table functions */
 Hash_Table * createTable();
-void insertHashTable(Hash_Table * hash, char c, char * filename);
+// void insertHashTable(Hash_Table * hash, char c, char * filename);
+void insertTrie(FILE * file, Hash_Table *table, char * filename);
 int hash(char c);
 void insertFileNode(char * filename, Hash_Table inv_index);
 void readFile(Hash_Table * hash, char * path);
+Prefix_Node * createNode(char c);
 
 /* File System functions */
 void recurseDir(Hash_Table * hash, char * path);
