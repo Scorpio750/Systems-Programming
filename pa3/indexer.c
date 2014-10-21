@@ -10,30 +10,30 @@
 
 /* Hash Table functions */
 Hash_Table * createTable () {
-	Hash_Table * table = malloc(sizeof(Hash_Table));
-	table->head = NULL;
-	table->ptr = NULL;
-	return table;
+	Hash_Table * inv_index = malloc(sizeof(Hash_Table));
+	inv_index->head = NULL;
+	inv_index->ptr = NULL;
+	return inv_index;
 }
 
-void insertHashTable(Hash_Table * table, char c, char * filename) {
+void insertHashTable(Hash_Table * inv_index, char c, char * filename) {
 	File_Node * fileptr = NULL;
 	int index = 0;
 	bool isFound;
 
-	if (table->head == NULL) {
-		table->head = malloc(sizeof(Prefix_Node));
-		table->ptr = table->head;
+	if (inv_index->head == NULL) {
+		inv_index->head = malloc(sizeof(Prefix_Node));
+		inv_index->ptr = inv_index->head;
 	}
 	index = hash(c);
 
 	//invalid character
 	if (index == -1) {
 		//if at root
-		if (table->ptr == table->head) return;
+		if (inv_index->ptr == inv_index->head) return;
 		else {
-			table->ptr->isWord = true;
-			for (fileptr = table->ptr->head; fileptr != NULL; fileptr = fileptr->next) {
+			inv_index->ptr->isWord = true;
+			for (fileptr = inv_index->ptr->head; fileptr != NULL; fileptr = fileptr->next) {
 				// compares files in File Linked List to current file
 				if (strcmp(fileptr->filename, filename) == 0) {
 					fileptr->occurrences++;
@@ -44,11 +44,11 @@ void insertHashTable(Hash_Table * table, char c, char * filename) {
 }
 
 int hash(char c) {
-	char * index = strchr(acceptable, c);
+	char * index = strchr(accepinv_index, c);
 	if (index == NULL) {
 		return -1;
 	}
-	return (int)(index - acceptable);
+	return (int)(index - accepinv_index);
 }
 
 /* File System functions */
@@ -69,7 +69,6 @@ void readFile(Hash_Table * inv_index, char * path) {
 	char c = '\0';
 	char * token[256];
 	int acceptcount = 0;
-
 
 	// converts mixed-case to lower-case and tokenizes
 	while (c != EOF) {
