@@ -38,18 +38,6 @@ File_Node *createFileNode(char *filename) {
 	}
 }
 
-void destroyNode(Prefix_Node *node){
-	if (node == NULL)
-		return;
-	for (int i = 0; i < 26; i++){
-		if (node->next[i] == NULL)
-			continue;
-		destroyNode(node->next[i]);
-	}
-	free (node->children);
-	free(node);
-	return;
-}
 
 void swap(Prefix_Node *node, File_Node *small, File_Node *big){
 	if(small == node->head) {
@@ -204,10 +192,7 @@ int checkFile(char * file) {
 
 
 /*
-void readFile(Hash_Table * inv_index, char * path) {
-=======
-/* void readFile(Hash_Table * inv_index, char * path) {
->>>>>>> f46dac4d8a7194265481bcf3c827e665e82ac3cc
+ void readFile(Hash_Table * inv_index, char * path) {
 	FILE * filep = fopen(path, "r");
 	char c = '\0';
 	char * token[256];
@@ -258,6 +243,7 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 		}
 
 		recurseDir(inv_index, entry->d_name);
+		free(dirp);
 	}
 }
 
@@ -317,7 +303,23 @@ void dump_to_file(Hash_Table * inv_index, char * filename) {
 }
 
 /* Free functions */
+void destroyList(File_Node *head){
 
+}
+
+void destroyNode(Prefix_Node *node){
+	if (node == NULL)
+		return;
+	for (int i = 0; i < 36; i++){
+		if (node->next[i] == NULL)
+			continue;
+		destroyNode(node->next[i]);
+	}
+	free (node->next);
+	destroyList(node->head);
+	free(node);
+	return;
+}
 
 int main(int argc, char ** argv) {
 
@@ -336,8 +338,6 @@ int main(int argc, char ** argv) {
 	}
 
 	recurseDir(inv_index, dirname);
-
 	dump_to_file(inv_index, path);
-	freeEverything(inv_index);
 	return 0;
 }

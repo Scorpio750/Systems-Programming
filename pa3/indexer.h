@@ -19,7 +19,7 @@ struct File_Node_ {
 	char * filename;
 	int occurrences;
 	struct File_Node_ * next;
-	//struct File_Node_ * prev;
+	struct File_Node_ * prev;
 };
 
 typedef struct File_Node_ File_Node;
