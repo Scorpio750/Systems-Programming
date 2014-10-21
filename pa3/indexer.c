@@ -55,7 +55,7 @@ void swap(Prefix_Node *node, File_Node *small, File_Node *big){
 	return;
 }
 
-void list(Prefix_Node *node, char *filename){
+void checkList(Prefix_Node *node, char *filename){
 	File_Node *fileNode;
 	int prevOcc;
 	if (node->head == NULL){
@@ -77,8 +77,8 @@ void list(Prefix_Node *node, char *filename){
 		if(fileNode->next == NULL){
 			File_Node *newNode = createFileNode(fileNode, filename);
 			fileNode->next = newNode;
-			newNode->prev = fileNode;
 			newNode->next = NULL;
+			newNode->prev = fileNode;
 		}
 	}
 }
@@ -97,7 +97,7 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 
 	Prefix_Node *ptr = table->head;
 	int index;
-	int c = tolower(fgetc(file)); //can you tolower a digit?
+	int c = tolower(fgetc(file));
 
 	while (c != EOF){
 		if (isalpha(c) || isdigit(c)){
@@ -111,10 +111,10 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 		if ((!isalpha(c)) && (!isdigit(c)) && ptr != root){
 			ptr->isWord = true;
 			if(ptr->isWord)
-				list(ptr,filename);
+				checkList(ptr,filename);
 			ptr = table->head;
 		}
-		c = tolower(fgetc(file)); //can you to lower a digit?
+		c = tolower(fgetc(file));
 	}
 	return;
 }
@@ -162,6 +162,7 @@ int checkFile(char * file) {
 	return S_ISREG(statbuff.st_mode);
 }
 
+/*
 void readFile(Hash_Table * inv_index, char * path) {
 	FILE * filep = fopen(path, "r");
 	char c = '\0';
@@ -175,7 +176,8 @@ void readFile(Hash_Table * inv_index, char * path) {
 		tolower(c);
 		insertHashTable(inv_index, c, path);
 	}
-}
+}-
+*/
 
 void recurseDir(Hash_Table * inv_index, char * dirname) {
 	if (checkDir(dirname)) {
