@@ -16,24 +16,30 @@ Hash_Table * createTable () {
 	return table;
 }
 
-void insertHashTable(Hash_Table * inv_index, char c, char * filename) {
+void insertHashTable(Hash_Table * table, char c, char * filename) {
+	File_Node * fileptr = NULL;
 	int index = 0;
+	bool isFound;
 
 	if (table->head == NULL) {
 		table->head = malloc(sizeof(Prefix_Node));
 		table->ptr = table->head;
 	}
 	index = hash(c);
-	
+
 	//invalid character
 	if (index == -1) {
 		//if at root
 		if (table->ptr == table->head) return;
 		else {
 			table->ptr->isWord = true;
-			for (ptr = table->ptr->head; ptr != NULL; ptr = ptr->next) {
-
-			}	
+			for (fileptr = table->ptr->head; fileptr != NULL; fileptr = fileptr->next) {
+				// compares files in File Linked List to current file
+				if (strcmp(fileptr->filename, filename) == 0) {
+					fileptr->occurrences++;
+				}
+			}
+		}
 	}
 }
 
@@ -58,9 +64,9 @@ int checkFile(char * file) {
 	return S_ISREG(statbuff.st_mode);
 }
 
-void readFile(Hash_Table, inv_index, char * path) {
+void readFile(Hash_Table * inv_index, char * path) {
 	FILE * filep = fopen(path, "r");
-	char c;
+	char c = '\0';
 	char * token[100];
 	int acceptcount = 0;
 
@@ -73,7 +79,7 @@ void readFile(Hash_Table, inv_index, char * path) {
 	}
 }
 
-void recurseDir(Hash_Table inv_index, char * dirname) {
+void recurseDir(Hash_Table * inv_index, char * dirname) {
 	if (checkDir(dirname)) {
 		char * buffer = NULL;
 		DIR * dirp = opendir(dirname);
@@ -81,7 +87,7 @@ void recurseDir(Hash_Table inv_index, char * dirname) {
 		if (!dirp) {
 			return;
 		}
-		
+
 		while ((entry = readdir(dirp)) != NULL) {
 			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
 				continue;
@@ -93,30 +99,41 @@ void recurseDir(Hash_Table inv_index, char * dirname) {
 				buffer = calloc(strlen(dirname) + strlen(entry->d_name) + 1, sizeof(char));
 				strcat(buffer, dirname);
 				strcat(buffer, entry->d_name);
-				recurseDir(buffer);
+				recurseDir(inv_index, buffer);
 				free(buffer);
 			}
 			if (checkFile(entry->d_name)) {
 				buffer = calloc(strlen(dirname) + strlen(entry->d_name) + 1, sizeof(char));
 				strcat(buffer, dirname);
 				strcat(buffer, entry->d_name);
-				readFile(buffer);
+				readFile(inv_index,buffer);
 				free(buffer);
 			}
 		}
 
-		recurseDir(entry->d_name);
+		recurseDir(inv_index, entry->d_name);
 	}
 }
 
+void recursivePrintTree(
+
+void printTree(Prefix_Node * head) {
+	char * buffer[100];
+	Prefix_Node * ptr = head;
+	
+
+}
 
 void dump_to_file(Hash_Table * inv_index, char * filename) {
 	FILE * file = fopen(filename, "w");
-	
+	for (int i = 36; i > 0; i--) {
+		
+	}
+
 }
 
 int main(int argc, char ** argv) {
-	
+
 	char * path = argv[1], * dirname = argv[2];
 	int file_descr;
 	Hash_Table * inv_index = createTable();
@@ -132,8 +149,8 @@ int main(int argc, char ** argv) {
 	}
 
 	recurseDir(inv_index, dirname);
-	
-	dump_to_file(Hash_Table * inv_index, char * filename);
+
+	dump_to_file(inv_index, path);
 
 	return 0;
 }

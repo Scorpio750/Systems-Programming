@@ -1,6 +1,6 @@
 #ifndef INDEXER_H
 #define INDEXER_H
-#define acceptable "abcdefghijklmnopqrstuvwxyz0123456789"
+#define acceptable "0123456789abcdefghijklmnopqrstuvwxy"
 
 #include <stdio.h>
 
@@ -11,7 +11,7 @@ typedef unsigned char bool;
 struct File_Node_ {
 	char * filename;
 	int occurrences;
-	struct File_Node * next;
+	struct File_Node_ * next;
 };
 
 typedef struct File_Node_ File_Node;
@@ -38,8 +38,8 @@ Hash_Table * createTable();
 void insertHashTable(Hash_Table * hash, char c, char * filename);
 int hash(char c);
 void insertFileNode(char * filename, Hash_Table inv_index);
-void readFile(Hash_Table hash, char * path);
-void recurseDir(Hash_Table hash, char * path);
+void readFile(Hash_Table * hash, char * path);
+void recurseDir(Hash_Table * hash, char * path);
 int checkDir(char * file);
 int checkFile(char * file);
 void dump_to_file(Hash_Table * inv_index, char * filename);
