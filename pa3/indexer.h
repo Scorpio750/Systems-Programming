@@ -3,6 +3,13 @@
 #define acceptable "0123456789abcdefghijklmnopqrstuvwxy"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <dirent.h>
+#include <ctype.h>
+#include <sys/stat.h>
 
 #define true 1
 #define false 0
@@ -12,6 +19,7 @@ struct File_Node_ {
 	char * filename;
 	int occurrences;
 	struct File_Node_ * next;
+	struct File_Node_ * prev;
 };
 
 typedef struct File_Node_ File_Node;
