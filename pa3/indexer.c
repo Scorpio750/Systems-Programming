@@ -2,14 +2,16 @@
 
 /* Hash Table functions */
 Hash_Table * createTable () {
-	Hash_Table * table = malloc(sizeof(Hash_Table));
-	table->head = NULL;
-	table->ptr = NULL;
-	return table;
+	Hash_Table * inv_index = malloc(sizeof(Hash_Table));
+	inv_index->head = NULL;
+	inv_index->ptr = NULL;
+	return inv_index;
 }
 
-Prefix_Node *createNode(char c, char *filename){
-	TNode *node = (Prefix_Node*)(calloc(1, sizeof(Prefix_Node)));
+// void insertHashTable(Hash_Table * inv_index, char c, char * filename) {
+
+Prefix_Node *createNode(char c) {
+	Prefix_Node *node = (Prefix_Node*)(calloc(1, sizeof(Prefix_Node)));
 	node->c = c;
 	node->depth = 0;
 	node->isWord = false;
@@ -18,19 +20,29 @@ Prefix_Node *createNode(char c, char *filename){
 	return node;
 }
 
-File_Node *createFileNode(Prefix_Node *node, char *filename){
-	File_Node *node = (File_node*)calloc((1, sizeof(File_Node)));
-	node->filename = filename;
-	node->occurrences = 1;
-	node->next = NULL;
-	node->prev = NULL;
+File_Node *createFileNode(char *filename) {
+	if (filename == NULL) {
+		return NULL;
+	}
+
+	File_Node *newnode = (File_Node*)calloc(1, sizeof(File_Node));
+	newnode->filename = filename;
+	newnode->occurrences = 1;
+	newnode->next = NULL;
+	newnode->prev = NULL;
+	if (newnode != NULL) {
+		return newnode;
+	}
+	else {
+		return NULL;
+	}
 }
 
 void swap(Prefix_Node *node, File_Node *small, File_Node *big){
-	if(small == node->head){
+	if(small == node->head) {
 		small->next = big->next;
 		small->prev = big;
-		big->prev = NULL
+		big->prev = NULL;
 		big->next = small;
 		node->head = big;
 		return;
@@ -45,21 +57,27 @@ void swap(Prefix_Node *node, File_Node *small, File_Node *big){
 	if(small->next != NULL)
 		small->next->prev = small;
 
-	File_Node *prev;
-	if(big->prev != NULL){
-		prev = big->prev->occurrences;
-		if(prev < big->occurrences){
-			swap(node, prev, big);
+	int prevOcc;
+	if(big->prev != NULL) {
+		prevOcc = big->prev->occurrences;
+		if(prevOcc < big->occurrences) {
+			swap(node, big->prev, big);
 		}
 	}
 	return;
 }
 
+<<<<<<< HEAD
 void checkList(Prefix_Node *node, char *filename){
+=======
+/* checks to see if there is a linked list at that node. If there isn't, we create
+ * a new fileNode head. Else, we traverse it to cmp filenames */
+void list(Prefix_Node *node, char *filename){
+>>>>>>> f46dac4d8a7194265481bcf3c827e665e82ac3cc
 	File_Node *fileNode;
 	int prevOcc;
 	if (node->head == NULL){
-		fileNode = createFileNode(fileNode, filename);
+		fileNode = createFileNode(filename);
 		node->head = fileNode;
 		return;
 	}
@@ -74,8 +92,9 @@ void checkList(Prefix_Node *node, char *filename){
 			}
 			return;
 		}
+
 		if(fileNode->next == NULL){
-			File_Node *newNode = createFileNode(fileNode, filename);
+			File_Node *newNode = createFileNode(filename);
 			fileNode->next = newNode;
 			newNode->next = NULL;
 			newNode->prev = fileNode;
@@ -92,23 +111,28 @@ int hash(char c) {
 }
 
 void insertTrie(FILE *file, Hash_Table *table, char *filename){
-	if(table->head == NULL)
-		table->head = createNode(' ');
+	if(table->head == NULL) {
+		table->head = createNode('\0');
+	}
 
 	Prefix_Node *ptr = table->head;
 	int index;
+<<<<<<< HEAD
 	int c = tolower(fgetc(file));
+=======
+	int c = tolower(fgetc(file)); 
+>>>>>>> f46dac4d8a7194265481bcf3c827e665e82ac3cc
 
 	while (c != EOF){
 		if (isalpha(c) || isdigit(c)){
 			index = hash(c);
-			if (ptr->children[index] == NULL){
-				ptr->children[index] = createNode(c);
-				ptr->children[index]->depth  = ptr->depth+1;
+			if (ptr->next[index] == NULL){
+				ptr->next[index] = createNode(c);
+				ptr->next[index]->depth  = ptr->depth+1;
 			}
-			ptr = ptr->children[index];
+			ptr = ptr->next[index];
 		}
-		if ((!isalpha(c)) && (!isdigit(c)) && ptr != root){
+		if ((!isalpha(c)) && (!isdigit(c)) && ptr != table->head){
 			ptr->isWord = true;
 			if(ptr->isWord)
 				checkList(ptr,filename);
@@ -121,23 +145,24 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 
 /*
 void insertHashTable(Hash_Table * table, char c, char * filename) {
+>>>>>>> efc9f486ea43b4dc04ea559c5da3298eaa9671bd
 	File_Node * fileptr = NULL;
 	int index = 0;
 	bool isFound;
 
-	if (table->head == NULL) {
-		table->head = malloc(sizeof(Prefix_Node));
-		table->ptr = table->head;
+	if (inv_index->head == NULL) {
+		inv_index->head = malloc(sizeof(Prefix_Node));
+		inv_index->ptr = inv_index->head;
 	}
 	index = hash(c);
 
 	//invalid character
 	if (index == -1) {
 		//if at root
-		if (table->ptr == table->head) return;
+		if (inv_index->ptr == inv_index->head) return;
 		else {
-			table->ptr->isWord = true;
-			for (fileptr = table->ptr->head; fileptr != NULL; fileptr = fileptr->next) {
+			inv_index->ptr->isWord = true;
+			for (fileptr = inv_index->ptr->head; fileptr != NULL; fileptr = fileptr->next) {
 				// compares files in File Linked List to current file
 				if (strcmp(fileptr->filename, filename) == 0) {
 					fileptr->occurrences++;
@@ -146,8 +171,18 @@ void insertHashTable(Hash_Table * table, char c, char * filename) {
 		}
 	}
 }
-/*
 
+
+<<<<<<< HEAD
+int hash(char c) {
+	char * index = strchr(accepinv_index, c);
+	if (index == NULL) {
+		return -1;
+	}
+	return (int)(index - accepinv_index);
+}
+=======
+>>>>>>> efc9f486ea43b4dc04ea559c5da3298eaa9671bd */
 
 /* File System functions */
 int checkDir(char * file) {
@@ -162,13 +197,16 @@ int checkFile(char * file) {
 	return S_ISREG(statbuff.st_mode);
 }
 
+<<<<<<< HEAD
 /*
 void readFile(Hash_Table * inv_index, char * path) {
+=======
+/* void readFile(Hash_Table * inv_index, char * path) {
+>>>>>>> f46dac4d8a7194265481bcf3c827e665e82ac3cc
 	FILE * filep = fopen(path, "r");
 	char c = '\0';
 	char * token[256];
 	int acceptcount = 0;
-
 
 	// converts mixed-case to lower-case and tokenizes
 	while (c != EOF) {
@@ -176,8 +214,12 @@ void readFile(Hash_Table * inv_index, char * path) {
 		tolower(c);
 		insertHashTable(inv_index, c, path);
 	}
+<<<<<<< HEAD
 }-
 */
+=======
+} */
+>>>>>>> f46dac4d8a7194265481bcf3c827e665e82ac3cc
 
 void recurseDir(Hash_Table * inv_index, char * dirname) {
 	if (checkDir(dirname)) {
@@ -206,7 +248,9 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 				buffer = calloc(strlen(dirname) + strlen(entry->d_name) + 1, sizeof(char));
 				strcat(buffer, dirname);
 				strcat(buffer, entry->d_name);
-				readFile(inv_index,buffer);
+
+				FILE * filep = fopen(dirname, "r");
+				insertTrie(filep, inv_index, dirname);
 				free(buffer);
 			}
 		}
@@ -237,6 +281,7 @@ char * formatOutput(char * buffer, File_Node * head) {
 	}
 	strcat(formatted_string, "\n</list>\n");
 	return formatted_string;
+	
 }
 
 void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
@@ -269,6 +314,9 @@ void dump_to_file(Hash_Table * inv_index, char * filename) {
 	printTree(inv_index->head, file);
 }
 
+/* Free functions */
+
+
 int main(int argc, char ** argv) {
 
 	char * path = argv[1], * dirname = argv[2];
@@ -288,6 +336,6 @@ int main(int argc, char ** argv) {
 	recurseDir(inv_index, dirname);
 
 	dump_to_file(inv_index, path);
-
+	freeEverything(inv_index);
 	return 0;
 }
