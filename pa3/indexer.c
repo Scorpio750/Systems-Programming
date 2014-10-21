@@ -303,11 +303,14 @@ void dump_to_file(Hash_Table * inv_index, char * filename) {
 }
 
 /* Free functions */
-void destroyList(File_Node *head){
-
+void destroyList(File_Node *head) {
+	if(head == NULL)
+		return;
+	destroyList(head->next);
+	free(head);
 }
 
-void destroyNode(Prefix_Node *node){
+void destroyNode(Prefix_Node *node) {
 	if (node == NULL)
 		return;
 	for (int i = 0; i < 36; i++){
