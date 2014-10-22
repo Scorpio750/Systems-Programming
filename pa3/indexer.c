@@ -11,6 +11,7 @@ Hash_Table * createTable () {
 // void insertHashTable(Hash_Table * inv_index, char c, char * filename) {
 
 Prefix_Node *createNode(char c) {
+	printf("CREATING NODE\n");
 	Prefix_Node *node = (Prefix_Node*)calloc(1, sizeof(Prefix_Node));
 	node->c = c;
 	node->depth = 0;
@@ -207,11 +208,20 @@ int checkFile(char * file) {
 		tolower(c);
 		insertHashTable(inv_index, c, path);
 	}
-<<<<<<< HEAD
 }-
 */
 
 void recurseDir(Hash_Table * inv_index, char * dirname) {
+	FILE * filep;
+	// if dirname is a file
+	if (checkFile(dirname)) {
+		filep = fopen(dirname, "r");
+		insertTrie(filep, inv_index, dirname);
+		return;
+	}
+
+	printf("CHECKING DIRECTORY %s\n", dirname);
+	printf("AND THE RESULTS ARE : %d\n", checkDir(dirname));
 	if (checkDir(dirname)) {
 		char * buffer = NULL;
 		DIR * dirp = opendir(dirname);
@@ -239,7 +249,7 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 				strcat(buffer, dirname);
 				strcat(buffer, entry->d_name);
 
-				FILE * filep = fopen(dirname, "r");
+				filep = fopen(dirname, "r");
 				insertTrie(filep, inv_index, dirname);
 				free(buffer);
 			}
@@ -248,13 +258,13 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 		// recurseDir(inv_index, entry->d_name);
 		free(dirp);
 	}
+	return;
 }
 
 /* Output functions */
 bool isEmpty(Prefix_Node ** ptr) {
 	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>STEPPED INTO isEmpty()\n");
 	for (int i = 0; i < 35; i++) {
-		printf(">>>>>>>>>>>>>>>>>>>STEPPED INTO LOOP\n");
 		if (ptr[i] != NULL) 
 			return false;
 	}
@@ -286,7 +296,7 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	bool is_empty = isEmpty(ptr->next);
 	if (is_empty) return;
 
-	for (int i = 35; i > 0; i--) {
+	for (int i = 0; i < 35; i++) {
 		if (ptr->next[i] == NULL)
 			continue;
 		index = ptr->next[i]->depth-1;
