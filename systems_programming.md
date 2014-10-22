@@ -657,3 +657,104 @@ Dangerous vvvv
 - int main() can actually take a 3rd argument, char ** envp
 	- Retrieves environment variables
 - Exec does not return values unless there is an error, in which case it returns -1
+---
+
+## 10/21/14
+
+## [ZOMG ZOMBIES](id:anchor1.12)
+
+- A zombie process is a transient state
+	- Has gone from running to not running
+	- Becomes a child of an init process
+	- Somebody waits for it, either its parent or its (child?)
+	
+## Command Line Commands
+
+	// create and maintain library archives
+	ar <key> libfile obj1.o obj2.o ... 
+		flags <-r -t -d -v- c>
+		-r 
+		-t // table of contents of static shared library
+		-d // delete files from static shared library
+		-v // verbose
+		-c // suppress messages
+
+	// display a calender 
+	cal <<month> year>
+	
+	// concatenates and prints files
+	cat <file 1> <file 2>
+	// destroys/creates file 1 and puts contents of file 2 into 1
+	cat file 1 file 2 > file 1
+	
+	//change permissions but not ownership
+	chmod <mode> <file>
+		rwx	rwx	rwx
+		7	7	7
+		rwx	r-x	r-x
+		7	5	5
+		rw-	r--	---
+		6	4	0
+
+If permissions are prefixed by a d when using *ls*, that means the file is a directory
+
+	
+	chown <owner> <file> ...
+	chgrp <group> <file> ...
+
+	// hard-link files together 
+	ln [-s] file target-file
+	ln [-s]
+	
+Hard links cannot link across file systems, but soft links can
+### [ASK RUSSELL]
+
+	find <path> <expression list>
+			|usually .	|
+						|-name "*.h"
+						|-type df // depth-first traversal
+						|-print
+						|-depth
+						|-exec cmd args {} \;
+	
+	grep <flags> <expression> <file>...
+			|-i case insensitive
+			|-n print line number of file
+			|-l print file name
+			|-v prints all lines that don't contain the regex
+	
+### Regular Expressions:
+		$
+		*
+		[]
+		^
+		|
+		.
+
+### Other Command-Line Arguments
+	
+	kill -signo pid...
+	
+	ls <flags>
+		| -a 
+		| -l
+		| -F will put a / after directories
+	
+	// looks at a file without opening it a page at a time
+	pg <file>...
+	more <file>...
+	
+	// see all processes running
+	ps
+		-e
+		-f // verbose
+		-u morbius // see for that user
+		
+	rm <flags> <filename>
+		|-i requests confirmation
+		|- f force command, overrides -i
+	
+	sort 
+		|-u with -c check for strict ordering
+		|-r reverse
+		|-f ignore lower-case

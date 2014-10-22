@@ -72,13 +72,14 @@ void swap(Prefix_Node *node, File_Node *small, File_Node *big){
  * a new fileNode head. Else, we traverse it to cmp filenames */
 void checkList(Prefix_Node *node, char *filename){
 	File_Node *fileNode;
-	int prevOcc;
+	int prevOcc; // gives you # of nodes previous to the one you were at
 	if (node->head == NULL){
 		fileNode = createFileNode(filename);
 		node->head = fileNode;
 		return;
 	}
 
+	/* file comparator */
 	for(fileNode = node->head; fileNode != NULL; fileNode = fileNode->next){
 		if(fileNode->filename == filename){
 			fileNode->occurrences++;
@@ -108,8 +109,10 @@ int hash(char c) {
 }
 
 void insertTrie(FILE *file, Hash_Table *table, char *filename){
+	printf(">>>>>>>>>>>>>>>>>>>>ENTERS insertTrie\n");
 	if(table->head == NULL) {
-		table->head = createNode('\0');
+		table->head = createNode('-');
+		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CREATED ROOT\n");
 	}
 
 	Prefix_Node *ptr = table->head;
@@ -127,7 +130,7 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 		}
 		if ((!isalpha(c)) && (!isdigit(c)) && ptr != table->head){
 			ptr->isWord = true;
-			if(ptr->isWord)
+			if (ptr->isWord)
 				checkList(ptr,filename);
 			ptr = table->head;
 		}
@@ -242,15 +245,18 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 			}
 		}
 
-		recurseDir(inv_index, entry->d_name);
+		// recurseDir(inv_index, entry->d_name);
 		free(dirp);
 	}
 }
 
 /* Output functions */
 bool isEmpty(Prefix_Node ** ptr) {
+	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>STEPPED INTO isEmpty()\n");
 	for (int i = 0; i < 35; i++) {
-		if (ptr[i] != NULL) return false;
+		printf(">>>>>>>>>>>>>>>>>>>STEPPED INTO LOOP\n");
+		if (ptr[i] != NULL) 
+			return false;
 	}
 	return true;
 }
@@ -273,6 +279,10 @@ char * formatOutput(char * buffer, File_Node * head) {
 
 void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	int index;
+	printf(">>>>>>>>>>>>>>>>>>>>>>>JUST ABOUT TO ENTER\n");
+	if (ptr == NULL) {
+		printf("DAMNIt\n");
+	}
 	bool is_empty = isEmpty(ptr->next);
 	if (is_empty) return;
 
@@ -289,9 +299,10 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	}
 }
 
-void printTree(Prefix_Node * head, FILE *file) {
+void printTree(Prefix_Node * head, FILE * file) {
 	char * buffer = calloc(256, sizeof(char));
 	Prefix_Node * headptr = head;
+	printf("TREE SEARCH MO\n");
 	recursivePrintTree(buffer, headptr, file);
 	free(buffer);
 }
@@ -340,6 +351,7 @@ int main(int argc, char ** argv) {
 	}
 
 	recurseDir(inv_index, dirname);
+	printf("MEOW\n");
 	dump_to_file(inv_index, path);
 	return 0;
 }
