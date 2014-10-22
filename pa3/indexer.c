@@ -182,6 +182,8 @@ int hash(char c) {
 >>>>>>> efc9f486ea43b4dc04ea559c5da3298eaa9671bd */
 
 /* File System functions */
+
+/* checkDir and checkFile return 1 if it is a file/dir, 0 otherwise */
 int checkDir(char * file) {
 	struct stat statbuff;
 	stat(file, &statbuff);
@@ -219,17 +221,15 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 		insertTrie(filep, inv_index, dirname);
 		return;
 	}
-
-	printf("CHECKING DIRECTORY %s\n", dirname);
-	printf("AND THE RESULTS ARE : %d\n", checkDir(dirname));
-	if (checkDir(dirname)) {
+	else if (checkDir(dirname)) {
 		char * buffer = NULL;
 		DIR * dirp = opendir(dirname);
 		struct dirent * entry;
 		if (!dirp) {
 			return;
 		}
-
+		
+		/* iterates through every file in a directory with readdir */
 		while ((entry = readdir(dirp)) != NULL) {
 			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
 				continue;
@@ -237,10 +237,14 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 
 			/* creates a buffer that appends found directory to current path in buffer
 			 * then recurses with buffer as the new path */
+			printf("AND THE VALUE OF %s IS %d\n", entry->d_name, checkDir(entry->d_name));
 			if (checkDir(entry->d_name)) { 
 				buffer = calloc(strlen(dirname) + strlen(entry->d_name) + 1, sizeof(char));
+				printf("%s\n", dirname);
 				strcat(buffer, dirname);
+				printf("BUFFER >>> %s\n ENTRY >>> %s\n", buffer, entry->d_name);
 				strcat(buffer, entry->d_name);
+
 				recurseDir(inv_index, buffer);
 				free(buffer);
 			}
@@ -292,6 +296,7 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	printf(">>>>>>>>>>>>>>>>>>>>>>>JUST ABOUT TO ENTER\n");
 	if (ptr == NULL) {
 		printf("DAMNIt\n");
+		return;
 	}
 	bool is_empty = isEmpty(ptr->next);
 	if (is_empty) return;
@@ -307,6 +312,7 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 		}
 		recursivePrintTree(buffer, ptr->next[i], file);
 	}
+	return;
 }
 
 void printTree(Prefix_Node * head, FILE * file) {
@@ -315,11 +321,13 @@ void printTree(Prefix_Node * head, FILE * file) {
 	printf("TREE SEARCH MO\n");
 	recursivePrintTree(buffer, headptr, file);
 	free(buffer);
+	return;
 }
 
 void dump_to_file(Hash_Table * inv_index, char * filename) {
 	FILE * file = fopen(filename, "w");
 	printTree(inv_index->head, file);
+	return;
 }
 
 /* Free functions */
@@ -328,6 +336,7 @@ void destroyList(File_Node *head) {
 		return;
 	destroyList(head->next);
 	free(head);
+	return;
 }
 
 void destroyNode(Prefix_Node *node) {
