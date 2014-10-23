@@ -4,7 +4,6 @@
 Hash_Table * createTable () {
 	Hash_Table * inv_index = malloc(sizeof(Hash_Table));
 	inv_index->head = NULL;
-	inv_index->ptr = NULL;
 	return inv_index;
 }
 
@@ -142,7 +141,6 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 
 /*
 void insertHashTable(Hash_Table * table, char c, char * filename) {
->>>>>>> efc9f486ea43b4dc04ea559c5da3298eaa9671bd
 	File_Node * fileptr = NULL;
 	int index = 0;
 	bool isFound;
@@ -169,8 +167,6 @@ void insertHashTable(Hash_Table * table, char c, char * filename) {
 	}
 }
 
-
-<<<<<<< HEAD
 int hash(char c) {
 	char * index = strchr(accepinv_index, c);
 	if (index == NULL) {
@@ -178,8 +174,7 @@ int hash(char c) {
 	}
 	return (int)(index - accepinv_index);
 }
-=======
->>>>>>> efc9f486ea43b4dc04ea559c5da3298eaa9671bd */
+*/
 
 /* File System functions */
 
@@ -215,6 +210,7 @@ int checkFile(char * file) {
 
 void recurseDir(Hash_Table * inv_index, char * dirname) {
 	FILE * filep;
+
 	// if dirname is a file
 	if (checkFile(dirname)) {
 		filep = fopen(dirname, "r");
@@ -287,8 +283,9 @@ char * formatOutput(char * buffer, File_Node * head) {
 		strcat(formatted_string, filename_list);
 	}
 	strcat(formatted_string, "\n</list>\n");
+	free(formatted_string);
+	free(format_list);
 	return formatted_string;
-	
 }
 
 void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
@@ -372,5 +369,6 @@ int main(int argc, char ** argv) {
 	recurseDir(inv_index, dirname);
 	printf("MEOW\n");
 	dump_to_file(inv_index, path);
+	free(in_index);
 	return 0;
 }
