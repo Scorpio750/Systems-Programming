@@ -37,7 +37,6 @@ typedef struct Prefix_Node_ Prefix_Node;
 
 struct Hash_Table_ {
 	Prefix_Node * head;
-	Prefix_Node * ptr;
 };
 
 typedef struct Hash_Table_ Hash_Table;
