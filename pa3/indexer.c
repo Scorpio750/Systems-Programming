@@ -237,22 +237,16 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 
 			/* creates a buffer that appends found directory to current path in buffer
 			 * then recurses with buffer as the new path */
-			printf("AND THE VALUE OF %s IS %d\n", entry->d_name, checkDir(entry->d_name));
-			if (checkDir(entry->d_name)) { 
-				buffer = calloc(strlen(dirname) + strlen(entry->d_name) + 1, sizeof(char));
-				printf("%s\n", dirname);
-				strcat(buffer, dirname);
+			buffer = calloc(strlen(dirname) + strlen(entry->d_name) + 2, sizeof(char));
+			sprintf(buffer, "%s/%s", dirname, entry->d_name);
+			printf("AND THE VALUE OF %s IS %d\n", buffer, checkDir((char*)entry->d_name));
+			if (checkDir(buffer)) { 
 				printf("BUFFER >>> %s\n ENTRY >>> %s\n", buffer, entry->d_name);
-				strcat(buffer, entry->d_name);
 
 				recurseDir(inv_index, buffer);
 				free(buffer);
 			}
-			if (checkFile(entry->d_name)) {
-				buffer = calloc(strlen(dirname) + strlen(entry->d_name) + 1, sizeof(char));
-				strcat(buffer, dirname);
-				strcat(buffer, entry->d_name);
-
+			if (checkFile(buffer)) {
 				filep = fopen(dirname, "r");
 				insertTrie(filep, inv_index, dirname);
 				free(buffer);
