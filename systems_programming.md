@@ -19,6 +19,8 @@
 	9. [Modularization](#anchor1.9)
 	10. [Libraries](#anchor1.10)
 	11. [Forking Around](#anchor1.11)
+	12. [Zombie Processes](#anchor1.12)
+2. [Multi-Threading](#anchor2)
 
 ---
 ---
@@ -758,3 +760,67 @@ Hard links cannot link across file systems, but soft links can
 		|-u with -c check for strict ordering
 		|-r reverse
 		|-f ignore lower-case
+		
+---
+
+## 10/23/14
+
+# Multi-Threading
+
+- multiple threads of execution
+- **Control Flow** is separate
+- Threads exist in a shared address space
+- Every *thread* has its own **register set**, **program counter** and **call stack**
+- Every thread also has its own **thread id** or *tid*
+- ***Multi-threading* is *ideal* for networking (client-server) architecture**
+- No thread can ever change the registers or stack of another 
+
+### Benefits
+
+- If some threads get stopped or blocked, other threads can continue executing
+- Threads are cheaper to create than processes
+	- between 10-100 times faster
+- Switching b/w threads is cheaper and faster than switching b/w processes
+- Can take advantage of multi-core processors
+	- Can get threads to run on different processors in true *parallel* processing
+
+## Thread Scheduling
+
+- Different levels: **user** and **kernel**-level threads
+	- Kernel-level threads handled by kernel and not the processor itself
+- Certain overhead in managing/scheduling different threads
+- How do I write a multi-client server? [Ask Russell]
+- User-level threads (scheduling and ish) all run as library code inside your process
+
+### Disadvantages
+
+- When one user-level thread gets blocked, all of them get blocked
+	- A blocking system call will stop all user-level threads
+		- **Signals** send to processes, not to threads
+- *However*, if one kernel-level thread gets blocked, the other kernel-level threads will continue executing
+- Kernel-level threads can handle hardware commands better
+	- Run a little bit slower than user-level
+- You make kernel-level threads *by default*
+
+### Syntax
+
+	#include <pthread.h>
+		
+		// fields
+		pthread_t		tid;
+		pthread_atr_t	attr;
+		struct gcd *	gcdptr;
+		unsigned int *	rptr;
+		unsigned int	error;
+		
+		// creates thread
+		pthread_create
+		pthread_join - blocking call: stop calling process until thread to itself is done
+		pthread_detach - prevents join on the specified thread
+		pthread_yield
+		pthread_threadexit
+
+### The Dynamic Memory Covenant
+
+- The parent thread allocates the parameter struct, the child thread extracts data from the struct and frees it
+- For return values, the child allocates and the joining thread does the free()

@@ -278,7 +278,7 @@ char * formatOutput(char * buffer, File_Node * head) {
 	}
 	strcat(formatted_string, "\n</list>\n");
 	free(formatted_string);
-	free(format_list);
+	free(filename_list);
 	return formatted_string;
 }
 
@@ -363,6 +363,6 @@ int main(int argc, char ** argv) {
 	recurseDir(inv_index, dirname);
 	printf("MEOW\n");
 	dump_to_file(inv_index, path);
-	free(in_index);
+	free(inv_index);
 	return 0;
 }
