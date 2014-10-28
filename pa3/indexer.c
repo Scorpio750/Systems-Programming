@@ -10,7 +10,6 @@ Hash_Table * createTable () {
 // void insertHashTable(Hash_Table * inv_index, char c, char * filename) {
 
 Prefix_Node *createNode(char c) {
-	printf("CREATING NODE\n");
 	Prefix_Node *node = (Prefix_Node*)calloc(1, sizeof(Prefix_Node));
 	node->c = c;
 	node->depth = 0;
@@ -109,10 +108,8 @@ int hash(char c) {
 }
 
 void insertTrie(FILE *file, Hash_Table *table, char *filename){
-	printf(">>>>>>>>>>>>>>>>>>>>ENTERS insertTrie\n");
 	if(table->head == NULL) {
 		table->head = createNode('-');
-		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CREATED ROOT\n");
 	}
 
 	Prefix_Node *ptr = table->head;
@@ -214,6 +211,7 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 	// if dirname is a file
 	if (checkFile(dirname)) {
 		filep = fopen(dirname, "r");
+		printf("ABOUT TO ENTER TRIE\n");
 		insertTrie(filep, inv_index, dirname);
 		return;
 	}
@@ -257,7 +255,6 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 
 /* Output functions */
 bool isEmpty(Prefix_Node ** ptr) {
-	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>STEPPED INTO isEmpty()\n");
 	for (int i = 0; i < 35; i++) {
 		if (ptr[i] != NULL) 
 			return false;
@@ -265,9 +262,8 @@ bool isEmpty(Prefix_Node ** ptr) {
 	return true;
 }
 
-char * formatOutput(char * buffer, File_Node * head) {
+char * formatOutput(char * buffer, File_Node * head, char *formatted_string) {
 	File_Node *ptr;
-	char *formatted_string = malloc((sizeof(char) * 2048) + 1);
 	char *filename_list = malloc((sizeof(char) * 100) + 1);;
 	
 	sprintf(formatted_string, "<list> %s\n ", buffer);
@@ -277,14 +273,13 @@ char * formatOutput(char * buffer, File_Node * head) {
 		strcat(formatted_string, filename_list);
 	}
 	strcat(formatted_string, "\n</list>\n");
-	free(formatted_string);
 	free(filename_list);
 	return formatted_string;
 }
 
 void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	int index;
-	printf(">>>>>>>>>>>>>>>>>>>>>>>JUST ABOUT TO ENTER\n");
+	char *formatted_string;
 	if (ptr == NULL) {
 		printf("DAMNIt\n");
 		return;
@@ -299,7 +294,9 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 		buffer[index] = (char)ptr->next[i]->c;
 		if(ptr->next[i]->isWord){
 			buffer[index+1] = '\0';
-			fputs(formatOutput(buffer,ptr->next[i]->head),file);
+			formatted_string = malloc((sizeof(char) * 2048) + 1);
+			fputs(formatOutput(buffer,ptr->next[i]->head,formatted_string),file);
+			free(formatted_string);
 		}
 		recursivePrintTree(buffer, ptr->next[i], file);
 	}
@@ -309,7 +306,6 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 void printTree(Prefix_Node * head, FILE * file) {
 	char * buffer = calloc(256, sizeof(char));
 	Prefix_Node * headptr = head;
-	printf("TREE SEARCH MO\n");
 	recursivePrintTree(buffer, headptr, file);
 	free(buffer);
 	return;
@@ -318,6 +314,7 @@ void printTree(Prefix_Node * head, FILE * file) {
 void dump_to_file(Hash_Table * inv_index, char * filename) {
 	FILE * file = fopen(filename, "w");
 	printTree(inv_index->head, file);
+	fclose(file);
 	return;
 }
 

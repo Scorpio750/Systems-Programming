@@ -1,13 +1,10 @@
 COMPILE = gcc
 FLAGS = -Wall -g
-FILES = indexer.c 
-TARGET = index
 
 all: index
 
-index:
-	$(COMPILE) $(FILES) $(FLAGS) -o $(TARGET)
+index: indexer.c
+	$(COMPILE) $(FLAGS) indexer.c -o index
 
 clean:
-	rm -f *.o
-	rm -f index
+	rm -f index *.o
