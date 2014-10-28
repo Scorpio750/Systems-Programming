@@ -113,8 +113,9 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 	}
 
 	Prefix_Node *ptr = table->head;
-	printf("THE VALUE OF POINTER IS %c\n", ptr->c);
+	printf("THE VALUE OF POINTER IS [%c]\n", ptr->c);
 	int index;
+	printf("DOES IT GET HERE?\n");
 	int c = tolower(fgetc(file));
 	printf("DID WE EVEN GET HERE?\n");
 	if (c == EOF){
@@ -194,6 +195,13 @@ int checkFile(char * file) {
 	return S_ISREG(statbuff.st_mode);
 }
 
+/* parses buffer with strrchr */
+char * parseBuffer(char * buffer) {
+	char * filename = malloc(sizeof(char) * strlen(buffer) + 1);
+	filename = strcpy(filename, strrchr(buffer, '/') + 1);
+	printf("THE VALUE OF FILENAME IS [%s]\n", filename);
+	return filename;
+}
 
 /*
  void readFile(Hash_Table * inv_index, char * path) {
@@ -247,13 +255,14 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 				free(buffer);
 			}
 			if (checkFile(buffer)) {
-				filep = fopen(dirname, "r");
+				printf("ABOUT TO ENTER PARSER\n");
+				char * filename = parseBuffer(buffer);
+				printf("THIS IS THE FILE NAME [%s]--------------------------\n",filename);
+				filep = fopen(filename, "r");
+
 				printf("ENTERING INSERT TRIE\n");
-				int c = tolower(fgetc(filep));
-				if(c == EOF){
-					printf("WELP WTF --------------------------------------- :P\n");
-				}
-				insertTrie(filep, inv_index, dirname);
+				insertTrie(filep, inv_index, buffer);
+				free(filename);
 				free(buffer);
 			}
 		}
