@@ -69,18 +69,18 @@ void swap(Prefix_Node *node, File_Node *small, File_Node *big){
 
 /* checks to see if there is a linked list at that node. If there isn't, we create
  * a new fileNode head. Else, we traverse it to cmp filenames */
-void checkList(Prefix_Node *node, char *filename){
+void checkList(Prefix_Node *node, char *pathname){
 	File_Node *fileNode;
 	int prevOcc; // gives you # of nodes previous to the one you were at
 	if (node->head == NULL){
-		fileNode = createFileNode(filename);
+		fileNode = createFileNode(pathname);
 		node->head = fileNode;
 		return;
 	}
 
 	/* file comparator */
 	for(fileNode = node->head; fileNode != NULL; fileNode = fileNode->next){
-		if(fileNode->filename == filename){
+		if(fileNode->pathname == pathname){
 			fileNode->occurrences++;
 			if(fileNode->prev != NULL){
 				prevOcc = fileNode->prev->occurrences;
@@ -91,7 +91,7 @@ void checkList(Prefix_Node *node, char *filename){
 		}
 
 		if(fileNode->next == NULL){
-			File_Node *newNode = createFileNode(filename);
+			File_Node *newNode = createFileNode(pathname);
 			fileNode->next = newNode;
 			newNode->next = NULL;
 			newNode->prev = fileNode;
@@ -107,7 +107,7 @@ int hash(char c) {
 	return (int)(index - acceptable);
 }
 
-void insertTrie(FILE *file, Hash_Table *table, char *filename){
+void insertTrie(FILE *file, Hash_Table *table, char *pathname){
 	if(table->head == NULL) {
 		table->head = createNode('-');
 	}
@@ -131,7 +131,7 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 		if ((!isalpha(c)) && (!isdigit(c)) && ptr != table->head){
 			ptr->isWord = true;
 			if (ptr->isWord)
-				checkList(ptr,filename);
+				checkList(ptr,pathname);
 			ptr = table->head;
 		}
 		c = tolower(fgetc(file));
@@ -256,7 +256,7 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 				char * filename = parseBuffer(buffer);
 				filep = fopen(filename, "r");
 				printf("ENTERING INSERT TRIE\n");
-				insertTrie(filep, inv_index, filename);
+				insertTrie(filep, inv_index, buffer);
 				free(filename);
 				free(buffer);
 			}
