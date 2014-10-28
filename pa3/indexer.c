@@ -116,9 +116,7 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 	int index;
 	int c = tolower(fgetc(file));
 
-
 	while (c != EOF){
-		printf("	CHAR READ IS %c\n", c);
 		if (isalpha(c) || isdigit(c)){
 			index = hash(c);
 			if (ptr->next[index] == NULL){
@@ -235,14 +233,13 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 			 * then recurses with buffer as the new path */
 			buffer = calloc(strlen(dirname) + strlen(entry->d_name) + 2, sizeof(char));
 			sprintf(buffer, "%s/%s", dirname, entry->d_name);
-			printf("AND THE DIR VALUE OF %s IS %d\n", buffer, checkDir(buffer));
+			printf("AND THE VALUE OF %s IS %d\n", buffer, checkDir((char*)entry->d_name));
 			if (checkDir(buffer)) { 
 				printf("BUFFER >>> %s\n ENTRY >>> %s\n", buffer, entry->d_name);
 
 				recurseDir(inv_index, buffer);
 				free(buffer);
 			}
-			printf("AND THE FILE VALUE OF %s IS %d\n", buffer, checkFile(buffer));
 			if (checkFile(buffer)) {
 				filep = fopen(dirname, "r");
 				insertTrie(filep, inv_index, dirname);
