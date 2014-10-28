@@ -16,7 +16,7 @@
 typedef unsigned char bool;
 
 struct File_Node_ {
-	char * filename;
+	char * pathname;
 	int occurrences;
 	struct File_Node_ * next;
 	struct File_Node_ * prev;

@@ -19,13 +19,13 @@ Prefix_Node *createNode(char c) {
 	return node;
 }
 
-File_Node *createFileNode(char *filename) {
-	if (filename == NULL) {
+File_Node *createFileNode(char *pathname) {
+	if (pathname == NULL) {
 		return NULL;
 	}
 
 	File_Node *newnode = (File_Node*)calloc(1, sizeof(File_Node));
-	newnode->filename = filename;
+	newnode->pathname = pathname;
 	newnode->occurrences = 1;
 	newnode->next = NULL;
 	newnode->prev = NULL;
@@ -284,7 +284,7 @@ char * formatOutput(char * buffer, File_Node * head, char *formatted_string) {
 	sprintf(formatted_string, "<list> %s\n ", buffer);
 
 	for (ptr = head; ptr != NULL; ptr = ptr->next) {
-		sprintf(filename_list,"%s %d ", ptr->filename, ptr->occurrences);
+		sprintf(filename_list,"%s %d ", ptr->pathname, ptr->occurrences);
 		strcat(formatted_string, filename_list);
 	}
 	strcat(formatted_string, "\n</list>\n");
