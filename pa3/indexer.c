@@ -130,8 +130,10 @@ void insertTrie(FILE *file, Hash_Table *table, char *pathname){
 		}
 		if ((!isalpha(c)) && (!isdigit(c)) && ptr != table->head){
 			ptr->isWord = true;
-			if (ptr->isWord)
-				checkList(ptr,pathname);
+			if (ptr->isWord) {
+				char * filename = parseBuffer(pathname);
+				checkList(ptr,filename);
+			}
 			ptr = table->head;
 		}
 		c = tolower(fgetc(file));
@@ -253,11 +255,13 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 			printf("AND THE FILE VALUE OF %s IS %d\n", buffer, checkFile(buffer));
 			if (checkFile(buffer)) {
 				printf("ABOUT TO ENTER PARSER\n");
-				char * filename = parseBuffer(buffer);
-				filep = fopen(filename, "r");
+				filep = fopen(buffer, "r");
+				if (filep == NULL) {
+					printf("FUCK STHISEFSJAFJDKA\n");
+					exit(1);
+				}
 				printf("ENTERING INSERT TRIE\n");
 				insertTrie(filep, inv_index, buffer);
-				free(filename);
 				free(buffer);
 			}
 		}
