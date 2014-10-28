@@ -113,7 +113,7 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 	}
 
 	Prefix_Node *ptr = table->head;
-	printf("THE VALUE OF POINTER IS %s\n", ptr->c);
+	printf("THE VALUE OF POINTER IS %c\n", ptr->c);
 	int index;
 	int c = tolower(fgetc(file));
 
@@ -191,6 +191,13 @@ int checkFile(char * file) {
 	return S_ISREG(statbuff.st_mode);
 }
 
+/* parses buffer with strrchr */
+char * parseBuffer(char * buffer) {
+	char * filename = malloc(sizeof(char) * strlen(buffer) + 1);
+	filename = strcpy(filename, strrchr(buffer, '/') + 1);
+	printf("THE VALUE OF FILENAME IS %s\n", filename);
+	return filename;
+}
 
 /*
  void readFile(Hash_Table * inv_index, char * path) {
@@ -245,9 +252,12 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 			}
 			printf("AND THE FILE VALUE OF %s IS %d\n", buffer, checkFile(buffer));
 			if (checkFile(buffer)) {
-				filep = fopen(dirname, "r");
+				printf("ABOUT TO ENTER PARSER\n");
+				char * filename = parseBuffer(buffer);
+				filep = fopen(filename, "r");
 				printf("ENTERING INSERT TRIE\n");
-				insertTrie(filep, inv_index, dirname);
+				insertTrie(filep, inv_index, filename);
+				free(filename);
 				free(buffer);
 			}
 		}

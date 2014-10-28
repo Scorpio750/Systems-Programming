@@ -54,6 +54,7 @@ Prefix_Node * createNode(char c);
 void recurseDir(Hash_Table * hash, char * path);
 int checkDir(char * file);
 int checkFile(char * file);
+char * parseBuffer(char * file);
 
 /* Output functions */
 bool isEmpty(Prefix_Node ** ptr);
