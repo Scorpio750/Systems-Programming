@@ -113,15 +113,20 @@ void insertTrie(FILE *file, Hash_Table *table, char *filename){
 	}
 
 	Prefix_Node *ptr = table->head;
-	printf("THE VALUE OF POINTER IS %s\n", ptr->c);
+	printf("THE VALUE OF POINTER IS %c\n", ptr->c);
 	int index;
 	int c = tolower(fgetc(file));
-
+	printf("DID WE EVEN GET HERE?\n");
+	if (c == EOF){
+		printf("c is EOF\n");
+	}
 	while (c != EOF){
+		printf("HOW ABOUT HERE?\n");
 		if (isalpha(c) || isdigit(c)){
 			index = hash(c);
 			if (ptr->next[index] == NULL){
 				ptr->next[index] = createNode(c);
+				printf("CHARACTER THAT IS ADDED [%c] [%c]\n", c, ptr->next[index]->c );
 				ptr->next[index]->depth  = ptr->depth+1;
 			}
 			ptr = ptr->next[index];
@@ -244,6 +249,10 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 			if (checkFile(buffer)) {
 				filep = fopen(dirname, "r");
 				printf("ENTERING INSERT TRIE\n");
+				int c = tolower(fgetc(filep));
+				if(c == EOF){
+					printf("WELP WTF --------------------------------------- :P\n");
+				}
 				insertTrie(filep, inv_index, dirname);
 				free(buffer);
 			}
