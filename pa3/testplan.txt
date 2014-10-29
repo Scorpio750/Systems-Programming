@@ -35,19 +35,16 @@ Given a file name.
 index <index><boo>
 
 <list> a
-boo 1
+ boo 1
 </list>
-
 <list> boo
-boo 1
+ boo 1
 </list>
-
 <list> dog
-boo 1
+ boo 1
 </list>
-
 <list> name
-boo 2
+ boo 2
 </list>
 ---------------------
 
@@ -61,27 +58,22 @@ Given a directory name containing only files.
 index <index><Case2>
 
 <list> a
-boo 1 baa 1
+ Case2/baa 1 Case2/boo 1
 </list>
-
 <list> baa
-baa 1
+ Case2/baa 1
 </list>
-
 <list> boo
-boo 1
+ Case2/boo 1
 </list>
-
 <list> cat
-baa 1
+ Case2/baa 1
 </list>
-
 <list> dog
-boo 1
+ Case2/boo 1
 </list>
-
 <list> name
-boo 2 baa 1
+ Case2/boo 2 Case2/baa 1
 </list>
 ---------------------
 
@@ -95,39 +87,31 @@ Given a directory name containing multiple directories.
 index <index><Case3>
 
 <list> a
-bii 2 boo 1 baa 1
+ Case3/bii 2 Case3/x/boo 1 Case3/y/baa 1
 </list>
-
 <list> baa
-baa 1
+ Case3/y/baa 1
 </list>
-
 <list> bii
-bii 1
+ Case3/bii 1
 </list>
-
 <list> boo
-boo 1
+ Case3/x/boo 1
 </list>
-
 <list> cat
-baa 1
+ Case3/y/baa 1
 </list>
-
 <list> dog
-boo 1
+ Case3/x/boo 1
 </list>
-
 <list> mouse
-bii 1
+ Case3/bii 1
 </list>
-
 <list> name
-boo 2 baa 1
+ Case3/x/boo 2 Case3/y/baa 1
 </list>
-
 <list> named
-bii 1
+ Case3/bii 1
 </list>
 ---------------------
 
@@ -142,27 +126,22 @@ index <y><Case4>
 
 Overwrite:
 <list> a
-boo 1 baa 1
+ Case4/x/boo 1 Case4/y/baa 1
 </list>
-
 <list> baa
-baa 1
+ Case4/y/baa 1
 </list>
-
 <list> boo
-boo 1
+ Case4/x/boo 1
 </list>
-
 <list> cat
-baa 1
+ Case4/y/baa 1
 </list>
-
 <list> dog
-boo 1
+ Case4/x/boo 1
 </list>
-
 <list> name
-boo 2 baa 1
+ Case4/x/boo 2 Case4/y/baa 1
 </list>
 
 Directory Name: Case4
@@ -184,26 +163,17 @@ Files that have the same name(but different pathnames).
 
 index <index><Case5>
 
-A dog name boo boo
-
 <list> a
-/Case5/boo 1 /Case5/z/boo 1
+ Case5/boo 1 Case5/z/boo 1
 </list>
-
 <list> boo
-/Case5/z/boo 2 /Case5/boo 1
+ Case5/z/boo 2 Case5/boo 1
 </list>
-
 <list> dog
-/Case5/boo 1 /Case5/z/boo 1
+ Case5/boo 1 Case5/z/boo 1
 </list>
-
 <list> name
-<<<<<<< HEAD
-/Case5/boo 2 /Case5/z/boo1
-=======
-/Case5/boo 2 /Case5/z/boo 1
->>>>>>> 2083ee7f2888e5c77ccc12f86fc2f75523b0e56d
+ Case5/boo 2 Case5/z/boo 1
 </list>
 ---------------------
 
@@ -216,7 +186,7 @@ Name of directory/file does not exist (ERROR).
 
 index <index><Case>
 
-Invalid input.
+File Does Not Exist.
 ---------------------
 
 
@@ -226,10 +196,10 @@ Test Case 7:
 Description:
 Scalability
 
-Tested Directories which contained many sub-directories with those sub-directories having sub-directories as well. Directories also contained different files with large files.
+We tested it on a really large data file.
 
 Result: 
-
+It works quickly.
 ---------------------
 
 
