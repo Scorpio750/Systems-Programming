@@ -199,7 +199,11 @@ A dog name boo boo
 </list>
 
 <list> name
+<<<<<<< HEAD
 /Case5/boo 2 /Case5/z/boo1
+=======
+/Case5/boo 2 /Case5/z/boo 1
+>>>>>>> 2083ee7f2888e5c77ccc12f86fc2f75523b0e56d
 </list>
 ---------------------
 

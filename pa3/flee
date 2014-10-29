@@ -1,15 +1,18 @@
-<list> coo
- foop 2 poo 2 poo 2 foop 1 
+<list> a
+ boo 2 baa 1 
 </list>
-<list> da4a4
- loop 1 
+<list> baa
+ baa 1 
 </list>
-<list> da5a
- loop 1 
+<list> boo
+ boo 1 
 </list>
-<list> foop
- foop 1 
+<list> cat
+ baa 1 
 </list>
-<list> loo
- poo 1 
+<list> dog
+ boo 1 
+</list>
+<list> name
+ boo 3 baa 1 
 </list>
