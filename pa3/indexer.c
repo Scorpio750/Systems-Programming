@@ -70,11 +70,6 @@ void swap(Prefix_Node *node, File_Node *small, File_Node *big){
 void checkList(Prefix_Node *node, char *pathname){
 	File_Node *fileNode;
 	int prevOcc; // gives you # of nodes previous to the one you were at
-<<<<<<< HEAD
-
-	/* creates new fileNode if there isn't one already */
-=======
->>>>>>> 6181107b1687113eda391f3e30bb0135364c41be
 	if (node->head == NULL){
 		fileNode = createFileNode(pathname);
 		node->head = fileNode;
@@ -119,13 +114,6 @@ void insertTrie(FILE *file, Hash_Table *table, char *pathname){
 	Prefix_Node *ptr = table->head;
 	int index;
 	int c = tolower(fgetc(file));
-<<<<<<< HEAD
-	//printf("DID WE EVEN GET HERE?\n");
-	/*if (c == EOF){
-	  printf("c is EOF\n");
-	  }*/
-=======
->>>>>>> 6181107b1687113eda391f3e30bb0135364c41be
 	while (c != EOF){
 		if (isalpha(c) || isdigit(c)){
 			index = hash(c);
@@ -147,46 +135,6 @@ void insertTrie(FILE *file, Hash_Table *table, char *pathname){
 	return;
 }
 
-<<<<<<< HEAD
-/*
-   void insertHashTable(Hash_Table * table, char c, char * filename) {
-   File_Node * fileptr = NULL;
-   int index = 0;
-   bool isFound;
-
-   if (inv_index->head == NULL) {
-   inv_index->head = malloc(sizeof(Prefix_Node));
-   inv_index->ptr = inv_index->head;
-   }
-   index = hash(c);
-
-//invalid character
-if (index == -1) {
-//if at root
-if (inv_index->ptr == inv_index->head) return;
-else {
-inv_index->ptr->isWord = true;
-for (fileptr = inv_index->ptr->head; fileptr != NULL; fileptr = fileptr->next) {
-// compares files in File Linked List to current file
-if (strcmp(fileptr->filename, filename) == 0) {
-fileptr->occurrences++;
-}
-}
-}
-}
-}
-
-int hash(char c) {
-char * index = strchr(accepinv_index, c);
-if (index == NULL) {
-return -1;
-}
-return (int)(index - accepinv_index);
-}
- */
-
-=======
->>>>>>> 6181107b1687113eda391f3e30bb0135364c41be
 /* File System functions */
 
 /* checkDir and checkFile return 1 if it is a file/dir, 0 otherwise */
@@ -209,25 +157,6 @@ char * parseBuffer(char * buffer) {
 	return filename;
 }
 
-<<<<<<< HEAD
-/*
-   void readFile(Hash_Table * inv_index, char * path) {
-   FILE * filep = fopen(path, "r");
-   char c = '\0';
-   char * token[256];
-   int acceptcount = 0;
-
-// converts mixed-case to lower-case and tokenizes
-while (c != EOF) {
-c = fgetc(filep);
-tolower(c);
-insertHashTable(inv_index, c, path);
-}
-}-
- */
-
-=======
->>>>>>> 6181107b1687113eda391f3e30bb0135364c41be
 void recurseDir(Hash_Table * inv_index, char * dirname) {
 	FILE * filep;
 
@@ -380,11 +309,10 @@ int main(int argc, char ** argv) {
 		printf("Unable to create file %s", path);
 	}
 	// check to see if specified inv-index filename is already in your current directory
-	char * buffer = NULL;
-	DIR * dirp = opendir('.');
+	DIR * dirp = opendir(".");
 	struct dirent * entry;
 	if (!dirp) {
-		return;
+		return 0;
 	}
 
 	/* iterates through every file in a directory with readdir */
@@ -400,7 +328,6 @@ int main(int argc, char ** argv) {
 		printf("File exists with the name %s.\nWould you like to overwrite it? (y/n)\n", path);
 
 	}
-
 
 	recurseDir(inv_index, dirname);
 	dump_to_file(inv_index, path);

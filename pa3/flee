@@ -1,18 +1,30 @@
+<list> 1
+ flee 6 
+</list>
+<list> 2
+ flee 1 
+</list>
+<list> 3
+ flee 1 
+</list>
 <list> a
- boo 2 baa 1 
+ flee 1 
 </list>
 <list> baa
- baa 1 
+ flee 5 
 </list>
 <list> boo
- boo 1 
+ flee 5 
 </list>
 <list> cat
- baa 1 
+ flee 1 
 </list>
 <list> dog
- boo 1 
+ flee 1 
+</list>
+<list> list
+ flee 12 
 </list>
 <list> name
- boo 3 baa 1 
+ flee 1 
 </list>
