@@ -1,5 +1,8 @@
 <list> 1
- flee 6 
+ flee 7 
+</list>
+<list> 12
+ flee 1 
 </list>
 <list> 2
  flee 1 
@@ -7,14 +10,20 @@
 <list> 3
  flee 1 
 </list>
+<list> 5
+ flee 2 
+</list>
+<list> 6
+ flee 1 
+</list>
 <list> a
  flee 1 
 </list>
 <list> baa
- flee 5 
+ flee 1 
 </list>
 <list> boo
- flee 5 
+ flee 1 
 </list>
 <list> cat
  flee 1 
@@ -22,8 +31,11 @@
 <list> dog
  flee 1 
 </list>
+<list> flee
+ flee 10 
+</list>
 <list> list
- flee 12 
+ flee 21 
 </list>
 <list> name
  flee 1 

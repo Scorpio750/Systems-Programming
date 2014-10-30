@@ -295,6 +295,7 @@ void destroyNode(Prefix_Node *node) {
 int main(int argc, char ** argv) {
 
 	char * path = argv[1], * dirname = argv[2];
+	char * ow_response = malloc(sizeof(char) * 10);
 	int file_descr;
 	bool file_exists = false;
 	Hash_Table * inv_index = createTable();
@@ -326,7 +327,13 @@ int main(int argc, char ** argv) {
 	}
 	if (file_exists) {
 		printf("File exists with the name %s.\nWould you like to overwrite it? (y/n)\n", path);
-
+		scanf("%s", ow_response);
+		for (int i = 0; i < strlen(ow_response); i++) {
+			ow_response[i] = tolower(ow_response[i]);
+		}
+		if (!strcmp(ow_response, "n") || !strcmp(ow_response, "no")) {
+			exit(1);	
+		}
 	}
 
 	recurseDir(inv_index, dirname);
