@@ -192,7 +192,7 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 			if (checkFile(buffer)) {
 				filep = fopen(buffer, "r");
 				if (filep == NULL) {
-					printf("FUCK STHISEFSJAFJDKA\n");
+					fprintf(stderr, "File does not exist\n");
 					exit(1);
 				}
 				insertTrie(filep, inv_index, buffer);
