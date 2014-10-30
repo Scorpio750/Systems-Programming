@@ -1,3 +1,6 @@
+// Patrick Wu
+// Alison Wong
+// Team -__-
 #include "indexer.h"
 
 /* Hash Table functions */
@@ -195,13 +198,15 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 				filep = fopen(buffer, "r");
 				if (filep == NULL) {
 					fprintf(stderr, "File does not exist\n");
+                    fclose(filep);
 					exit(1);
 				}
 				insertTrie(filep, inv_index, buffer);
 				free(buffer);
+                fclose(filep);
 			}
 		}
-		free(dirp);
+		closedir(dirp);
 	}
 	return;
 }
@@ -277,6 +282,7 @@ void dump_to_file(Hash_Table * inv_index, char * filename) {
 void destroyList(File_Node *head) {
 	if(head == NULL)
 		return;
+    // recursively calls destroyList to free all fileNodes
 	destroyList(head->next);
 	free(head->pathname);
 	free(head);
@@ -292,8 +298,8 @@ void destroyNode(Prefix_Node *node) {
 			continue;
 		destroyNode(node->next[i]);
 	}
-	free (node->next);
 	destroyList(node->head);
+	free(node->next);
 	free(node);
 	return;
 }
@@ -341,7 +347,10 @@ int main(int argc, char ** argv) {
 
 	recurseDir(inv_index, dirname);
 	dump_to_file(inv_index, path);
-	free(dirp);
+    destroyNode(inv_index->head);
+
+    // frees
+	closedir(dirp);
 	free(inv_index);
 	free(ow_response);
 	return 0;
