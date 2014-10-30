@@ -199,7 +199,7 @@ Scalability
 We tested it on a really large data file.
 
 Result: 
-It works quickly.
+It works.
 ---------------------
 
 
