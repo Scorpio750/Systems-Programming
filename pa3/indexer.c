@@ -299,7 +299,6 @@ int main(int argc, char ** argv) {
 
 	char * path = argv[1], * dirname = argv[2];
 	char * ow_response = malloc(sizeof(char) * 10);
-	int file_descr;
 	bool file_exists = false;
 	Hash_Table * inv_index = createTable();
 
@@ -308,10 +307,6 @@ int main(int argc, char ** argv) {
 		return 0;
 	}
 
-	// make a new file 
-	if ((file_descr = open(path, O_WRONLY)) == -1) {
-		printf("Unable to create file %s", path);
-	}
 	// check to see if specified inv-index filename is already in your current directory
 	DIR * dirp = opendir(".");
 	struct dirent * entry;
