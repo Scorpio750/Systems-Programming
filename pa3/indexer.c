@@ -150,12 +150,13 @@ int checkFile(char * file) {
 	return S_ISREG(statbuff.st_mode);
 }
 
-/* parses buffer with strrchr */
+/* parses buffer with strrchr 
 char * parseBuffer(char * buffer) {
 	char * filename = malloc(sizeof(char) * strlen(buffer) + 1);
 	filename = strcpy(filename, strrchr(buffer, '/') + 1);
 	return filename;
 }
+*/
 
 void recurseDir(Hash_Table * inv_index, char * dirname) {
 	FILE * filep;
@@ -164,6 +165,7 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 	if (checkFile(dirname)) {
 		filep = fopen(dirname, "r");
 		insertTrie(filep, inv_index, dirname);
+		fclose(filep); //------------------------------------------------------
 		return;
 	}
 	else if (checkDir(dirname)) {
@@ -274,6 +276,7 @@ void destroyList(File_Node *head) {
 	if(head == NULL)
 		return;
 	destroyList(head->next);
+	free(head->pathname);
 	free(head);
 	return;
 }
@@ -338,6 +341,8 @@ int main(int argc, char ** argv) {
 
 	recurseDir(inv_index, dirname);
 	dump_to_file(inv_index, path);
+	free(dirp);
 	free(inv_index);
+	free(ow_response);
 	return 0;
 }
