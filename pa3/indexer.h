@@ -18,6 +18,8 @@ typedef unsigned char bool;
 struct File_Node_ {
 	char * pathname;
 	int occurrences;
+	int count;
+	int size;
 	struct File_Node_ * next;
 	struct File_Node_ * prev;
 };
