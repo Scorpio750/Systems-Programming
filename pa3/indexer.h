@@ -1,6 +1,6 @@
 #ifndef INDEXER_H
 #define INDEXER_H
-#define acceptable "0123456789abcdefghijklmnopqrstuvwxy"
+#define acceptable "0123456789abcdefghijklmnopqrstuvwxyz"
 
 #include <stdio.h>
 #include <stdlib.h>

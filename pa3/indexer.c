@@ -1,3 +1,6 @@
+// Patrick Wu
+// Alison Wong
+// Team -__-
 #include "indexer.h"
 
 /* Hash Table functions */
@@ -195,20 +198,23 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 				filep = fopen(buffer, "r");
 				if (filep == NULL) {
 					fprintf(stderr, "File does not exist\n");
+                    fclose(filep);
 					exit(1);
 				}
 				insertTrie(filep, inv_index, buffer);
 				free(buffer);
+                fclose(filep);
 			}
 		}
-		free(dirp);
+		closedir(dirp);
 	}
 	return;
 }
 
 /* Output functions */
 bool isEmpty(Prefix_Node ** ptr) {
-	for (int i = 0; i < 35; i++) {
+    int i;
+	for (i = 0; i <= 35; i++) {
 		if (ptr[i] != NULL) 
 			return false;
 	}
@@ -232,6 +238,7 @@ char * formatOutput(char * buffer, File_Node * head, char *formatted_string) {
 
 void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	int index;
+    int i;
 	char *formatted_string;
 	if (ptr == NULL) {
 		fprintf(stderr, "File Does Not Exist\n");
@@ -239,8 +246,8 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	}
 	bool is_empty = isEmpty(ptr->next);
 	if (is_empty) return;
-
-	for (int i = 0; i < 35; i++) {
+    
+	for (i = 0; i <= 35; i++) {
 		if (ptr->next[i] == NULL)
 			continue;
 		index = ptr->next[i]->depth-1;
@@ -275,6 +282,7 @@ void dump_to_file(Hash_Table * inv_index, char * filename) {
 void destroyList(File_Node *head) {
 	if(head == NULL)
 		return;
+    // recursively calls destroyList to free all fileNodes
 	destroyList(head->next);
 	free(head->pathname);
 	free(head);
@@ -282,15 +290,16 @@ void destroyList(File_Node *head) {
 }
 
 void destroyNode(Prefix_Node *node) {
+    int i;
 	if (node == NULL)
 		return;
-	for (int i = 0; i < 36; i++){
+	for (i = 0; i < 36; i++){
 		if (node->next[i] == NULL)
 			continue;
 		destroyNode(node->next[i]);
 	}
-	free (node->next);
 	destroyList(node->head);
+	free(node->next);
 	free(node);
 	return;
 }
@@ -299,19 +308,22 @@ int main(int argc, char ** argv) {
 
 	char * path = argv[1], * dirname = argv[2];
 	char * ow_response = malloc(sizeof(char) * 10);
-	int file_descr;
 	bool file_exists = false;
 	Hash_Table * inv_index = createTable();
+    int i;
 
 	if (argc != 3) {
 		printf("Invalid number of arguments\n");
 		return 0;
 	}
 
+<<<<<<< HEAD
 	// make a new file 
 	if ((file_descr = open(path, O_WRONLY)) == -1) {
 		printf("Unable to create file %s\n", path);
 	}
+=======
+>>>>>>> 08888b43047a8f4f86e1aeea2e07ce709a2cf92b
 	// check to see if specified inv-index filename is already in your current directory
 	DIR * dirp = opendir(".");
 	struct dirent * entry;
@@ -331,17 +343,21 @@ int main(int argc, char ** argv) {
 	if (file_exists) {
 		printf("File exists with the name %s.\nWould you like to overwrite it? (y/n)\n", path);
 		scanf("%s", ow_response);
-		for (int i = 0; i < strlen(ow_response); i++) {
+		for (i = 0; i < strlen(ow_response); i++) {
 			ow_response[i] = tolower(ow_response[i]);
 		}
 		if (!strcmp(ow_response, "n") || !strcmp(ow_response, "no")) {
-			exit(1);	
+            printf("Aborting...\n");
+			return 0;	
 		}
 	}
 
 	recurseDir(inv_index, dirname);
 	dump_to_file(inv_index, path);
-	free(dirp);
+    destroyNode(inv_index->head);
+
+    // frees
+	closedir(dirp);
 	free(inv_index);
 	free(ow_response);
 	return 0;
