@@ -173,7 +173,7 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 		if (!dirp) {
 			return;
 		}
-		
+
 		/* iterates through every file in a directory with readdir */
 		while ((entry = readdir(dirp)) != NULL) {
 			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
@@ -296,6 +296,7 @@ int main(int argc, char ** argv) {
 
 	char * path = argv[1], * dirname = argv[2];
 	int file_descr;
+	bool file_exists = false;
 	Hash_Table * inv_index = createTable();
 
 	if (argc != 3) {
@@ -306,6 +307,26 @@ int main(int argc, char ** argv) {
 	// make a new file 
 	if ((file_descr = open(path, O_WRONLY)) == -1) {
 		printf("Unable to create file %s", path);
+	}
+	// check to see if specified inv-index filename is already in your current directory
+	DIR * dirp = opendir(".");
+	struct dirent * entry;
+	if (!dirp) {
+		return 0;
+	}
+
+	/* iterates through every file in a directory with readdir */
+	while ((entry = readdir(dirp)) != NULL) {
+		if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+			continue;
+		}
+		if (strcmp(entry->d_name, path) == 0) {
+			file_exists = true;
+		}
+	}
+	if (file_exists) {
+		printf("File exists with the name %s.\nWould you like to overwrite it? (y/n)\n", path);
+
 	}
 
 	recurseDir(inv_index, dirname);
