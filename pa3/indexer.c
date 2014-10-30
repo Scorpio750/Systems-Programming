@@ -101,8 +101,6 @@ void checkList(Prefix_Node *node, char *pathname){
 int hash(char c) {
 	char * index = strchr(acceptable, c);
 	if (index == NULL) {
-        printf("ILLEGAL CHAR: %c\n", c);
-        printf("illegal index returned by strchr\n");
 		return -1;
 	}
 	return (int)(index - acceptable);
@@ -211,7 +209,7 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 /* Output functions */
 bool isEmpty(Prefix_Node ** ptr) {
     int i;
-	for (i = 0; i < 35; i++) {
+	for (i = 0; i <= 35; i++) {
 		if (ptr[i] != NULL) 
 			return false;
 	}
@@ -244,7 +242,7 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	bool is_empty = isEmpty(ptr->next);
 	if (is_empty) return;
     
-	for (i = 0; i < 35; i++) {
+	for (i = 0; i <= 35; i++) {
 		if (ptr->next[i] == NULL)
 			continue;
 		index = ptr->next[i]->depth-1;
