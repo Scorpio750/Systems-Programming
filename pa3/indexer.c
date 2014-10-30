@@ -101,6 +101,8 @@ void checkList(Prefix_Node *node, char *pathname){
 int hash(char c) {
 	char * index = strchr(acceptable, c);
 	if (index == NULL) {
+        printf("ILLEGAL CHAR: %c\n", c);
+        printf("illegal index returned by strchr\n");
 		return -1;
 	}
 	return (int)(index - acceptable);
@@ -208,7 +210,8 @@ void recurseDir(Hash_Table * inv_index, char * dirname) {
 
 /* Output functions */
 bool isEmpty(Prefix_Node ** ptr) {
-	for (int i = 0; i < 35; i++) {
+    int i;
+	for (i = 0; i < 35; i++) {
 		if (ptr[i] != NULL) 
 			return false;
 	}
@@ -232,6 +235,7 @@ char * formatOutput(char * buffer, File_Node * head, char *formatted_string) {
 
 void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	int index;
+    int i;
 	char *formatted_string;
 	if (ptr == NULL) {
 		fprintf(stderr, "File Does Not Exist\n");
@@ -239,8 +243,8 @@ void recursivePrintTree(char *buffer, Prefix_Node * ptr, FILE *file){
 	}
 	bool is_empty = isEmpty(ptr->next);
 	if (is_empty) return;
-
-	for (int i = 0; i < 35; i++) {
+    
+	for (i = 0; i < 35; i++) {
 		if (ptr->next[i] == NULL)
 			continue;
 		index = ptr->next[i]->depth-1;
@@ -282,9 +286,10 @@ void destroyList(File_Node *head) {
 }
 
 void destroyNode(Prefix_Node *node) {
+    int i;
 	if (node == NULL)
 		return;
-	for (int i = 0; i < 36; i++){
+	for (i = 0; i < 36; i++){
 		if (node->next[i] == NULL)
 			continue;
 		destroyNode(node->next[i]);
@@ -301,6 +306,7 @@ int main(int argc, char ** argv) {
 	char * ow_response = malloc(sizeof(char) * 10);
 	bool file_exists = false;
 	Hash_Table * inv_index = createTable();
+    int i;
 
 	if (argc != 3) {
 		printf("Invalid number of arguments");
@@ -326,11 +332,12 @@ int main(int argc, char ** argv) {
 	if (file_exists) {
 		printf("File exists with the name %s.\nWould you like to overwrite it? (y/n)\n", path);
 		scanf("%s", ow_response);
-		for (int i = 0; i < strlen(ow_response); i++) {
+		for (i = 0; i < strlen(ow_response); i++) {
 			ow_response[i] = tolower(ow_response[i]);
 		}
 		if (!strcmp(ow_response, "n") || !strcmp(ow_response, "no")) {
-			exit(1);	
+            printf("Aborting...\n");
+			return 0;	
 		}
 	}
 
