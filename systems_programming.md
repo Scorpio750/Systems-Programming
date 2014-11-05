@@ -766,7 +766,7 @@ Hard links cannot link across file systems, but soft links can
 
 ## 10/23/14
 
-# Multi-Threading
+# [Multi-Threading](id:anchor2)
 
 - multiple threads of execution
 - **Control Flow** is separate
