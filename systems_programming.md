@@ -21,6 +21,7 @@
 	11. [Forking Around](#anchor1.11)
 	12. [Zombie Processes](#anchor1.12)
 2. [Multi-Threading](#anchor2)
+3. [Semaphore](#anchor3)
 
 ---
 ---
@@ -824,3 +825,63 @@ Hard links cannot link across file systems, but soft links can
 
 - The parent thread allocates the parameter struct, the child thread extracts data from the struct and frees it
 - For return values, the child allocates and the joining thread does the free()
+
+---
+## 11/3/14
+
+# [Semaphores](id:anchor3)
+
+- Asynchronization mechanism
+- 3 components:
+	1. Flag
+	2. Queue of suspended threads
+	3. Nonnegative Counter (instd. of an owner like a mutex)
+	
+```
+#include <semaphore.h>
+
+int sem_init(sem_t *, int, unsigned int);
+int sem_destroy(sem_t *);
+int sem_wait(sem_t *);
+int sem_post(sem_t *);
+```
+
+- Middle argument is a flag signifying whether the semaphore will be in shared memory
+- Third argument is a counter
+- If counter is 1
+- If suspended thread in queue, dequeue + make it runnable
+- Anyone can post to a semaphore (no ownership)
+- Options for *sem_wait*:
+	- If counter $$$
+\geq$$$ 1, let one thread through, decrement counter by 1
+	- If counter = 0, suspend calling thread and put into queue
+- You increment the counter every time you post
+
+
+
+**Asynch-Signal-Safe**
+
+- Something you can build inside a signal handler
+
+### Things you cannot do in a sighandler
+
+- Create or exit a hread
+	- You don't know which thread you're exiting
+- Lock/unlock or init/destroy a mutex
+- "                         " a condition variable
+- Invoke pthread
+- Invoke most semaphore fns.
+
+### Things you can do in a sighandler
+
+- Post to a semaphore
+- Sem_post if asynch-signal-safe
+- Anything labeled asynch-sig-safe
+
+### Differences b/w Semaphores and Mutexes
+
+- Mutexes can only be locked/unlocked by their owner
+	- Anyone can post to a semaphore
+- Mutexes only have two states: locked and unlocked
+	- Semaphore can take on $$$\mid \mathbb N \mid$$$ states
+		- With the right counter value it can have multiple concurrent accessors

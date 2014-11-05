@@ -1,6 +1,6 @@
 // Patrick Wu
 // Alison Wong
-// Team -__-
+// Team -_-
 #include "indexer.h"
 
 /* Hash Table functions */
