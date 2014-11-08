@@ -1,7 +1,6 @@
-/*
- * Alison Wong
- * Patrick Wu
- */
+// Alison Wong
+// Patrick Wu
+// Team -_-
 
 #ifndef INDEXER_H
 #define INDEXER_H

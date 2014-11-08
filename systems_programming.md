@@ -16,11 +16,17 @@
 	6. [Quicksort in C](#anchor1.6)
 	7. [Memory Manipulation](#anchor1.7)
 	8. [Constants](#anchor1.8)
-	9. [Modularization](#anchor1.9)
-	10. [Libraries](#anchor1.10)
-	11. [Forking Around](#anchor1.11)
-	12. [Zombie Processes](#anchor1.12)
-2. [Multi-Threading](#anchor2)
+	9. [Libraries](#anchor1.9)
+	10. [File Systems](#anchor1.10)
+	11. [System Calls](#anchor1.11)
+2. [Process Handling](#anchor2)
+	1. [Signal Handling](#anchor2.1)
+	2. [Forking Around](#anchor2.2)
+	3. [Zombie Processes](#anchor2.3)
+	4. [Orphan Processes](#anchor2.4)
+	5. [Multi-Threading](#anchor2.5)
+	6. [Mutexes](#anchor2.6)
+	7. [Semaphores](#anchor2.7)
 
 ---
 ---
@@ -288,11 +294,11 @@ $$\begin{matrix} \%c \;\text{char} & \%u \;\text{unsigned integer} & \%f \;\text
 
 	#include <stdlib.h>
 	
-	void* malloc(size_T size);
+	void* malloc(size_t size);
 	//changes size of previously malloc-ed memory
 	void* realloc(void*ptr, size_T size); 
 	//same as malloc but clears memory first
-	void* calloc();
+	void* calloc(size_t count, size_t size);
 	void free(void*);
 	
 	// example
@@ -313,7 +319,7 @@ $$\begin{matrix} \%c \;\text{char} & \%u \;\text{unsigned integer} & \%f \;\text
 		void qsort(void *base, \
 			size_T num_elems, \
 			size_T elem_size, \
-			int (*compar)(const void *, const void *))
+			int (*compar)(const void *, const void *)
 - In this case, the final param is a comparison function that you have to send it. The ugly syntax is necessary to cast the comparison function into a pointer to that function
 	
 - C has a comma operator which allows you to string a series of expressions together
@@ -378,7 +384,7 @@ Example function:
 		const int * const ptr = &x;
 		/* cannot change the dereferenced value OR the pointer */
 
-## [Modularization](id:anchor1.9)
+## Modularization
 
 - Advantages to modularization:
 	- Localization of specialization
@@ -450,7 +456,7 @@ Example function:
 				-f FILENAME
 				-n list all commands it will execute w/o running them
 
-### File Systems and their related shit
+## [File Systems and their related shit](id:anchor1.9)
 
 
 - inode (index node) contains meta-information about the file
@@ -518,14 +524,14 @@ Example function:
 			
 			 char * strerror(int errnum);
 			 void perror(const char * message);
-	- In C, all IO is done through file descriptors. [0] is stdin [1] is stdout, and [2] is stderr
+	- In C, all I/O is done through file descriptors. [0] is stdin [1] is stdout, and [2] is stderr
 	- Sockets are also parsed through file descriptors
 	
 ---
 
 ## 10/2/14
 
-## [Debugging](id:anchor1.12)
+## [Debugging](id:gdb)
 
 - The -g flag enables it to be debugged
 	- Used to be highly machine-specific/compiler-specific
@@ -545,9 +551,10 @@ Example function:
 
 ## 10/7/14
 
-## [Signals](id:anchor1.13)
+# [Process Handling](id:anchor2)
 
-[ASK RUSSELL!]
+## [Signals](id:anchor2.1)
+
 
 - Signals are inter-process communication in *NIX systems
 
@@ -604,7 +611,7 @@ Dangerous vvvv
 ---
 ## 10/16/14
 
-## [Forking Around](id:anchor1.11)
+## [Forking Around](id:anchor2.2)
 
 	int main() {
 		pid_t pid;
@@ -659,16 +666,22 @@ Dangerous vvvv
 - int main() can actually take a 3rd argument, char ** envp
 	- Retrieves environment variables
 - Exec does not return values unless there is an error, in which case it returns -1
+- It will return to the shell, not the parent process
+
 ---
 
 ## 10/21/14
 
-## [ZOMG ZOMBIES](id:anchor1.12)
+## [ZOMG ZOMBIES](id:anchor2.3)
 
 - A zombie process is a transient state
 	- Has gone from running to not running
-	- Becomes a child of an init process
-	- Somebody waits for it, either its parent or its (child?)
+
+## [OMG ORPHANS](id:anchor2.4)
+
+- Orphans are different from zombies
+	- An *orphan* is usually a child process still running whose parent process has died without waiting on it
+	- In such a case a speciail *init* process will *re-parent* the child process
 	
 ## Command Line Commands
 
@@ -765,7 +778,7 @@ Hard links cannot link across file systems, but soft links can
 
 ## 10/23/14
 
-# Multi-Threading
+## [Multi-Threading](id:anchor2.5)
 
 - multiple threads of execution
 - **Control Flow** is separate
@@ -789,7 +802,7 @@ Hard links cannot link across file systems, but soft links can
 - Different levels: **user** and **kernel**-level threads
 	- Kernel-level threads handled by kernel and not the processor itself
 - Certain overhead in managing/scheduling different threads
-- How do I write a multi-client server? [Ask Russell]
+- How do I write a multi-client server? **[Ask Russell]**
 - User-level threads (scheduling and ish) all run as library code inside your process
 
 ### Disadvantages
@@ -824,3 +837,83 @@ Hard links cannot link across file systems, but soft links can
 
 - The parent thread allocates the parameter struct, the child thread extracts data from the struct and frees it
 - For return values, the child allocates and the joining thread does the free()
+
+---
+## [Mutexes](id:anchor2.6)
+
+- Mutexes are used to lock shared data
+- Default state is unlocked
+- The first thread that calls pthread_mutex_lock locks it and returns immediately
+	- Subsequent threads will have to wait until the mutex becomes unlocked
+- A data structure of non-trivial complexity (linked list, hash table) is **inconsistent** when it is being modified
+	- In such a case, a mutex should **lock** the relevant execution control flows regarding the specified data from being modified by other threads with *pthread_mutex_lock*
+	
+## Deadlock
+
+- A **deadlock** occurs when you have one or more threads waiting for omsone else to unlock some shared resource. There are 4 conditions for a deadlock, also known as **Coffman conditions**
+
+	1. Mutual Exclusion
+	2. Circular Wait
+	3. Hold and Wait
+	4. No Preemption
+- You can avoid deadlocks by always locking shared resources in the same order
+	
+---
+## 11/3/14
+
+## [Semaphores](id:anchor2.7)
+
+- Asynchronization mechanism
+- 3 components:
+	1. Flag
+	2. Queue of suspended threads
+	3. Nonnegative Counter (instd. of an owner like a mutex)
+	
+```
+#include <semaphore.h>
+
+int sem_init(sem_t *, int, unsigned int);
+int sem_destroy(sem_t *);
+int sem_wait(sem_t *);
+int sem_post(sem_t *);
+```
+
+- Middle argument is a flag signifying whether the semaphore will be in shared memory
+- Third argument is a counter
+- If counter is 1
+- If suspended thread in queue, dequeue + make it runnable
+- Anyone can post to a semaphore (no ownership)
+- Options for *sem_wait*:
+	- If counter $$$
+\geq$$$ 1, let one thread through, decrement counter by 1
+	- If counter = 0, suspend calling thread and put into queue
+- You increment the counter every time you post
+
+
+
+**Asynch-Signal-Safe**
+
+- Something you can build inside a signal handler
+
+### Things you cannot do in a sighandler
+
+- Create or exit a hread
+	- You don't know which thread you're exiting
+- Lock/unlock or init/destroy a mutex
+- Same thing for a condition variable
+- Invoke pthread
+- Invoke most semaphore fns.
+
+### Things you can do in a sighandler
+
+- Post to a semaphore
+- Sem_post if asynch-sig-safe
+- Anything labeled asynch-sig-safe
+
+### Differences b/w Semaphores and Mutexes
+
+- Mutexes can only be locked/unlocked by their owner
+	- Anyone can post to a semaphore
+- Mutexes only have two states: locked and unlocked
+	- Semaphore can take on $$$\mid \mathbb N \mid$$$ states
+		- With the right counter value it can have multiple concurrent accessors

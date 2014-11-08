@@ -11,7 +11,7 @@ static void sigint_handler(int signo) {
 int main() {
 	struct sigaction action;
 
-	printf("main() invokedi n process %d.\n", getpid());
+	printf("main() invoked in process %d.\n", getpid());
 
 	action.sa_flags = 0;
 	action.sa_handler = sigint_handler; /* short form */

@@ -1,0 +1,1453 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+}
+
+</style>
+<title>Systems Programming</title>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax:{inlineMath:[['$$$','$$$']]}});</script><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<h1>Systems Programming</h1>
+
+<h1>Brian Russell</h1>
+
+<h2>Fall 2014</h2>
+
+<hr />
+
+<hr />
+
+<h2>Table of Contents</h2>
+
+<ol>
+<li><a href="#anchor1">C Programming</a>
+
+<ol>
+<li><a href="#anchor1.1">Structs</a></li>
+<li><a href="#anchor1.2">Arrays</a></li>
+<li><a href="#anchor1.3">Pointers</a></li>
+<li><a href="#anchor1.4">Pointers to Structs</a></li>
+<li><a href="#anchor1.5">Strings</a></li>
+<li><a href="#anchor1.6">Quicksort in C</a></li>
+<li><a href="#anchor1.7">Memory Manipulation</a></li>
+<li><a href="#anchor1.8">Constants</a></li>
+<li><a href="#anchor1.9">Modularization</a></li>
+<li> <a href="#anchor1.10">Libraries</a></li>
+<li> <a href="#anchor1.11">Forking Around</a></li>
+<li> <a href="#anchor1.12">Zombie Processes</a></li>
+</ol>
+</li>
+<li><a href="#anchor2">Multi-Threading</a></li>
+<li><a href="#anchor3">Semaphore</a></li>
+</ol>
+
+
+<hr />
+
+<hr />
+
+<h2>9/4/14</h2>
+
+<h1><span id="anchor1">C Programming</span></h1>
+
+<h2><span id="anchor1.1">Structs</span></h2>
+
+<ul>
+<li><p>C has no <em>classes</em>, instead it has something called a <strong>struct</strong></p>
+
+<pre><code>  struct Point {
+      int x;
+      int y;
+  } A, B, C;
+</code></pre>
+
+<ul>
+<li>No visibility controls (no abstraction)</li>
+<li>All structs are <em>public</em></li>
+</ul>
+</li>
+<li><p>no <strong>new</strong> operator</p>
+
+<pre><code>  struct {
+      float a, b, c;
+      } D = {3, 4, 5}, E;
+
+  struct F = {7};
+</code></pre></li>
+<li><p>F will be <em>partially defined</em>, <strong>a</strong> will be defined, but the other two values will garbage bits</p></li>
+<li><p>Can have structs within structs</p>
+
+<pre><code>  struct Rectangle {
+      struct Point topLeft,
+      struct Point bottomRight,
+  } A = {{3,4},{7,9}};
+</code></pre></li>
+</ul>
+
+
+<h2><span id="anchor1.2">Arrays</span></h2>
+
+<pre><code>int array[10];
+char stringArray[] = "Hello"; // = {'H', 'e', 'l', 'l', 'o', 'Ø'}
+int square[10][10] = {{0, 1, 2, 3, 4, 5},
+                       {6, 7, 8, 9, 10}};
+char s[20] = "Hello";
+</code></pre>
+
+<ul>
+<li>String arrays are <em>null-terminating</em>; they have an extra null byte at the end of all 0's</li>
+<li><p>square has an <em>incomplete initializer</em></p>
+
+<pre><code>  int main() {
+      int array[10], i;
+
+      for (i=0; i &lt;= 10; i++) {
+          array[i] = 0;
+      }
+      return 0;
+  }
+</code></pre></li>
+<li><p>Because C does not check array bounds, when the for loop goes out of bounds, it will set the next item at the next memory address and potentially bad things will happen.</p></li>
+</ul>
+
+
+<h2><span id="anchor1.3">Pointers</span></h2>
+
+<pre><code>int x;
+int *px;
+int *p1, *p2, y;
+
+x = 7;
+px = &amp;x;
+p1 = px;
+*px = 6; // x = 6
+*p1 = 6;
+p1 = 0;
+</code></pre>
+
+<hr />
+
+<pre><code>char **p2;
+char array[10] = "Hello";
+char *p1;
+char other[5];
+
+p1 = array;
+p1 = &amp;array[0];
+p1[0] = 'y';
+p1[3] = 'z';
+p2 = &amp;p1;
+*p2 = other;
+
+// p2 -&gt; p1 -&gt; 'H' -&gt; 'e' -&gt; 'l' -&gt; 'l' -&gt; 'o' -&gt; '\Ø'
+
+//types
+array : char[10]
+array[3] : char
+p1 : char*
+*p1 : char
+c : char
+$c : char *
+&amp;&amp;c : BAD!
+*c : BAD!
+</code></pre>
+
+<hr />
+
+<pre><code>arglist hello welcome bienvenue
+char **argv
+
+// argv -&gt; "arglist" -&gt; "hello" -&gt; welcome" -&gt; "happy"
+</code></pre>
+
+<hr />
+
+<h2>9/9/14</h2>
+
+<h2><span id="anchor1.4">Pointers to Structs</span></h2>
+
+<pre><code>struct Point *p;
+struct Point point;
+
+p = &amp;point;
+p -&gt; x
+</code></pre>
+
+<h3>Unions</h3>
+
+<pre><code>Union F {
+    int ipart;
+    char cpart(sizeof(int));
+} u = 3;
+
+u.ipart = 37;
+</code></pre>
+
+<ul>
+<li>The initializer of the union is defined as the frst member of the union</li>
+<li>The size of the the union is the size of the largest member of the union</li>
+</ul>
+
+
+<h3>Enumeration Types</h3>
+
+<pre><code>enum boolean {False, True};
+enum Trafficlight{red, yellow, green};
+enum Trafficlight a, b, c;
+
+a = red;
+b = green;
+
+enum Months {
+    jan = 1; feb, mar, apr, may, jun
+    };
+
+enum boolean TF;
+int x;
+
+TF = true;
+x = TF;
+TF = x;
+TF = 5; // C lets you do this
+</code></pre>
+
+<h3>Typedefs</h3>
+
+<pre><code>typedef char *charptr;
+charptr s;
+s = "hello";
+
+typedef int length;
+length a, b;
+length *ptr;
+typedef char *string;
+string p;
+</code></pre>
+
+<h3>Functions</h3>
+
+<pre><code>int gcd(int a, int b) {
+    if (b == 0)
+        return a;
+    else
+        return gcd(b, a%b);
+    }
+</code></pre>
+
+<ul>
+<li>Functions in C are <em>pass-by-value</em>: they duplicate a copy of the value being sent in the receiving function.</li>
+<li><p>In order to modify the value of a variable, you must pass in a pointer to the address of that variable</p>
+
+<pre><code>  void F(int *p) {
+      *p = 3;
+  }
+
+  x = 7;
+  F(&amp;x);
+</code></pre></li>
+<li><p>Do not return a pointer to the local variable, return the local variable</p></li>
+</ul>
+
+
+<h3>Arrow Notation</h3>
+
+<pre><code>p-&gt;x
+(*px).x
+</code></pre>
+
+<p>The above two statements are equivalent.</p>
+
+<h3>Pointer Arithmetic</h3>
+
+<pre><code>int x;
+int *p;
+
+p = &amp;x;
+
+p = p + 1;
+p = p + sizeof(x);
+</code></pre>
+
+<p>The last two statements are equivalent</p>
+
+<h4>List of Pointer Operators</h4>
+
+<pre><code>++p
+--p
+p++
+p--
+*p
+p1 = p2
+p1 == p2
+p1 != p2
+p += i
+p -= i
+p + i
+i + p
+p1 - p2
+p[i]
+</code></pre>
+
+<ul>
+<li><p>C does not care if you put in negative subscripts</p>
+
+<pre><code>  p = &amp;x;
+  p = p + 1;
+  p[-1] = 7; // x = 7
+</code></pre></li>
+</ul>
+
+
+<h3>Pointer to Function</h3>
+
+<pre><code>int x;
+int f(int);
+int (*pg)(int);
+int *f2(int);
+
+pg = f; // pg now points to f
+x = (*pg)(3); // assigns to x the return value of the dereferenced function
+</code></pre>
+
+<hr />
+
+<h2>9/11/14</h2>
+
+<h2><span id="anchor1.5">Strings</span></h2>
+
+<pre><code># include &lt;stdio.h&gt;
+
+int printf(const char *EMT,...);
+
+"This is a char %c \n";
+</code></pre>
+
+<p>$$\begin{matrix} \%c \;\text{char} &amp; \%u \;\text{unsigned integer} &amp; \%f \;\text{float} &amp; \%\% \;\text{percent} \\ \%s \;\text{string} &amp; \%o &amp; \%g \\ \%d \;\text{decimal} &amp; &amp; \%e \end{matrix}$$</p>
+
+<h3>List of String Commands</h3>
+
+<pre><code>#include &lt;string.h&gt;
+
+strcpy(char *DST, const char *src);
+// copies first n characters from the first string into the second string 
+strncpy
+// concatenates strings
+// concatenates first n characters from first string with second string. Returns string.    
+strcat  
+strncat
+// same thing as in java 
+strcmp 
+</code></pre>
+
+<h2>Standard Library</h2>
+
+<pre><code>#include &lt;stdlib.h&gt;
+
+void* malloc(size_T size);
+//changes size of previously malloc-ed memory
+void* realloc(void*ptr, size_T size); 
+//same as malloc but clears memory first
+void* calloc();
+void free(void*);
+
+// example
+char *s;
+s = (char *)malloc(strlen(argv[3] + 1);
+</code></pre>
+
+<ul>
+<li>argv[0] tells you the file size</li>
+<li>Free everything you malloc, otherwise you create a <em>memory leak</em></li>
+</ul>
+
+
+<hr />
+
+<h2>9/16/14</h2>
+
+<h2><span id="anchor1.6">Quicksort in C</span></h2>
+
+<ul>
+<li><p>C provides a generic quicksort function, however you have to specify the following params:</p>
+
+<pre><code>  void qsort(void *base, \
+      size_T num_elems, \
+      size_T elem_size, \
+      int (*compar)(const void *, const void *))
+</code></pre></li>
+<li><p>In this case, the final param is a comparison function that you have to send it. The ugly syntax is necessary to cast the comparison function into a pointer to that function</p></li>
+<li><p>C has a comma operator which allows you to string a series of expressions together</p>
+
+<ul>
+<li>The value of that expression is the rightmost expression</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Example function:</p>
+
+<pre><code>int main() {
+    float array[200];
+
+    qsort( array, \
+        count, \
+        sizeof(float), \
+        (int (*)(const void *, const void *) )numcmp );
+    }
+</code></pre>
+
+<h3>Header Files</h3>
+
+<ul>
+<li>In a C program there are two kinds of files, source files, and header files
+
+<ul>
+<li>sources files are the *.c files</li>
+<li>header files are included as *.h files</li>
+</ul>
+</li>
+<li><strong>static</strong> functions are used to prevent the modified function's access from other programs
+
+<ul>
+<li><p><strong>static</strong> can be used <em>inside</em> a function to modify variables. This means that the scope of that variable is limited to the function's it's within.</p>
+
+<pre><code>  static void foo() {
+      static int is_initialized = 0;
+
+      if (!is_initialized) {
+          is_initialized = 1;
+          }
+          //do stuff
+      }
+</code></pre></li>
+<li><p>When foo is called again, is_initialized will be the same variable in the same space in memory; the statement execution will be moved to the top of the memory instructions by the compiler. The actual <em>function</em> does not execute this statement.</p></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+
+<h2>9/18/14</h2>
+
+<h2><span id="anchor1.7">Memory Manipulation</span></h2>
+
+<pre><code>void * memcpy(void * dst, const void * src, size_t len);
+int memcmp(const void * s1, const void * s2, size_t len);
+    /* Return values
+    &lt;0 if s1 &lt; s2
+     0 if s1 == s2
+    &gt;0 s1 &gt; s2
+
+void * memset(void * s, int c, size_t len)
+    / * sets 
+</code></pre>
+
+<h3><span id="anchor1.8">Constants</span></h3>
+
+<ul>
+<li><p><strong>const</strong> values <em>must</em> have an initializer</p>
+
+<pre><code>  const int pi = 3.1415
+  const int * ptr = &amp;pi;
+  int x = 35;
+
+  ptr = &amp;x; // NO
+  *ptr = 22/7 // YES
+
+  const int * const ptr = &amp;x;
+  /* cannot change the dereferenced value OR the pointer */
+</code></pre></li>
+</ul>
+
+
+<h2><span id="anchor1.9">Modularization</span></h2>
+
+<ul>
+<li>Advantages to modularization:
+
+<ul>
+<li>Localization of specialization</li>
+<li>Makes changes much easier because of localization</li>
+<li>Manageability</li>
+<li>Allows for encapsulation</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Files</h2>
+
+<pre><code>#include &lt;stdio.h&gt;
+
+FILE * fopen(const char * path, const char * mode);
+flags:
+
+-r
+-r+
+-w
+-w+
+-a
+-a+
+
+int fread(void * ptr, \
+            size_t size, \
+            size_t num_elems, \
+            file * stream);
+</code></pre>
+
+<hr />
+
+<h2>9/24/14</h2>
+
+<h3>Makefiles</h3>
+
+<pre><code>#CC     = cc
+CC      = gcc
+ROOT    = /grad/users/morbius/cs214
+#ROOT   = /u
+COMPILE = $(CC)
+
+all: buncha shit
+
+calloc5: calloc5.c
+    $(COMPILE) -g -o calloc5 calloc5.c
+
+malloc5: malloc5.c
+    $(COMPILE) -g -o malloc5 malloc5.c
+
+factorial: main.o factorial.o
+    $(COMPILE) -g -o factorial main
+
+main.o: main.c factorial.h
+    $(COMPILE) -c -g main.c
+
+factorial.o: factorial.h factorial.c
+    $(COMPILE) -c -g factorial.c
+
+color: color.c
+    $(COMPILE) -g -o color color.c
+</code></pre>
+
+<ul>
+<li>Dependencies in a Makefile are <em>unordered</em></li>
+<li><p>Your shell looks for the following files when you execute <em>make</em>:</p>
+
+<pre><code>  makefile
+  Makefile
+  s.makefile
+  s.Makefile
+</code></pre></li>
+<li><p>You can give <em>make</em> the following flags:</p>
+
+<pre><code>  make    -i keep going even when a command fails
+          -f FILENAME
+          -n list all commands it will execute w/o running them
+</code></pre></li>
+</ul>
+
+
+<h3>File Systems and their related shit</h3>
+
+<ul>
+<li>inode (index node) contains meta-information about the file
+
+<ul>
+<li>Managed by the OS</li>
+<li>Includes information such as date created, date modified, user, etc.</li>
+</ul>
+</li>
+</ul>
+
+
+<h4>Directory library Commands</h4>
+
+<pre><code>#include &lt;dirent.h&gt;
+dir * opendir(const char *);
+struct dirent * readdir(dir*);
+void seekdir(dir *, long offset);
+long telldir(dir *);
+int closedir(dir *);
+</code></pre>
+
+<h5>Example file</h5>
+
+<pre><code>#include &lt;dirent.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+/* print files listed in a directory. */
+
+int main(int argc, char ** argv) {
+    DIR * dir;
+    struct dirent *entry;
+    extern int errno;
+
+    if (argc &lt; 2) {
+        printf("Specify dirname");
+        }
+    else {
+        printf("begin dirinfo list");
+        while ( (entry = readdir(dir)) != 0 ) {
+                printf("d_ino %d, d_off %d 
+</code></pre>
+
+<hr />
+
+<h2>9/30/14</h2>
+
+<h2><span id="anchor1.10">Libraries</span></h2>
+
+<ul>
+<li>Can be either <em>static</em> or <em>dynamic</em>
+
+<ul>
+<li>When you link from a <em>static</em> library, your program will pull out a separate copy of the object file information</li>
+<li>When you link from a <em>dynamic</em> library, you get the object file information only when you start the process and store it in your process address space</li>
+<li><p><em>Static</em> libraries take up a lot of space</p>
+
+<pre><code>  STATIC
+      gcc -c means.c
+      ar -rv libmeans.a means.c
+
+      ---
+
+  DYNAMIC
+      gcc -c -FPIC meand.c
+      gcc -shared - o libmeand.so meand.c
+</code></pre></li>
+</ul>
+</li>
+</ul>
+
+
+<h2><span id="anchor1.11">System Calls</span></h2>
+
+<ul>
+<li>All operating systems provide means for direct requests from the system
+
+<ul>
+<li><p>In *nix systems, this is also called the <strong>kernel</strong></p>
+
+<pre><code>  #include &lt;errno.h&gt;
+
+   char * strerror(int errnum);
+   void perror(const char * message);
+</code></pre></li>
+<li>In C, all IO is done through file descriptors. [0] is stdin [1] is stdout, and [2] is stderr</li>
+<li>Sockets are also parsed through file descriptors</li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+
+<h2>10/2/14</h2>
+
+<h2><span id="anchor1.12">Debugging</span></h2>
+
+<ul>
+<li>The -g flag enables it to be debugged
+
+<ul>
+<li>Used to be highly machine-specific/compiler-specific</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>gdb Commands</h3>
+
+<pre><code>print &lt;varname&gt; // prints value of specified varname
+n               // evaluates and prints the next line in the program
+backtrace       // self-explanatory
+</code></pre>
+
+<h3>Core dumps are baaaaad</h3>
+
+<ul>
+<li>gives you a core file; an image of a dead process</li>
+<li>Will give you a look at the stack frame, memory, etc.</li>
+</ul>
+
+
+<hr />
+
+<h2>10/7/14</h2>
+
+<h2><span id="anchor1.13">Signals</span></h2>
+
+<p>[ASK RUSSELL!]</p>
+
+<ul>
+<li><p>Signals are inter-process communication in *NIX systems</p>
+
+<pre><code>  SIGABRT /* Abort (ANSI). */
+  SIGKILL /* Kill, unblockable (POSIX) */
+  SIGUSR1 /* User-defined signal 1 (POSIX) */
+
+  int SIGPROCMASK(INT, CONSTSIGSET_T * SET, SIGSET_T * OLDSET);
+</code></pre></li>
+<li><p>After a signal is generated, it is now pending</p></li>
+<li>A signal is <em>delivered</em> when</li>
+</ul>
+
+
+<h3>Signal Handlers</h3>
+
+<ul>
+<li>Signals are managed by a <strong>signal handler</strong>
+
+<ul>
+<li>A signal handler <em>returns</em>, but does not get called</li>
+<li>Signal handlers are not and should not be large.</li>
+</ul>
+</li>
+<li>Signal handlers are managed <strong>asynchrously</strong></li>
+<li>The signal that causes the signal handler is <em>blocked</em> to prevent infinite recursion</li>
+<li><p>You can have multiple signal handlers for the same signal, but not at the same time</p>
+
+<pre><code>  struct sigaction {
+      void (*sa_handler)(int);
+      void (*sa_sigaction)(int, siginfo_t*, void*);
+      SIGSET_T sigmask;
+      int sa-flags; 
+  };
+</code></pre></li>
+</ul>
+
+
+<p>Dangerous vvvv</p>
+
+<pre><code>SA_NODEFER: Do not block signal in its own signal handler
+</code></pre>
+
+<hr />
+
+<h2>10/9/14</h2>
+
+<h3>Signal Handler Uses</h3>
+
+<ul>
+<li>Can send multiple signals to the same signal handler</li>
+<li>Can send timers to the signal handler, and SIGALARM will communicate with the program when the timer runs out</li>
+<li>Signal handlers can control changes in the program's internal <em>state</em></li>
+<li><p>Efficient, proactive communication with other machines</p>
+
+<pre><code>  setitimer(ITIMER_REAL, ITIMER_VIRTUAL, ITIMER_PROF
+</code></pre></li>
+</ul>
+
+
+<hr />
+
+<h2>10/14/14</h2>
+
+<h2><span id="valgrind">Valgrind</span></h2>
+
+<ul>
+<li>When you free a ptr that isn't malloc'ed, BAD THINGS WILL HAPPEN</li>
+<li>Malloc returns a pointer behind which is a speicla data structure</li>
+<li>When you free a ptr, it looks behind it to see what information to delink</li>
+</ul>
+
+
+<hr />
+
+<h2>10/16/14</h2>
+
+<h2><span id="anchor1.11">Forking Around</span></h2>
+
+<pre><code>int main() {
+    pid_t pid;
+    pid = fork();
+    switch(pid);
+    {
+        case -1: //ERROR
+        case 0: //child
+        default: //parent
+}
+</code></pre>
+
+<ul>
+<li>Once you fork, the parent and child are running <em>asynchronously</em></li>
+<li>Separate process addresses</li>
+<li>All file descriptors are duplicated
+
+<ul>
+<li>Position is also the same</li>
+</ul>
+</li>
+<li><p>Once a fork() is executed, the parent has to <em>wait()</em> for the child to return</p>
+
+<pre><code>  pid_t wait(int *);
+  pid_t waitpid(pid_t, 
+                  int *, 
+                  int);
+</code></pre></li>
+<li><p>Will get <em>errno</em> back if it fails</p></li>
+<li>Returns twice</li>
+</ul>
+
+
+<h3>Exit</h3>
+
+<ul>
+<li>Exits the process</li>
+<li>Closes file descriptors</li>
+<li>If the process has children, they get returned to the <strong>init</strong> function</li>
+<li>If a child calls exit, the parent gets sent a <strong>sigchild</strong></li>
+</ul>
+
+
+<h3>Exec</h3>
+
+<pre><code>int execl("pathname", "program name", 0)
+    execv()
+    execle()
+    execve()
+    execlp()
+    execvp()
+</code></pre>
+
+<ul>
+<li><p>Can execute different programs in process</p>
+
+<pre><code>  //execl() envarg test program
+  int main(int argc, char ** argv) {
+      printf("Process %s PID %d invoking envarg\n", argv[0], getpid() );
+      execl( "/grad/users/morbius/cs214/envarg", "envarg", 0);
+  }
+</code></pre></li>
+<li><p>int main() can actually take a 3rd argument, char ** envp</p>
+
+<ul>
+<li>Retrieves environment variables</li>
+<li>Exec does not return values unless there is an error, in which case it returns -1</li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+
+<h2>10/21/14</h2>
+
+<h2><span id="anchor1.12">ZOMG ZOMBIES</span></h2>
+
+<ul>
+<li>A zombie process is a transient state
+
+<ul>
+<li>Has gone from running to not running</li>
+<li>Becomes a child of an init process</li>
+<li>Somebody waits for it, either its parent or its (child?)</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Command Line Commands</h2>
+
+<pre><code>// create and maintain library archives
+ar &lt;key&gt; libfile obj1.o obj2.o ... 
+    flags &lt;-r -t -d -v- c&gt;
+    -r 
+    -t // table of contents of static shared library
+    -d // delete files from static shared library
+    -v // verbose
+    -c // suppress messages
+
+// display a calender 
+cal &lt;&lt;month&gt; year&gt;
+
+// concatenates and prints files
+cat &lt;file 1&gt; &lt;file 2&gt;
+// destroys/creates file 1 and puts contents of file 2 into 1
+cat file 1 file 2 &gt; file 1
+
+//change permissions but not ownership
+chmod &lt;mode&gt; &lt;file&gt;
+    rwx rwx rwx
+    7   7   7
+    rwx r-x r-x
+    7   5   5
+    rw- r-- ---
+    6   4   0
+</code></pre>
+
+<p>If permissions are prefixed by a d when using <em>ls</em>, that means the file is a directory</p>
+
+<pre><code>chown &lt;owner&gt; &lt;file&gt; ...
+chgrp &lt;group&gt; &lt;file&gt; ...
+
+// hard-link files together 
+ln [-s] file target-file
+ln [-s]
+</code></pre>
+
+<p>Hard links cannot link across file systems, but soft links can</p>
+
+<h3>[ASK RUSSELL]</h3>
+
+<pre><code>find &lt;path&gt; &lt;expression list&gt;
+        |usually .  |
+                    |-name "*.h"
+                    |-type df // depth-first traversal
+                    |-print
+                    |-depth
+                    |-exec cmd args {} \;
+
+grep &lt;flags&gt; &lt;expression&gt; &lt;file&gt;...
+        |-i case insensitive
+        |-n print line number of file
+        |-l print file name
+        |-v prints all lines that don't contain the regex
+</code></pre>
+
+<h3>Regular Expressions:</h3>
+
+<pre><code>    $
+    *
+    []
+    ^
+    |
+    .
+</code></pre>
+
+<h3>Other Command-Line Arguments</h3>
+
+<pre><code>kill -signo pid...
+
+ls &lt;flags&gt;
+    | -a 
+    | -l
+    | -F will put a / after directories
+
+// looks at a file without opening it a page at a time
+pg &lt;file&gt;...
+more &lt;file&gt;...
+
+// see all processes running
+ps
+    -e
+    -f // verbose
+    -u morbius // see for that user
+
+rm &lt;flags&gt; &lt;filename&gt;
+    |-i requests confirmation
+    |- f force command, overrides -i
+
+sort 
+    |-u with -c check for strict ordering
+    |-r reverse
+    |-f ignore lower-case
+</code></pre>
+
+<hr />
+
+<h2>10/23/14</h2>
+
+<h1><span id="anchor2">Multi-Threading</span></h1>
+
+<ul>
+<li>multiple threads of execution</li>
+<li><strong>Control Flow</strong> is separate</li>
+<li>Threads exist in a shared address space</li>
+<li>Every <em>thread</em> has its own <strong>register set</strong>, <strong>program counter</strong> and <strong>call stack</strong></li>
+<li>Every thread also has its own <strong>thread id</strong> or <em>tid</em></li>
+<li><strong><em>Multi-threading</em> is <em>ideal</em> for networking (client-server) architecture</strong></li>
+<li>No thread can ever change the registers or stack of another</li>
+</ul>
+
+
+<h3>Benefits</h3>
+
+<ul>
+<li>If some threads get stopped or blocked, other threads can continue executing</li>
+<li>Threads are cheaper to create than processes
+
+<ul>
+<li>between 10-100 times faster</li>
+</ul>
+</li>
+<li>Switching b/w threads is cheaper and faster than switching b/w processes</li>
+<li>Can take advantage of multi-core processors
+
+<ul>
+<li>Can get threads to run on different processors in true <em>parallel</em> processing</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Thread Scheduling</h2>
+
+<ul>
+<li>Different levels: <strong>user</strong> and <strong>kernel</strong>-level threads
+
+<ul>
+<li>Kernel-level threads handled by kernel and not the processor itself</li>
+</ul>
+</li>
+<li>Certain overhead in managing/scheduling different threads</li>
+<li>How do I write a multi-client server? [Ask Russell]</li>
+<li>User-level threads (scheduling and ish) all run as library code inside your process</li>
+</ul>
+
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li>When one user-level thread gets blocked, all of them get blocked
+
+<ul>
+<li>A blocking system call will stop all user-level threads
+
+<ul>
+<li><strong>Signals</strong> send to processes, not to threads</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>However</em>, if one kernel-level thread gets blocked, the other kernel-level threads will continue executing</li>
+<li>Kernel-level threads can handle hardware commands better
+
+<ul>
+<li>Run a little bit slower than user-level</li>
+</ul>
+</li>
+<li>You make kernel-level threads <em>by default</em></li>
+</ul>
+
+
+<h3>Syntax</h3>
+
+<pre><code>#include &lt;pthread.h&gt;
+
+    // fields
+    pthread_t       tid;
+    pthread_atr_t   attr;
+    struct gcd *    gcdptr;
+    unsigned int *  rptr;
+    unsigned int    error;
+
+    // creates thread
+    pthread_create
+    pthread_join - blocking call: stop calling process until thread to itself is done
+    pthread_detach - prevents join on the specified thread
+    pthread_yield
+    pthread_threadexit
+</code></pre>
+
+<h3>The Dynamic Memory Covenant</h3>
+
+<ul>
+<li>The parent thread allocates the parameter struct, the child thread extracts data from the struct and frees it</li>
+<li>For return values, the child allocates and the joining thread does the free()</li>
+</ul>
+
+
+<hr />
+
+<h2>11/3/14</h2>
+
+<h1><span id="anchor3">Semaphores</span></h1>
+
+<ul>
+<li>Asynchronization mechanism</li>
+<li>3 components:
+
+<ol>
+<li> Flag</li>
+<li> Queue of suspended threads</li>
+<li> Nonnegative Counter (instd. of an owner like a mutex)</li>
+</ol>
+</li>
+</ul>
+
+
+<pre><code>#include &lt;semaphore.h&gt;
+
+int sem_init(sem_t *, int, unsigned int);
+int sem_destroy(sem_t *);
+int sem_wait(sem_t *);
+int sem_post(sem_t *);
+</code></pre>
+
+<ul>
+<li>Middle argument is a flag signifying whether the semaphore will be in shared memory</li>
+<li>Third argument is a counter</li>
+<li>If counter is 1</li>
+<li>If suspended thread in queue, dequeue + make it runnable</li>
+<li>Anyone can post to a semaphore (no ownership)</li>
+<li>Options for <em>sem_wait</em>:
+
+<ul>
+<li>If counter $$$
+\geq$$$ 1, let one thread through, decrement counter by 1</li>
+<li>If counter = 0, suspend calling thread and put into queue</li>
+</ul>
+</li>
+<li>You increment the counter every time you post</li>
+</ul>
+
+
+<p><strong>Asynch-Signal-Safe</strong></p>
+
+<ul>
+<li>Something you can build inside a signal handler</li>
+</ul>
+
+
+<h3>Things you cannot do in a sighandler</h3>
+
+<ul>
+<li>Create or exit a hread
+
+<ul>
+<li>You don't know which thread you're exiting</li>
+</ul>
+</li>
+<li>Lock/unlock or init/destroy a mutex</li>
+<li>"                         " a condition variable</li>
+<li>Invoke pthread</li>
+<li>Invoke most semaphore fns.</li>
+</ul>
+
+
+<h3>Things you can do in a sighandler</h3>
+
+<ul>
+<li>Post to a semaphore</li>
+<li>Sem_post if asynch-signal-safe</li>
+<li>Anything labeled asynch-sig-safe</li>
+</ul>
+
+
+<h3>Differences b/w Semaphores and Mutexes</h3>
+
+<ul>
+<li>Mutexes can only be locked/unlocked by their owner
+
+<ul>
+<li>Anyone can post to a semaphore</li>
+</ul>
+</li>
+<li>Mutexes only have two states: locked and unlocked
+
+<ul>
+<li>Semaphore can take on $$$\mid \mathbb N \mid$$$ states
+
+<ul>
+<li>With the right counter value it can have multiple concurrent accessors</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</body>
+</html>
