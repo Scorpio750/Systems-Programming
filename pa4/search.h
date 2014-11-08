@@ -1,5 +1,6 @@
 #ifndef SEARCH_H
 #define INDEXER_H
+#define acceptable "0123456789abcdefghijklmnopqrstuvwxyz"
 
 /*
  * Alison Wong
@@ -29,6 +30,7 @@ typedef struct Root{
 }Root;
 
 Tnode *createNode(char c);
-TNode *createTree(FILE *file);
+void addNode(FILE *file);
+
 
 #endif
