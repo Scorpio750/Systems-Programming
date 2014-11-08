@@ -802,7 +802,7 @@ Hard links cannot link across file systems, but soft links can
 - Different levels: **user** and **kernel**-level threads
 	- Kernel-level threads handled by kernel and not the processor itself
 - Certain overhead in managing/scheduling different threads
-- How do I write a multi-client server? [Ask Russell]
+- How do I write a multi-client server? **[Ask Russell]**
 - User-level threads (scheduling and ish) all run as library code inside your process
 
 ### Disadvantages
@@ -850,12 +850,13 @@ Hard links cannot link across file systems, but soft links can
 	
 ## Deadlock
 
-- A **deadlock** occurs when you have one or more threads waiting for omsone else to unlock some shared resource. There are 4 conditions for a deadlock.
+- A **deadlock** occurs when you have one or more threads waiting for omsone else to unlock some shared resource. There are 4 conditions for a deadlock, also known as **Coffman conditions**
 
 	1. Mutual Exclusion
 	2. Circular Wait
 	3. Hold and Wait
 	4. No Preemption
+- You can avoid deadlocks by always locking shared resources in the same order
 	
 ---
 ## 11/3/14
@@ -899,14 +900,14 @@ int sem_post(sem_t *);
 - Create or exit a hread
 	- You don't know which thread you're exiting
 - Lock/unlock or init/destroy a mutex
-- "                         " a condition variable
+- Same thing for a condition variable
 - Invoke pthread
 - Invoke most semaphore fns.
 
 ### Things you can do in a sighandler
 
 - Post to a semaphore
-- Sem_post if asynch-signal-safe
+- Sem_post if asynch-sig-safe
 - Anything labeled asynch-sig-safe
 
 ### Differences b/w Semaphores and Mutexes
