@@ -13,27 +13,27 @@
 
 typedef enum {false, true} bool;
 
-typedef struct FileNode{
+struct FileNode_ {
 	char *pathname;
-	struct FileNode *next;
-}FileNode;
+	struct FileNode_ *next;
+};
+typedef struct FileNode_ FileNode;
 
-typedef struct TNode{
+struct TNode_{
 	char c;
 	bool isWord;
 	struct TNode **children;
 	FileNode *head;
-}Tnode;
+};
+typedef struct TNode_ TNode;
 
-typedef struct Root{
+typedef struct Root_ {
 	TNode *root;
-}Root;
+};
+typedef struct Root_ Root;
 
-Root *createRoot();
-Tnode *createNode(char c);
-int hash(char c);
-void addNode(FILE *file, TNode *root);
-void readIndex(FILE *file, Root tree);
+TNode *createNode(char c);
+void addNode(FILE *file);
 
 
 #endif
