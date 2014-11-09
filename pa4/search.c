@@ -2,22 +2,40 @@
  * Alison Wong
  * Patrick Wu
  */
+ #include "search.h"
 
-Root *createRoot(){
-	Root *tree = malloc(sizeof(Root));
-	head->root = NULL;
-	return tree;
-}
-
-Tnode *createNode(char c){
+TNode *createNode(char c){
 	TNode *node = (TNode *)malloc(sizeof(TNode));
 	node->c = c;
-	node->children = (TNode**)calloc(36, sizeof(TNode));
+	node->children = (TNode**)calloc(36, sizeof(TNode*));
 	node->isWord = false;
+	node->head = NULL;
 	return node;
 }
 
-int hash(char c) {
+Tree *createRoot(){
+	Tree *tree = malloc(sizeof(Tree));
+	tree->root = createNode(' ');
+	return tree;
+}
+
+FileNode *createFileNode(char *pathname){
+	if (pathname == NULL) {
+		return NULL;
+	}
+	FileNode *newnode = (FileNode*)calloc(1, sizeof(FileNode));
+	newnode->pathname = (char*)malloc((strlen(pathname)+1)*sizeof(char));
+	strcpy(newnode->pathname, pathname);
+	newnode->next = NULL;
+	if (newnode != NULL) {
+		return newnode;
+	}
+	else {
+		return NULL;
+	}
+}
+
+int hash(char c){
 	char * index = strchr(acceptable, c);
 	if (index == NULL) {
 		return -1;
@@ -25,43 +43,75 @@ int hash(char c) {
 	return (int)(index - acceptable);
 }
 
-void addNode(FILE *file, TNode *root){
-	TNode *ptr = root;
-	c = fgetc(file);
+TNode *addNode(char *buffer, TNode *root){
 	int index;
+	TNode *ptr = root;
+	int i;
+	char c;
 
-	while (c != '\n'){
+	for (i = 0; i < strlen(buffer); i++){
+		c = buffer[i];
 		index = hash(c);
-		if (ptr->next[index] == NULL){
-			ptr->next[index] = createNode(c);
+		if (ptr->children[index] == NULL){
+			ptr->children[index] = createNode(c);
 		}
-		ptr = ptr->next[index];
-		c = fgetc(file);
+		ptr = ptr->children[index];
 	}
 	ptr->isWord = true;
-	//put the files in now
+	return ptr;
 }
 
-void readIndex(FILE *file, Root tree){
-	int c = fgetc(file);
-	if (c == EOF){
-		fprintf(stderr, "Empty Inverted Index\n");
-		fclose(file);
-		return;
-	}
+FileNode *addList(FileNode *node, char *buffer){
+	FileNode *newnode = createFileNode(buffer);
+	node->next = newnode;
+	return newnode;
+}
 
-	if (tree->root == NULL){
-		tree->root = createNode(' ');
-	}
+void readIndex(FILE *file, TNode *root){
+	int state = 0;
+	char *buffer = (char *)malloc(sizeof(char) * 1024);
+	char i;
+	TNode *ptr;
+	FileNode *llptr;
 
-	while (c != ' '){
-		c = fgetc(file);
-	}
-	addToTree(file, tree->root);
+	do{
+		i = fscanf(file, "%s", buffer);
+	  //printf("STATE: [%d] STRING: [%s]\n", state, buffer);
+		if(i == -1){
+			//printf(">>>>>>EYE is NEGATIVE ONE\n");
+			break;
+		}
+		if (strcmp(buffer, "</list>") == 0){
+			//printf("STATE: [2] ACTUAL STATE[%d] WORD: [%s] </list>\n", state, buffer);
+			state = 0;
+		}
+		else if (state == 0){
+			//printf("STATE: [%d] WORD [%s]\n", state, buffer);
+			state = 1;
+		}
+		else if (state == 1){
+			//printf("STATE: [%d] WORD [%s]\n", state, buffer);
+			ptr = addNode(buffer,root);
+			//printf("ADDED NODE\n");
+			state = 2;
+		}
+		else if (state == 2){
+			//printf("STATE: [%d] WORD [%s]\n", state, buffer);
+			if (ptr->head == NULL){
+				//printf("Created New File Node\n");
+			}
+			else{
+				//printf("Added to Linked List\n");
+				llptr = addList(llptr, buffer);
+			}
+		}
+	}while(i != EOF);
+	//printf("DOES THIS EVER PRINT?\n");
 	fclose(file);
+	//printf("IS FCLOSE FAILING?\n");
 }
 
- int main (int arc, char **argv){
+ int main (int argc, char **argv){
  	if (argc != 2){
  		fprintf(stderr, "Invalid number of arguments.\n");
  		return 1;
@@ -73,8 +123,12 @@ void readIndex(FILE *file, Root tree){
  		return 1;
  	}
 
- 	Root *tree = createRoot();
+ 	Tree *tree = createRoot();
 
- 	readIndex(index,tree);
- 	free(tree);
+ 	readIndex(index, tree->root);
+ 	//printf("AM I MAKING IT HERE?\n");
+ 	//free(tree);
+ 	//printf("I DONT UNDERSTAND\n");
+ 	return 0;
+ 	//printf("WUT\n");
  }

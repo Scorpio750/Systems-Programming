@@ -10,30 +10,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 typedef enum {false, true} bool;
 
-typedef struct FileNode{
+struct FileNode_{
 	char *pathname;
-	struct FileNode *next;
-}FileNode;
+	struct FileNode_ *next;
+};
 
-typedef struct TNode{
+typedef struct FileNode_ FileNode;
+
+struct TNode_{
 	char c;
 	bool isWord;
-	struct TNode **children;
+	struct TNode_ **children;
 	FileNode *head;
-}Tnode;
+};
 
-typedef struct Root{
+typedef struct TNode_ TNode;
+
+struct Tree_{
 	TNode *root;
-}Root;
+};
 
-Root *createRoot();
-Tnode *createNode(char c);
+typedef struct Tree_ Tree;
+
+//Functions
+TNode *createNode(char c);
+Tree *createRoot();
+FileNode *createFileNode(char *pathname);
 int hash(char c);
-void addNode(FILE *file, TNode *root);
-void readIndex(FILE *file, Root tree);
-
+TNode *addNode(char *buffer, TNode *root);
+FileNode *addList(FileNode *node, char *buffer);
+void readIndex(FILE *file, TNode *root);
 
 #endif
