@@ -1,8 +1,10 @@
+#include "search.h"
+
 /*
  * Alison Wong
  * Patrick Wu
  */
- #include "search.h"
+#include "search.h"
 
 TNode *createNode(char c){
 	TNode *node = (TNode *)malloc(sizeof(TNode));
@@ -111,7 +113,10 @@ void readIndex(FILE *file, TNode *root){
 	//printf("IS FCLOSE FAILING?\n");
 }
 
- int main (int argc, char **argv){
+int main (int argc, char **argv){
+	bool quit = false;
+	char * query_response = malloc(256 * sizeof(char) + 1);
+
  	if (argc != 2){
  		fprintf(stderr, "Invalid number of arguments.\n");
  		return 1;
@@ -126,9 +131,17 @@ void readIndex(FILE *file, TNode *root){
  	Tree *tree = createRoot();
 
  	readIndex(index, tree->root);
- 	//printf("AM I MAKING IT HERE?\n");
+
+	// options
+	while (quit == false) {
+		puts("Enter your query:");
+		query_answer = scanf();
+		if (query_answer = "q") {
+			puts("Exiting program");
+			exit(1);
+		}
+		readIndex(index,tree);
+	}
  	//free(tree);
- 	//printf("I DONT UNDERSTAND\n");
  	return 0;
- 	//printf("WUT\n");
- }
+}
