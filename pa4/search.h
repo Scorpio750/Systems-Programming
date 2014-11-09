@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 typedef enum {false, true} bool;
 
@@ -27,13 +28,13 @@ struct TNode_{
 };
 typedef struct TNode_ TNode;
 
-typedef struct Root_ {
+struct Root_ {
 	TNode *root;
 };
 typedef struct Root_ Root;
 
 TNode *createNode(char c);
-void addNode(FILE *file);
-
+void addNode(FILE *file, TNode *root);
+void tokenize(query_answer);
 
 #endif
