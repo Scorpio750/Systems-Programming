@@ -1,5 +1,3 @@
-#include "search.h"
-
 /*
  * Alison Wong
  * Patrick Wu
@@ -114,7 +112,6 @@ void readIndex(FILE *file, TNode *root){
 }
 
 int main (int argc, char **argv){
-	bool quit = false;
 	char * query_response = malloc(256 * sizeof(char) + 1);
 
  	if (argc != 2){
@@ -133,15 +130,16 @@ int main (int argc, char **argv){
  	readIndex(index, tree->root);
 
 	// options
-	while (quit == false) {
+	/*
+	while (true) {
 		puts("Enter your query:");
-		query_answer = scanf();
-		if (query_answer = "q") {
+		query_response = scanf();
+		if (query_response = "q") {
 			puts("Exiting program");
 			exit(1);
 		}
-		readIndex(index,tree);
 	}
+	*/
  	//free(tree);
  	return 0;
 }
