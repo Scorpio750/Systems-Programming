@@ -1,3 +1,5 @@
+#include "search.h"
+
 /*
  * Alison Wong
  * Patrick Wu
@@ -62,6 +64,9 @@ void readIndex(FILE *file, Root tree){
 }
 
  int main (int arc, char **argv){
+	bool quit = false;
+	char * query_response = malloc(256 * sizeof(char) + 1);
+
  	if (argc != 2){
  		fprintf(stderr, "Invalid number of arguments.\n");
  		return 1;
@@ -74,7 +79,18 @@ void readIndex(FILE *file, Root tree){
  	}
 
  	Root *tree = createRoot();
+	
+	// options
 
- 	readIndex(index,tree);
- 	free(tree);
+	while (quit == false) {
+		puts("Enter your query:");
+		query_answer = scanf();
+		if (query_answer = "q") {
+			puts("Exiting program");
+			exit(1);
+		}
+		readIndex(index,tree);
+	}
+ 	
+	free(tree);
  }
