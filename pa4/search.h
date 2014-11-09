@@ -29,8 +29,11 @@ typedef struct Root{
 	TNode *root;
 }Root;
 
+Root *createRoot();
 Tnode *createNode(char c);
-void addNode(FILE *file);
+int hash(char c);
+void addNode(FILE *file, TNode *root);
+void readIndex(FILE *file, Root tree);
 
 
 #endif

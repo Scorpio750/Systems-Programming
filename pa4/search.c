@@ -27,7 +27,7 @@ int hash(char c) {
 	return (int)(index - acceptable);
 }
 
-void addToTree(FILE *file, TNode *root){
+void addNode(FILE *file, TNode *root){
 	TNode *ptr = root;
 	c = fgetc(file);
 	int index;
