@@ -3,7 +3,7 @@ FLAGS = -Wall -g
 
 all: search
 
-serach: search.c
+search: search.c search.h
 	$(COMPILE) $(FLAGS) search.c -o search
 
 clean:

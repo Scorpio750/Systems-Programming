@@ -1,0 +1,18 @@
+<list> a
+ case4/x/boo 1 case4/y/baa 1 
+</list>
+<list> baa
+ case4/y/baa 1 
+</list>
+<list> boo
+ case4/x/boo 1 
+</list>
+<list> cat
+ case4/y/baa 1 
+</list>
+<list> dog
+ case4/x/boo 1 
+</list>
+<list> name
+ case4/x/boo 2 case4/y/baa 1 
+</list>
