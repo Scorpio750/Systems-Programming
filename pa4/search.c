@@ -117,7 +117,56 @@ void readIndex(FILE *file, TNode *root){
 	fclose(file);
 }
 
-void SOprintFiles (LinkedList *LL, char *filename, TNode *root){
+void destroyList(FileNode *head){
+	if(head == NULL)
+		return;
+	destroyList(head->next);
+	free(head->pathname);
+	free(head);
+	return;
+}
+
+void destroyNode(TNode *node){
+	int i;
+	if (node == NULL)
+		return;
+	for (i = 0; i < 36; i++){
+		if (node->children[i] == NULL)
+			continue;
+		destroyNode(node->children[i]);
+	}
+	destroyList(node->head);
+	free(node->children);
+	free(node);
+}
+
+void printLinkedList(LinkedList *LL){
+	FileNode *ptr;
+	FileNode *prev = NULL;
+	
+	if(LL == NULL)
+		return;
+	if(LL->head == NULL)
+		return;
+
+	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
+		printf("%s\n",ptr->pathname);
+		prev = ptr;
+	}
+
+	destroyList(LL->head);
+	free(LL);
+}
+
+void SAprintFiles(LinkedList *LL, char *filename, TNode *root){
+
+}
+
+LinkedList *SAinsertFile(LinkedList *LL, char *filename){
+
+}
+
+void SOprintFiles(LinkedList *LL, char *filename, TNode *root){
 	TNode *ptr = root;
 	FileNode *fptr;
 	if (ptr == NULL){
@@ -141,8 +190,7 @@ void SOprintFiles (LinkedList *LL, char *filename, TNode *root){
 			}
 		}
 	}
-
-
+	printLinkedList(LL);
 }
 
 LinkedList *SOinsertFile(LinkedList *LL, char *filename){
@@ -162,29 +210,6 @@ LinkedList *SOinsertFile(LinkedList *LL, char *filename){
 	prev->next = createFileNode(filename);
 	printf("%s \n", prev->next->pathname);
 	return LL;
-}
-
-void destroyList(FileNode *head){
-	if(head == NULL)
-		return;
-	destroyList(head->next);
-	free(head->pathname);
-	free(head);
-	return;
-}
-
-void destroyNode(TNode *node){
-	int i;
-	if (node == NULL)
-		return;
-	for (i = 0; i < 36; i++){
-		if (node->children[i] == NULL)
-			continue;
-		destroyNode(node->children[i]);
-	}
-	destroyList(node->head);
-	free(node->children);
-	free(node);
 }
 
 int main (int argc, char **argv){
@@ -230,9 +255,7 @@ int main (int argc, char **argv){
 		}
 	}
 	
-	free(tree->root);
-	destroyList(list->head);
+	destroyNode(tree->root);
 	free(tree);
-	free(list);
  	return 0;
 }
