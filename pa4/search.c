@@ -158,17 +158,57 @@ void printLinkedList(LinkedList *LL){
 	free(LL);
 }
 
-void SAprintFiles(LinkedList *LL, char *filename, TNode *root){
+LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
+	FileNode *ptr;
+	FileNode *ptr2;
+	FileNode *prev2 = NULL;
+	LinkedList *tmp;
+	FileNode *tptr;
 
+	for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
+		if (tmp == NULL){
+			tmp = createLL(ptr2->pathname);
+			tptr = tmp->head;
+			continue;
+		}
+		tptr->next = ptr2;
+	}
+	
+	if (sa == 0){
+		for (ptr = node; ptr != NULL; ptr = ptr->next){
+			if (LL == NULL){
+				LL = createLL(ptr->pathname);
+				continue;
+			}
+			for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){		
+				if (strcmp((ptr->pathname), ptr2->pathname) == 0)
+					break;
+				prev2 = ptr2;
+				if (ptr2->next == NULL)
+					prev2->next = createFileNode(ptr->pathname);
+			}
+		}
+	}
+
+	prev2 = NULL;
+
+	if (sa == 1){
+		for (tptr = tmp->head; tptr != NULL; tptr = tptr->next){
+			ptr2 = tptr;
+			for (ptr = node; ptr != NULL; ptr = ptr->next){
+				if (strcmp((tptr->pathname), ptr->pathname) == 0)
+					break;		
+				if (ptr->next == NULL)
+					removeNode(prev2, ptr2);
+			}
+			prev2 = tptr;
+		}
+	}
+	return LL;
 }
 
-LinkedList *SAinsertFile(LinkedList *LL, char *filename){
-
-}
-
-void SOprintFiles(LinkedList *LL, char *filename, TNode *root){
+void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 	TNode *ptr = root;
-	FileNode *fptr;
 	if (ptr == NULL){
 		fprintf(stderr, "Indexer DNE\n");
 		return;
@@ -184,32 +224,10 @@ void SOprintFiles(LinkedList *LL, char *filename, TNode *root){
 		if (ptr->children[index] == NULL)
 			return;
 
-		if (ptr->children[i]->isWord){
-			for (fptr = ptr->children[i]->head; fptr != NULL; fptr = fptr->next){
-				LL = SOinsertFile(LL, fptr->pathname);
-			}
+		if (ptr->children[i]->isWord)
+				LL = insertFile(LL, ptr->children[i]->head, sa);
 		}
-	}
 	printLinkedList(LL);
-}
-
-LinkedList *SOinsertFile(LinkedList *LL, char *filename){
-	if (LL == NULL){
-		LL = createLL(filename);
-		printf("%s \n", LL->head->pathname);
-		return LL;
-	}
-	FileNode *ptr;
-	FileNode *prev = NULL;
-	for(ptr = LL->head; ptr != NULL;	ptr = ptr->next){
-		if (strcmp((ptr->pathname),filename) == 0){
-			break;
-		}
-		prev = ptr;
-	}
-	prev->next = createFileNode(filename);
-	printf("%s \n", prev->next->pathname);
-	return LL;
 }
 
 int main (int argc, char **argv){
@@ -241,13 +259,13 @@ int main (int argc, char **argv){
 			if (!strcmp("so", strtok(query_answer, " "))) {
 				puts("Logical V");
 				while ((token = strtok(NULL, " "))) {
-					SOprintFiles(list, token, tree->root);
+					printFiles(list, token, tree->root, 0);
 				}	
 			}
 			else if (!strcmp("sa", strtok(query_answer, " "))) {
 				puts("Logical ^");
 				while ((token = strtok(NULL, " "))) {
-					SAprintFiles(list, token, tree->root);
+					printFiles(list, token, tree->root, 1);
 				}
 			}
 			// only one word to be searched
