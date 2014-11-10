@@ -48,9 +48,10 @@ int hash(char c);
 TNode *addNode(char *buffer, TNode *root);
 FileNode *addList(FileNode *node, char *buffer);
 void readIndex(FILE *file, TNode *root);
-void SOprintFiles(LinkedList *LL, char *filename, TNode *root);
-LinkedList *SOinsertFile(LinkedList *LL, char *filename);
 void destroyList(FileNode *head);
 void destroyNode(TNode *node);
+void printLinkedList*LinkedList *LL);
+void SOprintFiles(LinkedList *LL, char *filename, TNode *root);
+LinkedList *SOinsertFile(LinkedList *LL, char *filename);
 
 #endif
