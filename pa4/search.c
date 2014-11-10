@@ -229,7 +229,7 @@ int main (int argc, char **argv){
  	Tree *tree = createRoot();
 	LinkedList *list = NULL;
 
-	while (1) {
+	for (;;) {
 		puts("Enter your query:");
 		scanf("%s", query_answer);
 		if (!strcmp(query_answer,"q")) {
@@ -246,6 +246,9 @@ int main (int argc, char **argv){
 			}
 			else if (!strcmp("sa", strtok(query_answer, " "))) {
 				puts("Logical ^");
+				while ((token = strtok(NULL, " "))) {
+					SAprintFiles(list, token, tree->root);
+				}
 			}
 			// only one word to be searched
 			else {
