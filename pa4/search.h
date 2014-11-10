@@ -18,7 +18,6 @@ struct FileNode_{
 	char *pathname;
 	struct FileNode_ *next;
 };
-
 typedef struct FileNode_ FileNode;
 
 struct TNode_{
@@ -27,22 +26,11 @@ struct TNode_{
 	struct TNode_ **children;
 	FileNode *head;
 };
-
 typedef struct TNode_ TNode;
 
-<<<<<<< HEAD
-struct Root_ {
-=======
 struct Tree_{
->>>>>>> 360935799be19c15949e87bbadb91aa36b1b69ae
 	TNode *root;
 };
-
-<<<<<<< HEAD
-TNode *createNode(char c);
-void addNode(FILE *file, TNode *root);
-void tokenize(query_answer);
-=======
 typedef struct Tree_ Tree;
 
 //Functions
@@ -53,6 +41,5 @@ int hash(char c);
 TNode *addNode(char *buffer, TNode *root);
 FileNode *addList(FileNode *node, char *buffer);
 void readIndex(FILE *file, TNode *root);
->>>>>>> 360935799be19c15949e87bbadb91aa36b1b69ae
 
 #endif

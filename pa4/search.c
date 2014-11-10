@@ -111,13 +111,8 @@ void readIndex(FILE *file, TNode *root){
 	//printf("IS FCLOSE FAILING?\n");
 }
 
-<<<<<<< HEAD
- int main (int argc, char **argv){
-	char * query_answer = malloc(256 * sizeof(char) + 1);
-=======
 int main (int argc, char **argv){
-	char * query_response = malloc(256 * sizeof(char) + 1);
->>>>>>> 360935799be19c15949e87bbadb91aa36b1b69ae
+	char * query_answer = malloc(256 * sizeof(char) + 1);
 
  	if (argc != 2){
  		fprintf(stderr, "Invalid number of arguments.\n");
@@ -132,7 +127,6 @@ int main (int argc, char **argv){
 
  	Tree *tree = createRoot();
 
-<<<<<<< HEAD
 	while (1) {
 		puts("Enter your query:");
 		scanf("%s", query_answer);
@@ -157,22 +151,5 @@ int main (int argc, char **argv){
 		}
 	}
 	free(tree);
- }
-=======
- 	readIndex(index, tree->root);
-
-	// options
-	/*
-	while (true) {
-		puts("Enter your query:");
-		query_response = scanf();
-		if (query_response = "q") {
-			puts("Exiting program");
-			exit(1);
-		}
-	}
-	*/
- 	//free(tree);
  	return 0;
 }
->>>>>>> 360935799be19c15949e87bbadb91aa36b1b69ae
