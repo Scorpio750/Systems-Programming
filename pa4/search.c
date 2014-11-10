@@ -113,7 +113,7 @@ void readIndex(FILE *file, TNode *root){
 
 int main (int argc, char **argv){
 	char * query_answer = malloc(256 * sizeof(char) + 1);
-
+	char * token;
  	if (argc != 2){
  		fprintf(stderr, "Invalid number of arguments.\n");
  		return 1;
@@ -126,7 +126,8 @@ int main (int argc, char **argv){
  	}
 
  	Tree *tree = createRoot();
-
+	LinkedList * list = NULL;
+		
 	while (1) {
 		puts("Enter your query:");
 		scanf("%s", query_answer);
@@ -135,19 +136,21 @@ int main (int argc, char **argv){
 			exit(1);
 		}
 		else {
-			tokenize(query_answer);
-			
-			if (!strncmp("so ", query_answer, 3)) {
-
+			puts("Query is not 'q'");
+			if (!strcmp("so", strtok(query_answer, " "))) {
+				puts("Logical V");
+				while ((token = strtok(NULL, " "))) {
+					SOprintFiles(list, token, tree->root);
+				}	
 			}
-			else if (!strncmp("sa ", query_answer, 3)) {
-
+			else if (!strcmp("sa", strtok(query_answer, " "))) {
+				puts("Logical ^");
 			}
 			// only one word to be searched
 			else {
-				readIndex(index, tree);
+				readIndex(index, tree->root);
 			}
-			readIndex(index,tree);
+			readIndex(index,tree->root);
 		}
 	}
 	free(tree);
