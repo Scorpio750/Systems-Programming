@@ -73,6 +73,7 @@ FileNode *addList(FileNode *node, char *buffer){
 	return newnode;
 }
 
+// File I/O Functions
 void readIndex(FILE *file, TNode *root){
 	int state = 0;
 	char *buffer = (char *)malloc(sizeof(char) * 1024);
@@ -145,6 +146,7 @@ void SOprintFiles (LinkedList *LL, char *filename, TNode *root){
 
 }
 
+// Linked List Functions
 LinkedList *SOinsertFile(LinkedList *LL, char *filename){
 	if (LL == NULL){
 		LL = createLL(filename);
@@ -164,6 +166,20 @@ LinkedList *SOinsertFile(LinkedList *LL, char *filename){
 	return LL;
 }
 
+void removeNode(FileNode *prev, FileNode *curr) {
+	if (prev == NULL) {
+		prev = curr;
+		curr = curr->next;
+		destroyFileNode(prev);
+	}
+	else {
+		prev->next = curr->next;
+		destroyFileNode(curr);
+	}
+	return;
+}
+
+// Destroy Functions
 void destroyList(FileNode *head){
 	if(head == NULL)
 		return;
