@@ -18,7 +18,6 @@ struct FileNode_{
 	char *pathname;
 	struct FileNode_ *next;
 };
-
 typedef struct FileNode_ FileNode;
 
 struct TNode_{
@@ -27,13 +26,11 @@ struct TNode_{
 	struct TNode_ **children;
 	FileNode *head;
 };
-
 typedef struct TNode_ TNode;
 
 struct Tree_{
 	TNode *root;
 };
-
 typedef struct Tree_ Tree;
 
 //Functions
