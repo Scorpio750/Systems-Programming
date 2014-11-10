@@ -1,18 +1,27 @@
 <list> a
- case4/x/boo 1 case4/y/baa 1 
+ case/bii case/x/boo case/y/baa 
 </list>
 <list> baa
- case4/y/baa 1 
+ case/y/baa 
+</list>
+<list> bii
+ case/bii 
 </list>
 <list> boo
- case4/x/boo 1 
+ case/x/boo 
 </list>
 <list> cat
- case4/y/baa 1 
+ case/y/baa 
 </list>
 <list> dog
- case4/x/boo 1 
+ case/x/boo 
+</list>
+<list> mouse
+ case/bii 
 </list>
 <list> name
- case4/x/boo 2 case4/y/baa 1 
+ case/x/boo case/y/baa 
+</list>
+<list> named
+ case/bii 
 </list>

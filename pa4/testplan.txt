@@ -1,0 +1,68 @@
+Alison Wong
+Patrick Wu
+
+[] indicates file name
+{} indicates directory
+
+File Name: boo
+	Contains: A dog name name Boo
+File Name: baa
+	Contains: A cat name Baa
+File Name: bii
+	Contains: A a mouse named Bii
+Directory Name: x
+	Contains: [boo]
+Directory Name: y
+	Contains: [baa]
+Directory Name: Case
+	Conatins {x} {y} [bii]
+
+index <index><Case>
+
+<list> a
+ case/bii case/x/boo case/y/baa 
+</list>
+<list> baa
+ case/y/baa 
+</list>
+<list> bii
+ case/bii 
+</list>
+<list> boo
+ case/x/boo 
+</list>
+<list> cat
+ case/y/baa 
+</list>
+<list> dog
+ case/x/boo 
+</list>
+<list> mouse
+ case/bii 
+</list>
+<list> name
+ case/x/boo case/y/baa 
+</list>
+<list> named
+ case/bii 
+</list>
+
+
+search <index>
+
+Test Case 1:
+--------------------
+Description:
+sa - Given one file
+so - Given one file
+
+sa <a>
+	case/bii case/x/boo case/y/baa
+so <mouse>
+	case/bii
+-------------------
+
+Test Case 2:
+------------------
+Description:
+sa - Given 
