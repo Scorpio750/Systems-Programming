@@ -202,13 +202,8 @@ int main (int argc, char **argv){
  	}
 
  	Tree *tree = createRoot();
-<<<<<<< HEAD
-	LinkedList * list = NULL;
-		
-=======
 	LinkedList *list = NULL;
 
->>>>>>> 7b35def5c55d9f624875db70c344cfe7c387838d
 	while (1) {
 		puts("Enter your query:");
 		scanf("%s", query_answer);
@@ -217,19 +212,12 @@ int main (int argc, char **argv){
 			exit(1);
 		}
 		else {
-<<<<<<< HEAD
 			puts("Query is not 'q'");
 			if (!strcmp("so", strtok(query_answer, " "))) {
 				puts("Logical V");
 				while ((token = strtok(NULL, " "))) {
 					SOprintFiles(list, token, tree->root);
 				}	
-=======
-		//	tokenize(query_answer);
-			
-			if (!strncmp("so ", query_answer, 3)) {
-
->>>>>>> 7b35def5c55d9f624875db70c344cfe7c387838d
 			}
 			else if (!strcmp("sa", strtok(query_answer, " "))) {
 				puts("Logical ^");
