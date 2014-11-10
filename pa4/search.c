@@ -5,7 +5,7 @@
 #include "search.h"
 
 TNode *createNode(char c){
-	TNode *node = (TNode *)malloc(sizeof(TNode));
+	TNode *node = (TNode*)malloc(sizeof(TNode));
 	node->c = c;
 	node->children = (TNode**)calloc(36, sizeof(TNode*));
 	node->isWord = false;
@@ -33,6 +33,12 @@ FileNode *createFileNode(char *pathname){
 	else {
 		return NULL;
 	}
+}
+
+LinkedList *createLL(char *pathname){
+	LinkedList *newhead = (LinkedList*)malloc(sizeof(LinkedList));
+	newhead->head = createFileNode(pathname);
+	return newhead;
 }
 
 int hash(char c){
@@ -99,6 +105,8 @@ void readIndex(FILE *file, TNode *root){
 			//printf("STATE: [%d] WORD [%s]\n", state, buffer);
 			if (ptr->head == NULL){
 				//printf("Created New File Node\n");
+				llptr = createFileNode(buffer);
+				ptr->head = llptr;
 			}
 			else{
 				//printf("Added to Linked List\n");
@@ -106,9 +114,77 @@ void readIndex(FILE *file, TNode *root){
 			}
 		}
 	}while(i != EOF);
-	//printf("DOES THIS EVER PRINT?\n");
 	fclose(file);
-	//printf("IS FCLOSE FAILING?\n");
+}
+
+void SOprintFiles (LinkedList *LL, char *filename, TNode *root){
+	TNode *ptr = root;
+	FileNode *fptr;
+	if (ptr == NULL){
+		fprintf(stderr, "Indexer DNE\n");
+		return;
+	}
+	
+	int i;
+	int index;
+	char c;
+	for (i = 0; i < strlen(filename); i++){
+		c = filename[i];
+		index = hash(c);
+
+		if (ptr->children[index] == NULL)
+			return;
+
+		if (ptr->children[i]->isWord){
+			for (fptr = ptr->children[i]->head; fptr != NULL; fptr = fptr->next){
+				LL = SOinsertFile(LL, fptr->pathname);
+			}
+		}
+	}
+
+
+}
+
+LinkedList *SOinsertFile(LinkedList *LL, char *filename){
+	if (LL == NULL){
+		LL = createLL(filename);
+		printf("%s \n", LL->head->pathname);
+		return LL;
+	}
+	FileNode *ptr;
+	FileNode *prev = NULL;
+	for(ptr = LL->head; ptr != NULL;	ptr = ptr->next){
+		if (strcmp((ptr->pathname),filename) == 0){
+			break;
+		}
+		prev = ptr;
+	}
+	prev->next = createFileNode(filename);
+	printf("%s \n", prev->next->pathname);
+	return LL;
+}
+
+void destroyList(FileNode *head){
+	if(head == NULL)
+		return;
+	destroyList(head->next);
+	free(head->pathname);
+	free(head);
+	return;
+}
+
+void destroyNode(TNode *node){
+	int i;
+	if (node == NULL)
+		return;
+	for (i = 0; i < 36; i++){
+		if (node->children[i] == NULL)
+			continue;
+		destroyNode(node->children[i]);
+	}
+	destroyList(node->head);
+	free(node->children);
+	free(node);
 }
 
 int main (int argc, char **argv){
@@ -126,8 +202,13 @@ int main (int argc, char **argv){
  	}
 
  	Tree *tree = createRoot();
+<<<<<<< HEAD
 	LinkedList * list = NULL;
 		
+=======
+	LinkedList *list = NULL;
+
+>>>>>>> 7b35def5c55d9f624875db70c344cfe7c387838d
 	while (1) {
 		puts("Enter your query:");
 		scanf("%s", query_answer);
@@ -136,12 +217,19 @@ int main (int argc, char **argv){
 			exit(1);
 		}
 		else {
+<<<<<<< HEAD
 			puts("Query is not 'q'");
 			if (!strcmp("so", strtok(query_answer, " "))) {
 				puts("Logical V");
 				while ((token = strtok(NULL, " "))) {
 					SOprintFiles(list, token, tree->root);
 				}	
+=======
+		//	tokenize(query_answer);
+			
+			if (!strncmp("so ", query_answer, 3)) {
+
+>>>>>>> 7b35def5c55d9f624875db70c344cfe7c387838d
 			}
 			else if (!strcmp("sa", strtok(query_answer, " "))) {
 				puts("Logical ^");
@@ -153,6 +241,10 @@ int main (int argc, char **argv){
 			readIndex(index,tree->root);
 		}
 	}
+	
+	free(tree->root);
+	destroyList(list->head);
 	free(tree);
+	free(list);
  	return 0;
 }

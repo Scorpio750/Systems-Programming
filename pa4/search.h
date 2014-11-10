@@ -20,6 +20,12 @@ struct FileNode_{
 };
 typedef struct FileNode_ FileNode;
 
+struct LinkedList_{
+	FileNode *head;
+};
+
+typedef struct LinkedList_ LinkedList;
+
 struct TNode_{
 	char c;
 	bool isWord;
@@ -37,9 +43,14 @@ typedef struct Tree_ Tree;
 TNode *createNode(char c);
 Tree *createRoot();
 FileNode *createFileNode(char *pathname);
+LinkedList *createLL(char *pathname);
 int hash(char c);
 TNode *addNode(char *buffer, TNode *root);
 FileNode *addList(FileNode *node, char *buffer);
 void readIndex(FILE *file, TNode *root);
+void SOprintFiles(LinkedList *LL, char *filename, TNode *root);
+LinkedList *SOinsertFile(LinkedList *LL, char *filename);
+void destroyList(FileNode *head);
+void destroyNode(TNode *node);
 
 #endif
