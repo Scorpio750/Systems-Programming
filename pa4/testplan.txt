@@ -51,18 +51,61 @@ index <index><Case>
 search <index>
 
 Test Case 1:
---------------------
+-------------------------
 Description:
-sa - Given one file
-so - Given one file
+Properly exists program
 
-sa <a>
-	case/bii case/x/boo case/y/baa
-so <mouse>
-	case/bii
--------------------
+q
+	Exiting program
+-------------------------
 
 Test Case 2:
-------------------
+-------------------------
 Description:
-sa - Given 
+Invalid Input
+(should quit)
+
+token
+	Invalid Input
+-------------------------
+
+Test Case 3:
+-------------------------
+Description:
+Token does not exist.
+
+so <rainbow>
+-------------------------
+
+Test Case 4:
+-------------------------
+Description:
+sa - Given one token
+so - Given one token
+
+sa <a>
+	case/bii 
+	case/x/boo 
+	case/y/baa
+so <mouse>
+	case/bii
+-------------------------
+
+Test Case 5:
+-------------------------
+Description:
+sa - Given multiple tokens
+
+sa <a> <name>
+	case/x/boo 
+	case/y/baa
+-------------------------
+
+Test Case 6:
+-------------------------
+Description:
+sa - No file has all tokens
+
+sa <baa> <bii> <boo>
+
+-------------------------
