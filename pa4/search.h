@@ -44,13 +44,14 @@ TNode *createNode(char c);
 Tree *createRoot();
 FileNode *createFileNode(char *pathname);
 LinkedList *createLL(char *pathname);
+void destroyList(FileNode *head);
+void destroyNode(TNode *node);
 int hash(char c);
 TNode *addNode(char *buffer, TNode *root);
 FileNode *addList(FileNode *node, char *buffer);
 void readIndex(FILE *file, TNode *root);
-void destroyList(FileNode *head);
-void destroyNode(TNode *node);
 void printLinkedList(LinkedList *LL);
+void removeNode(FileNode *prev, FileNode *curr);
 LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa);
 void printFiles(LinkedList *LL, char *filename, TNode *root, int sa);
 #endif
