@@ -39,7 +39,6 @@ FileNode *createFileNode(char *pathname){
 	strcpy(newnode->pathname, pathname);
 	newnode->next = NULL;
 	if (newnode != NULL) {
-		printf("NEW NODE [%s]\n",newnode->pathname);
 		return newnode;
 	}
 	else {
@@ -109,7 +108,7 @@ TNode *addNode(char *buffer, TNode *root){
 			ptr->children[index]->depth = ptr->depth+1;
 		}
 		ptr = ptr->children[index];
-		printf("letter at ptr [%c]\n", ptr->c);
+		//printf("letter at ptr [%c]\n", ptr->c);
 	}
 	ptr->isWord = true;
 	return ptr;
@@ -147,7 +146,6 @@ void printTree(TNode *root){
 
 // File I/O Functions
 void readIndex(FILE *file, TNode *root){
-	printf("DOES readIndex() RUN???\n");
 	int state = 0;
 	char *buffer = (char *)malloc(sizeof(char) * 1024);
 	char i;
@@ -170,9 +168,9 @@ void readIndex(FILE *file, TNode *root){
 			state = 1;
 		}
 		else if (state == 1){
-			printf("STATE: [%d] WORD [%s]\n", state, buffer);
+			//printf("STATE: [%d] WORD [%s]\n", state, buffer);
 			ptr = addNode(buffer,root);
-			printf("ADDED NODE\n");
+			//printf("ADDED NODE\n");
 			state = 2;
 		}
 		else if (state == 2){
@@ -209,19 +207,21 @@ void printLinkedList(LinkedList *LL) {
 	return;
 }
 
+// Removes FileNode curr
 void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
-	if (prev == NULL) {
-		prev = curr;
-		curr = curr->next;
-		LL->head = prev;
-		if (prev != NULL){
-			destroyFileNode(prev);
-		}
+	puts("In RemoveNode");
+	if (LL->head == NULL || prev == NULL || curr == NULL) {
+		fprintf(stderr, "Null pointer Exception");
+	}
+	// head of the list
+	if (prev == NULL && LL->head == curr) {
+		puts("At Head of the List");
+		LL->head = curr->next;
 	}
 	else {
 		prev->next = curr->next;
-		destroyFileNode(curr);
 	}
+	destroyFileNode(curr);
 	return;
 }
 
@@ -264,7 +264,6 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 			printf("%s\n", ptr->pathname);
 			for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){		
 				if (strcmp(ptr->pathname, ptr2->pathname) == 0) {
-					printf("%s and %s are EQUALL bitches\n", ptr->pathname, ptr2->pathname);
 					break;
 				}
 				prev2 = ptr2;
@@ -337,7 +336,7 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			return NULL;
 		}
 		if (ptr->children[index]->isWord) {
-			puts("ENTERING INSERTFILE");
+			//puts("ENTERING INSERTFILE");
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 		}
 		ptr = ptr->children[index];
