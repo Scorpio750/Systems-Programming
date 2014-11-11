@@ -118,56 +118,7 @@ void readIndex(FILE *file, TNode *root){
 	fclose(file);
 }
 
-void destroyList(FileNode *head){
-	if(head == NULL)
-		return;
-	destroyList(head->next);
-	free(head->pathname);
-	free(head);
-	return;
-}
-
-void destroyNode(TNode *node){
-	int i;
-	if (node == NULL)
-		return;
-	for (i = 0; i < 36; i++){
-		if (node->children[i] == NULL)
-			continue;
-		destroyNode(node->children[i]);
-	}
-	destroyList(node->head);
-	free(node->children);
-	free(node);
-}
-
-void printLinkedList(LinkedList *LL){
-	FileNode *ptr;
-	FileNode *prev = NULL;
-	
-	if(LL == NULL)
-		return;
-	if(LL->head == NULL)
-		return;
-
-	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
-		printf("%s\n",ptr->pathname);
-		prev = ptr;
-	}
-
-	destroyList(LL->head);
-	free(LL);
-}
-
-void SAprintFiles(LinkedList *LL, char *filename, TNode *root){
-
-}
-
-LinkedList *SAinsertFile(LinkedList *LL, char *filename){
-
-}
-
-void SOprintFiles(LinkedList *LL, char *filename, TNode *root){
+void SOprintFiles (LinkedList *LL, char *filename, TNode *root){
 	TNode *ptr = root;
 	FileNode *fptr;
 	if (ptr == NULL){
@@ -191,7 +142,8 @@ void SOprintFiles(LinkedList *LL, char *filename, TNode *root){
 			}
 		}
 	}
-	printLinkedList(LL);
+
+
 }
 
 // Linked List Functions
@@ -214,7 +166,6 @@ LinkedList *SOinsertFile(LinkedList *LL, char *filename){
 	return LL;
 }
 
-<<<<<<< HEAD
 void removeNode(FileNode *prev, FileNode *curr) {
 	if (prev == NULL) {
 		prev = curr;
@@ -238,22 +189,26 @@ void destroyList(FileNode *head){
 	return;
 }
 
-void destroyNode(TNode *node){
+void destroyTNode(TNode *node){
 	int i;
 	if (node == NULL)
 		return;
 	for (i = 0; i < 36; i++){
 		if (node->children[i] == NULL)
 			continue;
-		destroyNode(node->children[i]);
+		destroyTNode(node->children[i]);
 	}
 	destroyList(node->head);
 	free(node->children);
 	free(node);
 }
 
-=======
->>>>>>> a85edcb411add90d38e92e8690ddf2c00ae4933a
+void destroyFileNode(FileNode *filenode) {
+	free(filenode->pathname);
+	free(filenode);
+	return;
+}
+
 int main (int argc, char **argv){
 	char * query_answer = malloc(256 * sizeof(char) + 1);
 	char * token;
@@ -300,7 +255,9 @@ int main (int argc, char **argv){
 		}
 	}
 	
-	destroyNode(tree->root);
+	free(tree->root);
+	destroyList(list->head);
 	free(tree);
+	free(list);
  	return 0;
 }
