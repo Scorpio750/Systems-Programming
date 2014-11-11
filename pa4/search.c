@@ -390,6 +390,8 @@ int main (int argc, char **argv) {
 		else {
 			char * flag = strsep(&query_answer, " ");
 			printf("FLAG: %s\n", flag);
+
+			//so
 			if (!strcmp("so", flag)) {
 				for (token = strsep(&query_answer, " ");
 						token; 
@@ -400,6 +402,8 @@ int main (int argc, char **argv) {
 				}	
 				printLinkedList(list);
 			}
+			
+			//sa
 			else if (!strcmp("sa", flag)) {
 				for (token = strsep(&query_answer, " ");
 						token;
