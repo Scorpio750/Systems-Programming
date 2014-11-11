@@ -1,0 +1,51 @@
+Alison Wong
+Patrick Wu
+
+Design:
+--------------------
+The tokens in the inverted index file are put into a prefix tree. With each 
+node that is a word, it contains a linked list of the file names it beliongs
+in (found in the inverted index file).
+There is a separate LinkedList that stores the files that should be printed out.
+For sa, it will compare the files from the LinkedList to the files in the nodes,
+if the nodes are in common, it stays in the linked list. Otherwise, if it
+doesn't exist in the nodes file list, it removes it from the resultant linked
+ist.
+Fo so, it will compare the files in the nodes to the files from the LinkedList.
+It will add the files to the LinkedList and ignore duplicates.
+
+Efficiency:
+--------------------
+Efficiency of Search
+m = number of queries
+n = number of files
+K = number of characters in all the queries added together
+
+For every m queries we go through k characters, K is denoted to be the number
+of characters in total. For every m queries we go through the linked list of
+n files and add them to the resultant linkedlist. Which is O(n).
+
+O(K + mn)
+
+Space Complexity:
+--------------------
+n = number of files
+K = number of characters in the index file
+m = words in index file
+
+When we create the prefix tree we have O(K). And for every unique word (m) in the
+tree, we have a linked list of files (n). 
+
+O(K + mn)
+
+
+Inverted Index Format:
+--------------------
+<list> token
+ file1 file2
+</list>
+<list> token2
+ file1 file2 file3
+</list>
+
+
