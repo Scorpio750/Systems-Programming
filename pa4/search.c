@@ -258,9 +258,8 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 
 		if (ptr->children[i]->isWord) {
 				LL = insertFile(LL, ptr->children[i]->head, sa);
-		}
 	}
-
+	return;
 }
 
 int main (int argc, char **argv){
@@ -311,13 +310,15 @@ int main (int argc, char **argv){
 		}
 	}
 
-	printf("%c\n",tree->root->children[10]->c);
-	printf("%c\n",tree->root->children[10]->c);
-	
-	destroyNode(tree->root);
-	destroyList(list->head);
-	free(tree);
-	free(list);
- 	return 0;
+	if (tree != NULL && tree->root != NULL)
+		destroyNode(tree->root);
+	if(list != NULL && list->head != NULL)
+		destroyList(list->head);
+	if(tree != NULL)
+		free(tree);
+	if(list != NULL)
+		free(list);
+
+	return 0;
 
 }
