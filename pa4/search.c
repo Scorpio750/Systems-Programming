@@ -66,6 +66,7 @@ void destroyNode(TNode *node){
 	free(node);
 }
 
+// Data Structures functions
 void destroyFileNode(FileNode *node){
 	free(node->pathname);
 	free(node);
@@ -257,6 +258,8 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 		if (ptr->children[i]->isWord)
 				LL = insertFile(LL, ptr->children[i]->head, sa);
 		}
+	}
+
 }
 
 int main (int argc, char **argv){
