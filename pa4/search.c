@@ -153,7 +153,6 @@ void readIndex(FILE *file, TNode *root){
 
 void printLinkedList(LinkedList *LL){
 	FileNode *ptr;
-	FileNode *prev = NULL;
 
 	if(LL == NULL)
 		return;
@@ -162,7 +161,6 @@ void printLinkedList(LinkedList *LL){
 
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
 		printf("%s\n",ptr->pathname);
-		prev = ptr;
 	}
 
 	destroyList(LL->head);
@@ -284,11 +282,7 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 		}
 	}
-<<<<<<< HEAD
-	printLinkedList(LL);
-=======
-    printLinkedList(LL);
->>>>>>> d9acede7cf2dc614ed359f29d220a1b2e447692e
+  printLinkedList(LL);
 	return;
 }
 
