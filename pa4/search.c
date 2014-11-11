@@ -169,10 +169,11 @@ void printLinkedList(LinkedList *LL){
 	free(LL);
 }
 
-void removeNode(FileNode *prev, FileNode *curr) {
+void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
 	if (prev == NULL) {
 		prev = curr;
 		curr = curr->next;
+		LL->head = prev;
 		destroyFileNode(prev);
 	}
 	else {
@@ -223,7 +224,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 				if (strcmp((tptr->pathname), ptr->pathname) == 0)
 					break;		
 				if (ptr->next == NULL)
-					removeNode(prev2, ptr2);
+					removeNode(prev2, ptr2, LL);
 			}
 			prev2 = tptr;
 		}
