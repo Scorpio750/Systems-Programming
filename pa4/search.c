@@ -191,6 +191,16 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	LinkedList *tmp;
 	FileNode *tptr;
 
+	for (ptr = node; ptr != NULL; ptr = ptr->next){
+		if (LL == NULL){
+			LL = createLL(ptr->pathname);
+			ptr2 = LL->head;
+		}else{
+			ptr2->next = createFileNode(ptr->pathname);
+			ptr2 = ptr2->next;
+		}
+	}
+
 	for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
 		if (tmp == NULL){
 			tmp = createLL(ptr2->pathname);
@@ -274,6 +284,7 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 		}
 	}
+	printLinkedList(LL);
 	return;
 }
 
