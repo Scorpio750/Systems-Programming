@@ -347,7 +347,6 @@ int main (int argc, char **argv) {
 				}	
 			}
 			else if (!strcmp("sa", flag)) {
-				printf("%s\n", token);
 				puts("Logical ^");
 				for (token = strsep(&query_answer, " ");
 						token;
