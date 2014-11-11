@@ -93,6 +93,7 @@ TNode *addNode(char *buffer, TNode *root){
 			ptr->children[index] = createNode(c);
 		}
 		ptr = ptr->children[index];
+		printf("letter at ptr [%c]\n", ptr->c);
 	}
 	ptr->isWord = true;
 	return ptr;
@@ -129,9 +130,9 @@ void readIndex(FILE *file, TNode *root){
 			state = 1;
 		}
 		else if (state == 1){
-			//printf("STATE: [%d] WORD [%s]\n", state, buffer);
+			printf("STATE: [%d] WORD [%s]\n", state, buffer);
 			ptr = addNode(buffer,root);
-			//printf("ADDED NODE\n");
+			printf("ADDED NODE\n");
 			state = 2;
 		}
 		else if (state == 2){
@@ -190,6 +191,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	FileNode *tptr;
 
 	for (ptr = node; ptr != NULL; ptr = ptr->next){
+		printf("NODE FILES: [%s]\n", ptr->pathname);
 		if (LL == NULL){
 			LL = createLL(ptr->pathname);
 			ptr2 = LL->head;
@@ -200,12 +202,14 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	}
 
 	for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
+		printf("LL NODES [%s]\n", ptr2->pathname);
 		if (tmp == NULL){
 			tmp = createLL(ptr2->pathname);
 			tptr = tmp->head;
+			printf("TMP NODE CREATED [%s]\n", tptr->pathname);
 			continue;
 		}
-		tptr->next = ptr2;
+		tptr->next = createFileNode(ptr2->pathname);
 	}
 
 	printf("MADE the TEMPORARY LINKEDLIST\n");
@@ -234,10 +238,14 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 		for (tptr = tmp->head; tptr != NULL; tptr = tptr->next){
 			ptr2 = tptr;
 			for (ptr = node; ptr != NULL; ptr = ptr->next){
-				if (strcmp((tptr->pathname), ptr->pathname) == 0)
+				if (strcmp((tptr->pathname), ptr->pathname) == 0){
+					printf("LL PATHNAME [%s] NODE PATHNAME [%s]\n", tptr->pathname, ptr->pathname);
 					break;		
-				if (ptr->next == NULL)
+				}
+				if (ptr->next == NULL){
+					printf("DOES THIS RUN\n");
 					removeNode(prev2, ptr2, LL);
+				}
 			}
 			prev2 = tptr;
 		}
@@ -264,11 +272,12 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 	char c;
 	puts("ENTERING FOR LOOP");
 	for (i = 0; i < strlen(filename); i++){
+		printf("[%d]\n",i);
 		c = filename[i];
-		//printf("THIS IS THE CHARACTER [%c]\n", c);
+		printf("THIS IS THE CHARACTER [%c]\n", c);
 		index = hash(c);
-		//printf("THIS IS THE INDEX [%d]\n", index);
-		//printf("THIS IS THE CHARACTER AT THE INDEX OF THE TREE [%c]\n", ptr->children[index]->c);
+		printf("THIS IS THE INDEX [%d]\n", index);
+		printf("THIS IS THE CHARACTER AT THE INDEX OF THE TREE [%c]\n", ptr->children[index]->c);
 		if (ptr->children[index] == NULL) {
 			return;
 		}
@@ -314,6 +323,7 @@ int main (int argc, char **argv) {
 	for (;;) {
 		puts("Enter your query:");
 		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
+		printf("YOUR INPUT: %s\n", query_answer);
 		if (n == -1) {
 			fprintf(stderr, "Error: unable to read from input stream");
 			exit(1);
