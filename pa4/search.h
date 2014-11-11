@@ -31,6 +31,7 @@ struct TNode_{
 	char c;
 	bool isWord;
 	struct TNode_ **children;
+	int depth;
 	FileNode *head;
 };
 typedef struct TNode_ TNode;
@@ -41,6 +42,7 @@ struct Tree_{
 typedef struct Tree_ Tree;
 
 //Functions
+bool isEmpty(TNode **array);
 TNode *createNode(char c);
 Tree *createRoot();
 FileNode *createFileNode(char *pathname);
@@ -51,6 +53,8 @@ void destroyFileNode(FileNode *node);
 int hash(char c);
 TNode *addNode(char *buffer, TNode *root);
 FileNode *addList(FileNode *node, char *buffer);
+void recursivePrint(char *buffer, TNode *node);
+void printTree(TNode *root);
 void readIndex(FILE *file, TNode *root);
 void printLinkedList(LinkedList *LL);
 void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL);

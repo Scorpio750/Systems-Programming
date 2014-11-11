@@ -4,11 +4,21 @@
  */
 #include "search.h"
 
+bool isEmpty(TNode **array){
+	int i;
+	for (i=0; i <36; i++){
+		if (array[i] != NULL)
+			return false;
+	}
+	return true;
+}
+
 //Create Functions
 TNode *createNode(char c){
 	TNode *node = (TNode*)malloc(sizeof(TNode));
 	node->c = c;
 	node->children = (TNode**)calloc(36, sizeof(TNode*));
+	node->depth = 0;
 	node->isWord = false;
 	node->head = NULL;
 	return node;
@@ -91,6 +101,7 @@ TNode *addNode(char *buffer, TNode *root){
 		index = hash(c);
 		if (ptr->children[index] == NULL){
 			ptr->children[index] = createNode(c);
+			ptr->children[index]->depth = ptr->depth+1;
 		}
 		ptr = ptr->children[index];
 		printf("letter at ptr [%c]\n", ptr->c);
@@ -103,6 +114,32 @@ FileNode *addList(FileNode *node, char *buffer){
 	FileNode *newnode = createFileNode(buffer);
 	node->next = newnode;
 	return newnode;
+}
+
+void recursivePrint(char *buffer, TNode *node){
+	if(isEmpty(node->children) == true)
+			return;
+	int i;
+	int index;
+	for(i=0;i<36;i++){
+		if (node->children[i] == NULL)
+			continue;
+		index = node->children[i]->depth -1;
+		buffer[index] = (char)node->children[i]->c;
+		if (node->children[i]->isWord){
+			buffer[index+1] = '\0';
+			printf(buffer);
+			printf("\n");
+		}
+		recursivePrint(buffer, node->children[i]);
+	}
+	return;
+}
+
+void printTree(TNode *root){
+	char *buffer = (char *)calloc(105, sizeof(char));
+	TNode *ptr = root;
+	recursivePrint(buffer,ptr);
 }
 
 // File I/O Functions
@@ -290,6 +327,7 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			puts("ENTERING INSERTFILE");
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 		}
+		ptr = ptr->children[index];
 	}
   printLinkedList(LL);
 	return;
@@ -317,16 +355,18 @@ int main (int argc, char **argv) {
 
 	readIndex(index,tree->root);
 
+	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PRINTING THE TREE<<<<<<<<<<<<<<<\n");
+	printTree(tree->root);
+
 	// Query Menu
 	for (;;) {
 		puts("Enter your query:");
 		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
-		printf("YOUR INPUT: %s\n", query_answer);
 		if (n == -1) {
 			fprintf(stderr, "Error: unable to read from input stream");
 			exit(1);
 		}
-        query_answer[n-1] = '\0';
+    query_answer[n-1] = '\0';
 		printf("QUERY ANSWER IS : %s\n", query_answer);
 		if (!strcmp(query_answer,"q")) {
 			puts("Exiting program");
@@ -335,7 +375,7 @@ int main (int argc, char **argv) {
 		else {
 			puts("Query is not 'q'");
 			char * flag = strsep(&query_answer, " ");
-
+			printf("FLAG: %s\n", flag);
 			if (!strcmp("so", flag)) {
 				puts("Logical V");
 				for (token = strsep(&query_answer, " ");
