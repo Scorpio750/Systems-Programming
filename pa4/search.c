@@ -106,7 +106,7 @@ FileNode *addList(FileNode *node, char *buffer){
 
 // File I/O Functions
 void readIndex(FILE *file, TNode *root){
-	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DOES readIndex() RUN???\n");
+	printf("DOES readIndex() RUN???\n");
 	int state = 0;
 	char *buffer = (char *)malloc(sizeof(char) * 1024);
 	char i;
@@ -238,7 +238,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	return LL;
 }
 
-void printFiles(LinkedList *LL, char *filename, TNode *root, int sa) {
+void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 	printf("DOES printFILES() RUN?\n");
 	TNode *ptr = root;
 	if (ptr == NULL){
@@ -252,14 +252,16 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa) {
 	puts("ENTERING FOR LOOP");
 	for (i = 0; i < strlen(filename); i++){
 		c = filename[i];
+		puts("ENTERING HASH");
 		index = hash(c);
-
+		printf("Char: %c\nIndex: %d\n", c, index);
 		if (ptr->children[index] == NULL) {
 			return;
 		}
-
+		puts("ABOUT TO ENTER ISWORD");
 		if (ptr->children[i]->isWord) {
-			LL = insertFile(LL, ptr->children[i]->head, sa);
+			puts("ENTERING INSERTFILE");
+			LL = insertFile(LL, ptr->children[i]->head, flag);
 		}
 	}
 	return;
@@ -302,9 +304,7 @@ int main (int argc, char **argv) {
 		}
 		else {
 			puts("Query is not 'q'");
-			printf("QUERY B4 FLAG IS : %s\n", query_answer);
 			char * flag = strsep(&query_answer, " ");
-			printf("QUERY AFTER FLAG IS : %s\n", query_answer);
 
 			if (!strcmp("so", flag)) {
 				puts("Logical V");
