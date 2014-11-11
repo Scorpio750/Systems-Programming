@@ -252,10 +252,11 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 		c = filename[i];
 		index = hash(c);
 
-		if (ptr->children[index] == NULL)
+		if (ptr->children[index] == NULL) {
 			return;
+		}
 
-		if (ptr->children[i]->isWord)
+		if (ptr->children[i]->isWord) {
 				LL = insertFile(LL, ptr->children[i]->head, sa);
 	}
 	return;
@@ -277,6 +278,8 @@ int main (int argc, char **argv){
 
  	Tree *tree = createRoot();
 	LinkedList *list = NULL;
+
+	readIndex(index,tree->root);
 
 	for (;;) {
 		puts("Enter your query:");
@@ -301,11 +304,9 @@ int main (int argc, char **argv){
 			}
 			// only one word to be searched
 			else {
-				break;
-				puts("BAD QUEURY \n");
-				readIndex(index, tree->root);
+				puts("BAD QUERY");
+				exit(1);
 			}
-			readIndex(index,tree->root);
 		}
 	}
 
