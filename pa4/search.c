@@ -331,10 +331,9 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 		c = filename[i];
 		index = hash(c);
 		if (ptr->children[index] == NULL) {
-			return NULL;
-		}
-		index = hash(c);
-		if (ptr->children[index] == NULL) {
+			if (flag == 0){
+				return LL;
+			}
 			return NULL;
 		}
 		if (ptr->children[index]->isWord) {
