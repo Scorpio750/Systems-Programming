@@ -302,10 +302,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 			for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
 				printf("This if the pathname of the FileNode in the LL [%s]\n", ptr2->pathname);	
 				if (strcmp(ptr->pathname, ptr2->pathname) == 0) {
-<<<<<<< HEAD
-=======
 					printf("The TNode FileNode [%s] and the Ll FileNode [%s] are EQUAL\n", ptr->pathname, ptr2->pathname);
->>>>>>> 195bc5621374f4a2f0ef339beaec97f5ba415896
 					break;
 				}
 				//prev2 = ptr2;
@@ -399,13 +396,10 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			}
 			return NULL;
 		}
-<<<<<<< HEAD
 		if (ptr->children[index]->isWord) {
 			//puts("ENTERING INSERTFILE");
-=======
 		if (ptr->children[index]->isWord && ( i == strlen(filename)-1)) {
 			printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
->>>>>>> 195bc5621374f4a2f0ef339beaec97f5ba415896
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 			return LL;
 		}
