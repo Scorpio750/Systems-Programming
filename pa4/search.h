@@ -46,6 +46,7 @@ FileNode *createFileNode(char *pathname);
 LinkedList *createLL(char *pathname);
 void destroyList(FileNode *head);
 void destroyNode(TNode *node);
+void destroyFileNode(FileNode *node);
 int hash(char c);
 TNode *addNode(char *buffer, TNode *root);
 FileNode *addList(FileNode *node, char *buffer);

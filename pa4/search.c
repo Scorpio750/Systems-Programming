@@ -67,6 +67,11 @@ void destroyNode(TNode *node){
 }
 
 // Data Structures functions
+void destroyFileNode(FileNode *node){
+	free(node->pathname);
+	free(node);
+}
+
 int hash(char c){
 	char * index = strchr(acceptable, c);
 	if (index == NULL) {
@@ -101,6 +106,7 @@ FileNode *addList(FileNode *node, char *buffer){
 
 // File I/O Functions
 void readIndex(FILE *file, TNode *root){
+	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DOES readIndex() RUN???\n");
 	int state = 0;
 	char *buffer = (char *)malloc(sizeof(char) * 1024);
 	char i;
@@ -222,10 +228,17 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 			prev2 = tptr;
 		}
 	}
+
+	if (tmp->head != NULL)
+		destroyList(tmp->head);
+	if (tmp != NULL)
+		free(tmp);
+
 	return LL;
 }
 
 void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
+	printf("DOES printFILES() RUN?\n");
 	TNode *ptr = root;
 	if (ptr == NULL){
 		fprintf(stderr, "Indexer DNE\n");
@@ -247,6 +260,7 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 		}
 	}
 
+}
 
 int main (int argc, char **argv){
 	char * query_answer = malloc(256 * sizeof(char) + 1);
@@ -276,27 +290,33 @@ int main (int argc, char **argv){
 			puts("Query is not 'q'");
 			if (!strcmp("so", strtok(query_answer, " "))) {
 				puts("Logical V");
-				while ((token = strtok(NULL, " "))) {
+				while ((token = strtok(NULL, " \n"))) {
 					printFiles(list, token, tree->root, 0);
 				}	
 			}
 			else if (!strcmp("sa", strtok(query_answer, " "))) {
 				puts("Logical ^");
-				while ((token = strtok(NULL, " "))) {
+				while ((token = strtok(NULL, " \n"))) {
 					printFiles(list, token, tree->root, 1);
 				}
 			}
 			// only one word to be searched
 			else {
+				break;
+				puts("BAD QUEURY \n");
 				readIndex(index, tree->root);
 			}
 			readIndex(index,tree->root);
 		}
 	}
+
+	printf("%c\n",tree->root->children[10]->c);
+	printf("%c\n",tree->root->children[10]->c);
 	
-	free(tree->root);
+	destroyNode(tree->root);
 	destroyList(list->head);
 	free(tree);
 	free(list);
  	return 0;
+
 }
