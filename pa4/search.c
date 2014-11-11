@@ -39,6 +39,7 @@ FileNode *createFileNode(char *pathname){
 	strcpy(newnode->pathname, pathname);
 	newnode->next = NULL;
 	if (newnode != NULL) {
+		printf("NEW NODE [%s]\n",newnode->pathname);
 		return newnode;
 	}
 	else {
@@ -221,20 +222,29 @@ void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
 
 LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	printf("ENTERING insertFile()\n");
-	FileNode *ptr;
-	FileNode *ptr2;
+	FileNode *ptr = NULL;
+	FileNode *ptr2 = NULL;
 	FileNode *prev2 = NULL;
-	LinkedList *tmp;
-	FileNode *tptr;
+	LinkedList *tmp = NULL;
+	FileNode *tptr = NULL;
+	FileNode *newnode = NULL;
+	LL = NULL;
 
 	for (ptr = node; ptr != NULL; ptr = ptr->next){
 		printf("NODE FILES: [%s]\n", ptr->pathname);
 		if (LL == NULL){
+			printf("LL IS NULL\n");
 			LL = createLL(ptr->pathname);
 			ptr2 = LL->head;
 		}else{
-			ptr2->next = createFileNode(ptr->pathname);
-			ptr2 = ptr2->next;
+			printf("LL IS NOT NULL\n");
+			printf("%s\n",ptr->pathname);
+			newnode = createFileNode(ptr->pathname);
+			printf("newnode pathname [%s]\n", newnode->pathname);
+			printf("PTR2 current pathname [%s]\n", ptr2->pathname);
+			ptr2->next = newnode;
+			ptr2 = ptr2->next;	
+			printf("THE PATH NAME THAT SHOULD BE ADDED [%s]\n",ptr2->pathname);
 		}
 	}
 
@@ -314,7 +324,6 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 		printf("THIS IS THE CHARACTER [%c]\n", c);
 		index = hash(c);
 		printf("THIS IS THE INDEX [%d]\n", index);
-		printf("THIS IS THE CHARACTER AT THE INDEX OF THE TREE [%c]\n", ptr->children[index]->c);
 		if (ptr->children[index] == NULL) {
 			return;
 		}

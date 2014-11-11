@@ -94,7 +94,7 @@ Test Case 5:
 Description:
 sa - Given multiple tokens
 
-sa a name
+sa a named
 	case/x/boo 
 	case/y/baa
 -------------------------
@@ -104,7 +104,7 @@ Test Case 6:
 Description:
 so - Given multiple tokens
 
-so a name
+so a named
 	case/bii
 	case/x/boo
 	case/y/baa
@@ -125,7 +125,7 @@ Description:
 Duplicate tokens
 
 sa name name
-	case/x/boo case/y/boo
+	case/x/boo case/y/baa
 so name name
-	case/x/boo case/y/boo
+	case/x/boo case/y/baa
 -------------------------
