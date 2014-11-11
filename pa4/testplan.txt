@@ -72,7 +72,7 @@ token
 Test Case 3:
 -------------------------
 Description:
-Token does not exist.
+Search terms cannot be found.
 
 so sometoken
 -------------------------
