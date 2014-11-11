@@ -133,8 +133,6 @@ void recursivePrint(char *buffer, TNode *node){
 		buffer[index] = (char)node->children[i]->c;
 		if (node->children[i]->isWord){
 			buffer[index+1] = '\0';
-			printf(buffer);
-			printf("\n");
 		}
 		recursivePrint(buffer, node->children[i]);
 	}
@@ -195,22 +193,20 @@ void readIndex(FILE *file, TNode *root){
 
 
 void printLinkedList(LinkedList *LL) {
-	puts("In linked list");
+	// puts("In linked list");
 	FileNode *ptr;
 	if(LL == NULL) {
-		puts("LL is Null");
+		puts("Search terms cannot be found");
 		return;
-		}	
+	}	
 	if(LL->head == NULL) {
 		puts("LL has nothing in it you fucking twat");
 		return;
-		}
+	}
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
-//		puts("WE ENTER THE LOOP");
 		printf("%s\n",ptr->pathname);
-		}
-
-//	puts("Out linked list");
+	}
+	return;
 }
 
 void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
@@ -268,15 +264,15 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 			printf("%s\n", ptr->pathname);
 			for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){		
 				if (strcmp(ptr->pathname, ptr2->pathname) == 0) {
-				  printf("%s and %s are EQUALL bitches", ptr->pathname, ptr2->pathname);
+					printf("%s and %s are EQUALL bitches\n", ptr->pathname, ptr2->pathname);
 					break;
 				}
-				puts("How about here");
 				prev2 = ptr2;
 				if (ptr2->next == NULL)
 					prev2->next = createFileNode(ptr->pathname);
 			}
 		}
+
 	}
 	// state is sa
 	if (sa == 1){
@@ -309,13 +305,15 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 				prev2 = ptr2;
 			}
 		}
-	if (tmp->head != NULL)
-		destroyList(tmp->head);
-	if (tmp != NULL)
-		free(tmp);
-
+		if (tmp->head != NULL){
+			destroyList(tmp->head);
+		}
+		if (tmp != NULL){
+			free(tmp);
+		}
 	}
 
+	puts("Exited states");
 	return LL;
 }
 
@@ -400,7 +398,6 @@ int main (int argc, char **argv) {
 					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
 					printf("TOKEN = %s\n", token);
 					list = printFiles(list, token, tree->root, 0);
-//					printLinkedList(list);
 				}	
 				printLinkedList(list);
 			}
