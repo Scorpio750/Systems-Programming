@@ -210,6 +210,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 
 	printf("MADE the TEMPORARY LINKEDLIST\n");
 
+    // state is so
 	if (sa == 0){
 		for (ptr = node; ptr != NULL; ptr = ptr->next){
 			if (LL == NULL){
@@ -228,6 +229,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 
 	prev2 = NULL;
 
+    // state is sa
 	if (sa == 1){
 		for (tptr = tmp->head; tptr != NULL; tptr = tptr->next){
 			ptr2 = tptr;
