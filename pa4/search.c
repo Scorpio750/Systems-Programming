@@ -284,7 +284,11 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 		}
 	}
+<<<<<<< HEAD
 	printLinkedList(LL);
+=======
+    printLinkedList(LL);
+>>>>>>> d9acede7cf2dc614ed359f29d220a1b2e447692e
 	return;
 }
 
@@ -315,9 +319,10 @@ int main (int argc, char **argv) {
 		puts("Enter your query:");
 		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
 		if (n == -1) {
-			puts("Error: unable to read from input stream");
+			fprintf(stderr, "Error: unable to read from input stream");
 			exit(1);
 		}
+        query_answer[n-1] = '\0';
 		printf("QUERY ANSWER IS : %s\n", query_answer);
 		if (!strcmp(query_answer,"q")) {
 			puts("Exiting program");
@@ -333,10 +338,6 @@ int main (int argc, char **argv) {
 						token; 
 						token = strsep(&query_answer, " ")) {
 					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
-					if (!strcmp(token, "so")) {
-						puts("Token = SO, skipping");	
-						continue;
-					}
 					printf("TOKEN = %s\n", token);
 					printFiles(list, token, tree->root, 0);
 				}	
@@ -347,7 +348,6 @@ int main (int argc, char **argv) {
 				for (token = strsep(&query_answer, " ");
 						token;
 						token = strsep(&query_answer, " ")) {
-					if (!strcmp(token, "sa")) continue;
 					printf("%s\n", token);
 					printFiles(list, token, tree->root, 1);
 				}
