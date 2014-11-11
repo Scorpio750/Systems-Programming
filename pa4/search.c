@@ -184,6 +184,7 @@ void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
 }
 
 LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
+	printf("ENTERING insertFile()\n");
 	FileNode *ptr;
 	FileNode *ptr2;
 	FileNode *prev2 = NULL;
@@ -252,12 +253,13 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa) {
 	puts("ENTERING FOR LOOP");
 	for (i = 0; i < strlen(filename); i++){
 		c = filename[i];
+		//printf("THIS IS THE CHARACTER [%c]\n", c);
 		index = hash(c);
-
+		//printf("THIS IS THE INDEX [%d]\n", index);
+		//printf("THIS IS THE CHARACTER AT THE INDEX OF THE TREE [%c]\n", ptr->children[index]->c);
 		if (ptr->children[index] == NULL) {
 			return;
 		}
-
 		if (ptr->children[i]->isWord) {
 			LL = insertFile(LL, ptr->children[i]->head, sa);
 		}
