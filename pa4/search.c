@@ -366,7 +366,6 @@ int main (int argc, char **argv) {
 
 	readIndex(index,tree->root);
 
-	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PRINTING THE TREE<<<<<<<<<<<<<<<\n");
 	printTree(tree->root);
 
 	// Query Menu
