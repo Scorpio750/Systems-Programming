@@ -153,7 +153,6 @@ void readIndex(FILE *file, TNode *root){
 
 void printLinkedList(LinkedList *LL){
 	FileNode *ptr;
-	FileNode *prev = NULL;
 
 	if(LL == NULL)
 		return;
@@ -162,7 +161,6 @@ void printLinkedList(LinkedList *LL){
 
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
 		printf("%s\n",ptr->pathname);
-		prev = ptr;
 	}
 
 	destroyList(LL->head);
@@ -190,6 +188,16 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	FileNode *prev2 = NULL;
 	LinkedList *tmp;
 	FileNode *tptr;
+
+	for (ptr = node; ptr != NULL; ptr = ptr->next){
+		if (LL == NULL){
+			LL = createLL(ptr->pathname);
+			ptr2 = LL->head;
+		}else{
+			ptr2->next = createFileNode(ptr->pathname);
+			ptr2 = ptr2->next;
+		}
+	}
 
 	for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
 		if (tmp == NULL){
@@ -274,7 +282,7 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 		}
 	}
-    printLinkedList(LL);
+  printLinkedList(LL);
 	return;
 }
 
