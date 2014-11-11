@@ -257,9 +257,8 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 
 		if (ptr->children[i]->isWord)
 				LL = insertFile(LL, ptr->children[i]->head, sa);
-		}
 	}
-
+	return;
 }
 
 int main (int argc, char **argv){
