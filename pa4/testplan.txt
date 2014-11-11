@@ -74,7 +74,7 @@ Test Case 3:
 Description:
 Token does not exist.
 
-so <rainbow>
+so sometoken
 -------------------------
 
 Test Case 4:
@@ -83,11 +83,9 @@ Description:
 sa - Given one token
 so - Given one token
 
-sa <a>
-	case/bii 
-	case/x/boo 
+sa baa
 	case/y/baa
-so <mouse>
+so mouse
 	case/bii
 -------------------------
 
@@ -96,7 +94,7 @@ Test Case 5:
 Description:
 sa - Given multiple tokens
 
-sa <a> <name>
+sa a name
 	case/x/boo 
 	case/y/baa
 -------------------------
@@ -104,8 +102,30 @@ sa <a> <name>
 Test Case 6:
 -------------------------
 Description:
+so - Given  multiple tokens
+
+so a name
+	case/bii
+	case/x/boo
+	case/y/baa
+-------------------------
+
+Test Case 7:
+-------------------------
+Description:
 sa - No file has all tokens
 
-sa <baa> <bii> <boo>
+sa baa bii boo
 
+-------------------------
+
+Test Case 8:
+-------------------------
+Description:
+Duplicate tokens
+
+sa name name
+	case/x/boo case/y/boo
+so name name
+	case/x/boo case/y/boo
 -------------------------
