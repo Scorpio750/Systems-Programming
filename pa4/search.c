@@ -79,8 +79,12 @@ void destroyNode(TNode *node){
 
 // Data Structures functions
 void destroyFileNode(FileNode *node){
-	free(node->pathname);
-	free(node);
+	if (node->pathname != NULL){
+		free(node->pathname);
+	}
+	if (node != NULL){
+		free(node);
+	}
 }
 
 int hash(char c){
@@ -202,13 +206,11 @@ void printLinkedList(LinkedList *LL) {
 		return;
 		}
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
-		puts("WE ENTER THE LOOP");
+//		puts("WE ENTER THE LOOP");
 		printf("%s\n",ptr->pathname);
 		}
 
-	puts("Out linked list");
-	destroyList(LL->head);
-	free(LL);
+//	puts("Out linked list");
 }
 
 void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
@@ -216,7 +218,9 @@ void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
 		prev = curr;
 		curr = curr->next;
 		LL->head = prev;
-		destroyFileNode(prev);
+		if (prev != NULL){
+			destroyFileNode(prev);
+		}
 	}
 	else {
 		prev->next = curr->next;
@@ -302,15 +306,15 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 					printf("DOES THIS RUN\n");
 					removeNode(prev2, ptr2, LL);
 				}
+				prev2 = ptr2;
 			}
-			prev2 = tptr;
 		}
-	}
-
 	if (tmp->head != NULL)
 		destroyList(tmp->head);
 	if (tmp != NULL)
 		free(tmp);
+
+	}
 
 	return LL;
 }
@@ -371,6 +375,10 @@ int main (int argc, char **argv) {
 	// Query Menu
 	for (;;) {
 		puts("Enter your query:");
+		if (list != NULL){
+			destroyList(list->head);
+			list = NULL;
+		}
 		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
 		if (n == -1) {
 			fprintf(stderr, "Error: unable to read from input stream");
@@ -392,7 +400,7 @@ int main (int argc, char **argv) {
 					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
 					printf("TOKEN = %s\n", token);
 					list = printFiles(list, token, tree->root, 0);
-					printLinkedList(list);
+//					printLinkedList(list);
 				}	
 				printLinkedList(list);
 			}
