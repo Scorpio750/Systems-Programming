@@ -4,6 +4,7 @@
  */
 #include "search.h"
 
+//Create Functions
 TNode *createNode(char c){
 	TNode *node = (TNode*)malloc(sizeof(TNode));
 	node->c = c;
@@ -39,6 +40,30 @@ LinkedList *createLL(char *pathname){
 	LinkedList *newhead = (LinkedList*)malloc(sizeof(LinkedList));
 	newhead->head = createFileNode(pathname);
 	return newhead;
+}
+
+//Destroy Functions
+void destroyList(FileNode *head){
+	if(head == NULL)
+		return;
+	destroyList(head->next);
+	free(head->pathname);
+	free(head);
+	return;
+}
+
+void destroyNode(TNode *node){
+	int i;
+	if (node == NULL)
+		return;
+	for (i = 0; i < 36; i++){
+		if (node->children[i] == NULL)
+			continue;
+		destroyNode(node->children[i]);
+	}
+	destroyList(node->head);
+	free(node->children);
+	free(node);
 }
 
 int hash(char c){
@@ -118,28 +143,6 @@ void readIndex(FILE *file, TNode *root){
 	fclose(file);
 }
 
-void destroyList(FileNode *head){
-	if(head == NULL)
-		return;
-	destroyList(head->next);
-	free(head->pathname);
-	free(head);
-	return;
-}
-
-void destroyNode(TNode *node){
-	int i;
-	if (node == NULL)
-		return;
-	for (i = 0; i < 36; i++){
-		if (node->children[i] == NULL)
-			continue;
-		destroyNode(node->children[i]);
-	}
-	destroyList(node->head);
-	free(node->children);
-	free(node);
-}
 
 void printLinkedList(LinkedList *LL){
 	FileNode *ptr;
@@ -157,6 +160,19 @@ void printLinkedList(LinkedList *LL){
 
 	destroyList(LL->head);
 	free(LL);
+}
+
+void removeNode(FileNode *prev, FileNode *curr) {
+	if (prev == NULL) {
+		prev = curr;
+		curr = curr->next;
+		destroyFileNode(prev);
+	}
+	else {
+		prev->next = curr->next;
+		destroyFileNode(curr);
+	}
+	return;
 }
 
 LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
@@ -231,69 +247,6 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 	printLinkedList(LL);
 }
 
-<<<<<<< HEAD
-=======
-// Linked List Functions
-LinkedList *SOinsertFile(LinkedList *LL, char *filename){
-	if (LL == NULL){
-		LL = createLL(filename);
-		printf("%s \n", LL->head->pathname);
-		return LL;
-	}
-	FileNode *ptr;
-	FileNode *prev = NULL;
-	for(ptr = LL->head; ptr != NULL;	ptr = ptr->next){
-		if (strcmp((ptr->pathname),filename) == 0){
-			break;
-		}
-		prev = ptr;
-	}
-	prev->next = createFileNode(filename);
-	printf("%s \n", prev->next->pathname);
-	return LL;
-}
-
-<<<<<<< HEAD
-void removeNode(FileNode *prev, FileNode *curr) {
-	if (prev == NULL) {
-		prev = curr;
-		curr = curr->next;
-		destroyFileNode(prev);
-	}
-	else {
-		prev->next = curr->next;
-		destroyFileNode(curr);
-	}
-	return;
-}
-
-// Destroy Functions
-void destroyList(FileNode *head){
-	if(head == NULL)
-		return;
-	destroyList(head->next);
-	free(head->pathname);
-	free(head);
-	return;
-}
-
-void destroyNode(TNode *node){
-	int i;
-	if (node == NULL)
-		return;
-	for (i = 0; i < 36; i++){
-		if (node->children[i] == NULL)
-			continue;
-		destroyNode(node->children[i]);
-	}
-	destroyList(node->head);
-	free(node->children);
-	free(node);
-}
-
-=======
->>>>>>> a85edcb411add90d38e92e8690ddf2c00ae4933a
->>>>>>> 4e245349b70de6f761c6e559f846ed93158ad1da
 int main (int argc, char **argv){
 	char * query_answer = malloc(256 * sizeof(char) + 1);
 	char * token;
