@@ -200,6 +200,8 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 		tptr->next = ptr2;
 	}
 
+	printf("MADE the TEMPORARY LINKEDLIST\n");
+
 	if (sa == 0){
 		for (ptr = node; ptr != NULL; ptr = ptr->next){
 			if (LL == NULL){
@@ -267,9 +269,9 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			return;
 		}
 		puts("ABOUT TO ENTER ISWORD");
-		if (ptr->children[i]->isWord) {
+		if (ptr->children[index]->isWord) {
 			puts("ENTERING INSERTFILE");
-			LL = insertFile(LL, ptr->children[i]->head, flag);
+			LL = insertFile(LL, ptr->children[index]->head, flag);
 		}
 	}
 	return;
