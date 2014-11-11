@@ -59,5 +59,5 @@ void readIndex(FILE *file, TNode *root);
 void printLinkedList(LinkedList *LL);
 void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL);
 LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa);
-void printFiles(LinkedList *LL, char *filename, TNode *root, int sa);
+LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int sa);
 #endif

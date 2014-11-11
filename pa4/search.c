@@ -119,7 +119,7 @@ FileNode *addList(FileNode *node, char *buffer){
 
 void recursivePrint(char *buffer, TNode *node){
 	if(isEmpty(node->children) == true)
-			return;
+		return;
 	int i;
 	int index;
 	for(i=0;i<36;i++){
@@ -190,18 +190,23 @@ void readIndex(FILE *file, TNode *root){
 }
 
 
-void printLinkedList(LinkedList *LL){
+void printLinkedList(LinkedList *LL) {
+	puts("In linked list");
 	FileNode *ptr;
-
-	if(LL == NULL)
+	if(LL == NULL) {
+		puts("LL is Null");
 		return;
-	if(LL->head == NULL)
+		}	
+	if(LL->head == NULL) {
+		puts("LL has nothing in it you fucking twat");
 		return;
-
+		}
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
+		puts("WE ENTER THE LOOP");
 		printf("%s\n",ptr->pathname);
-	}
+		}
 
+	puts("Out linked list");
 	destroyList(LL->head);
 	free(LL);
 }
@@ -221,67 +226,71 @@ void removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
 }
 
 LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
-	printf("ENTERING insertFile()\n");
 	FileNode *ptr = NULL;
 	FileNode *ptr2 = NULL;
 	FileNode *prev2 = NULL;
 	LinkedList *tmp = NULL;
 	FileNode *tptr = NULL;
 	FileNode *newnode = NULL;
-	LL = NULL;
 
-	for (ptr = node; ptr != NULL; ptr = ptr->next){
-		printf("NODE FILES: [%s]\n", ptr->pathname);
-		if (LL == NULL){
-			printf("LL IS NULL\n");
-			LL = createLL(ptr->pathname);
-			ptr2 = LL->head;
-		}else{
-			printf("LL IS NOT NULL\n");
-			printf("%s\n",ptr->pathname);
-			newnode = createFileNode(ptr->pathname);
-			printf("newnode pathname [%s]\n", newnode->pathname);
-			printf("PTR2 current pathname [%s]\n", ptr2->pathname);
-			ptr2->next = newnode;
-			ptr2 = ptr2->next;	
-			printf("THE PATH NAME THAT SHOULD BE ADDED [%s]\n",ptr2->pathname);
-		}
-	}
-
-	for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
-		printf("LL NODES [%s]\n", ptr2->pathname);
-		if (tmp == NULL){
-			tmp = createLL(ptr2->pathname);
-			tptr = tmp->head;
-			printf("TMP NODE CREATED [%s]\n", tptr->pathname);
-			continue;
-		}
-		tptr->next = createFileNode(ptr2->pathname);
-	}
-
-	printf("MADE the TEMPORARY LINKEDLIST\n");
-
-    // state is so
-	if (sa == 0){
+	// creates new result LL if none exists
+	if (LL == NULL){
 		for (ptr = node; ptr != NULL; ptr = ptr->next){
+			printf("NODE FILES: [%s]\n", ptr->pathname);
 			if (LL == NULL){
+				printf("LL IS NULL\n");
 				LL = createLL(ptr->pathname);
-				continue;
+				ptr2 = LL->head;
+			}else{
+				printf("LL IS NOT NULL\n");
+				printf("%s\n",ptr->pathname);
+				newnode = createFileNode(ptr->pathname);
+				printf("newnode pathname [%s]\n", newnode->pathname);
+				printf("PTR2 current pathname [%s]\n", ptr2->pathname);
+				ptr2->next = newnode;
+				ptr2 = ptr2->next;	
+				printf("THE PATH NAME THAT SHOULD BE ADDED [%s]\n",ptr2->pathname);
 			}
+		}
+		return LL;
+	}
+
+	printf("%s\n", LL->head->pathname);
+	// state is so
+	if (sa == 0){
+		// compares the filenodes in your indexed list to avoid duplicates
+		printf("THIS IS WHERE SO IS BEING RUN\n");
+		for (ptr = node; ptr != NULL; ptr = ptr->next){
+			printf("%s\n", ptr->pathname);
 			for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){		
-				if (strcmp((ptr->pathname), ptr2->pathname) == 0)
+				if (strcmp(ptr->pathname, ptr2->pathname) == 0) {
+				  printf("%s and %s are EQUALL bitches", ptr->pathname, ptr2->pathname);
 					break;
+				}
+				puts("How about here");
 				prev2 = ptr2;
 				if (ptr2->next == NULL)
 					prev2->next = createFileNode(ptr->pathname);
 			}
 		}
 	}
-
-	prev2 = NULL;
-
-    // state is sa
+	// state is sa
 	if (sa == 1){
+		// making temporary copy of LL
+		printf("THIS IS WHERE SA IS BEING RUN\n");
+		for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
+			printf("LL NODES [%s]\n", ptr2->pathname);
+			if (tmp == NULL){
+				tmp = createLL(ptr2->pathname);
+				tptr = tmp->head;
+				printf("TMP NODE CREATED [%s]\n", tptr->pathname);
+				continue;
+			}
+			tptr->next = createFileNode(ptr2->pathname);
+		}
+		printf("MADE the TEMPORARY LINKEDLIST\n");
+
+		prev2 = NULL;
 		for (tptr = tmp->head; tptr != NULL; tptr = tptr->next){
 			ptr2 = tptr;
 			for (ptr = node; ptr != NULL; ptr = ptr->next){
@@ -306,42 +315,33 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	return LL;
 }
 
-void printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
-	printf("DOES printFILES() RUN?\n");
+LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 	TNode *ptr = root;
 	if (ptr == NULL){
 		fprintf(stderr, "Indexer does not exist\n");
-		return;
+		return NULL;
 	}
 
 	int i;
 	int index;
 	char c;
-	puts("ENTERING FOR LOOP");
 	for (i = 0; i < strlen(filename); i++){
-		printf("[%d]\n",i);
 		c = filename[i];
-		printf("THIS IS THE CHARACTER [%c]\n", c);
 		index = hash(c);
-		printf("THIS IS THE INDEX [%d]\n", index);
 		if (ptr->children[index] == NULL) {
-			return;
+			return NULL;
 		}
-		puts("ENTERING HASH");
 		index = hash(c);
-		printf("Char: %c\nIndex: %d\n", c, index);
 		if (ptr->children[index] == NULL) {
-			return;
+			return NULL;
 		}
-		puts("ABOUT TO ENTER ISWORD");
 		if (ptr->children[index]->isWord) {
 			puts("ENTERING INSERTFILE");
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 		}
 		ptr = ptr->children[index];
 	}
-  printLinkedList(LL);
-	return;
+	return LL;
 }
 
 int main (int argc, char **argv) {
@@ -377,34 +377,34 @@ int main (int argc, char **argv) {
 			fprintf(stderr, "Error: unable to read from input stream");
 			exit(1);
 		}
-    query_answer[n-1] = '\0';
+		query_answer[n-1] = '\0';
 		printf("QUERY ANSWER IS : %s\n", query_answer);
 		if (!strcmp(query_answer,"q")) {
 			puts("Exiting program");
 			exit(1);
 		}
 		else {
-			puts("Query is not 'q'");
 			char * flag = strsep(&query_answer, " ");
 			printf("FLAG: %s\n", flag);
 			if (!strcmp("so", flag)) {
-				puts("Logical V");
 				for (token = strsep(&query_answer, " ");
 						token; 
 						token = strsep(&query_answer, " ")) {
 					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
 					printf("TOKEN = %s\n", token);
-					printFiles(list, token, tree->root, 0);
+					list = printFiles(list, token, tree->root, 0);
+					printLinkedList(list);
 				}	
+				printLinkedList(list);
 			}
 			else if (!strcmp("sa", flag)) {
-				puts("Logical ^");
 				for (token = strsep(&query_answer, " ");
 						token;
 						token = strsep(&query_answer, " ")) {
 					printf("%s\n", token);
-					printFiles(list, token, tree->root, 1);
+					list = printFiles(list, token, tree->root, 1);
 				}
+				printLinkedList(list);
 			}
 			// only one word to be searched
 			else {
