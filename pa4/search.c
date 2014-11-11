@@ -115,7 +115,7 @@ void readIndex(FILE *file, TNode *root){
 
 	do{
 		i = fscanf(file, "%s", buffer);
-	  //printf("STATE: [%d] STRING: [%s]\n", state, buffer);
+		//printf("STATE: [%d] STRING: [%s]\n", state, buffer);
 		if(i == -1){
 			//printf(">>>>>>EYE is NEGATIVE ONE\n");
 			break;
@@ -154,7 +154,7 @@ void readIndex(FILE *file, TNode *root){
 void printLinkedList(LinkedList *LL){
 	FileNode *ptr;
 	FileNode *prev = NULL;
-	
+
 	if(LL == NULL)
 		return;
 	if(LL->head == NULL)
@@ -197,7 +197,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 		}
 		tptr->next = ptr2;
 	}
-	
+
 	if (sa == 0){
 		for (ptr = node; ptr != NULL; ptr = ptr->next){
 			if (LL == NULL){
@@ -237,17 +237,18 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	return LL;
 }
 
-void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
+void printFiles(LinkedList *LL, char *filename, TNode *root, int sa) {
 	printf("DOES printFILES() RUN?\n");
 	TNode *ptr = root;
 	if (ptr == NULL){
-		fprintf(stderr, "Indexer DNE\n");
+		fprintf(stderr, "Indexer does not exist\n");
 		return;
 	}
-	
+
 	int i;
 	int index;
 	char c;
+	puts("ENTERING FOR LOOP");
 	for (i = 0; i < strlen(filename); i++){
 		c = filename[i];
 		index = hash(c);
@@ -257,53 +258,81 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 		}
 
 		if (ptr->children[i]->isWord) {
-				LL = insertFile(LL, ptr->children[i]->head, sa);
+			LL = insertFile(LL, ptr->children[i]->head, sa);
+		}
+		return;
 	}
-	return;
 }
 
-int main (int argc, char **argv){
-	char * query_answer = malloc(256 * sizeof(char) + 1);
+int main (int argc, char **argv) {
+	int nbytes = 256;
+	char * query_answer = malloc(nbytes * sizeof(char) + 1);
 	char * token;
- 	if (argc != 2){
- 		fprintf(stderr, "Invalid number of arguments.\n");
- 		return 1;
- 	}
+	// LinkedList *searchterms = NULL;
 
- 	FILE *index = fopen(argv[1], "r");
- 	if (index == NULL){
- 		fprintf(stderr, "File does not exist.\n");
- 		return 1;
- 	}
+	if (argc != 2) {
+		fprintf(stderr, "Invalid number of arguments.\n");
+		return 1;
+	}
 
- 	Tree *tree = createRoot();
+	FILE *index = fopen(argv[1], "r");
+	if (index == NULL){
+		fprintf(stderr, "File does not exist.\n");
+		return 1;
+	}
+
+	Tree *tree = createRoot();
 	LinkedList *list = NULL;
 
 	readIndex(index,tree->root);
 
+	// Query Menu
 	for (;;) {
 		puts("Enter your query:");
-		scanf("%s", query_answer);
+		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
+		if (n == -1) {
+			puts("Error: unable to read from input stream");
+			exit(1);
+		}
+		printf("QUERY ANSWER IS : %s\n", query_answer);
 		if (!strcmp(query_answer,"q")) {
 			puts("Exiting program");
 			exit(1);
 		}
 		else {
 			puts("Query is not 'q'");
-			if (!strcmp("so", strtok(query_answer, " "))) {
+			printf("QUERY B4 FLAG IS : %s\n", query_answer);
+			char * flag = strsep(&query_answer, " ");
+			printf("QUERY AFTER FLAG IS : %s\n", query_answer);
+
+			if (!strcmp("so", flag)) {
 				puts("Logical V");
-				while ((token = strtok(NULL, " \n"))) {
+				for (token = strsep(&query_answer, " ");
+						token; 
+						token = strsep(&query_answer, " ")) {
+					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
+					if (!strcmp(token, "so")) {
+						puts("Token = SO, skipping");	
+						continue;
+					}
+					printf("TOKEN = %s\n", token);
 					printFiles(list, token, tree->root, 0);
 				}	
 			}
-			else if (!strcmp("sa", strtok(query_answer, " "))) {
+			else if (!strcmp("sa", flag)) {
+				printf("%s\n", token);
 				puts("Logical ^");
-				while ((token = strtok(NULL, " \n"))) {
+				for (token = strsep(&query_answer, " ");
+						token;
+						token = strsep(&query_answer, " ")) {
+					if (!strcmp(token, "sa")) continue;
+					printf("%s\n", token);
 					printFiles(list, token, tree->root, 1);
 				}
 			}
 			// only one word to be searched
 			else {
+				printf("Query = %s\nToken = %s\n",query_answer, token);
 				puts("BAD QUERY");
 				exit(1);
 			}
@@ -319,6 +348,8 @@ int main (int argc, char **argv){
 	if(list != NULL)
 		free(list);
 
+	free(query_answer);
 	return 0;
 
 }
+
