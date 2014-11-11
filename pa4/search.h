@@ -50,8 +50,7 @@ FileNode *addList(FileNode *node, char *buffer);
 void readIndex(FILE *file, TNode *root);
 void destroyList(FileNode *head);
 void destroyNode(TNode *node);
-void printLinkedList*LinkedList *LL);
-void SOprintFiles(LinkedList *LL, char *filename, TNode *root);
-LinkedList *SOinsertFile(LinkedList *LL, char *filename);
-
+void printLinkedList(LinkedList *LL);
+LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa);
+void printFiles(LinkedList *LL, char *filename, TNode *root, int sa);
 #endif
