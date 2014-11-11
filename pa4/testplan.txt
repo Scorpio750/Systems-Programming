@@ -102,7 +102,7 @@ sa a name
 Test Case 6:
 -------------------------
 Description:
-so - Given  multiple tokens
+so - Given multiple tokens
 
 so a name
 	case/bii
