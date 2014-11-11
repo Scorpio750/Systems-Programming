@@ -66,7 +66,7 @@ Invalid Input
 (should quit)
 
 token
-	Invalid Input
+	Invalid Input.
 -------------------------
 
 Test Case 3:
@@ -89,7 +89,7 @@ so mouse
 	case/bii
 -------------------------
 
-Test Case 5:
+Test Case 5: (FAILING - free/corrupt)
 -------------------------
 Description:
 sa - Given multiple tokens
@@ -129,3 +129,16 @@ sa name name
 so name name
 	case/x/boo case/y/baa
 -------------------------
+
+Test Case 9: (CAPITAL LETTERS SEGFAULT)
+-------------------------
+Description:
+Mixed tokens (tokens that exist & don't exist)
+sa 
+so (should ignore the tokens that don't exist)
+
+sa named DNE 
+	Search terms cannot be found.
+so bii DNE boo
+	case/x/boo
+	case/bii
