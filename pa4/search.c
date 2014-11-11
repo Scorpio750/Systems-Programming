@@ -66,6 +66,7 @@ void destroyNode(TNode *node){
 	free(node);
 }
 
+// Data Structures functions
 int hash(char c){
 	char * index = strchr(acceptable, c);
 	if (index == NULL) {
@@ -246,8 +247,6 @@ void printFiles(LinkedList *LL, char *filename, TNode *root, int sa){
 		}
 	}
 
-	printLinkedList(LL);
-}
 
 int main (int argc, char **argv){
 	char * query_answer = malloc(256 * sizeof(char) + 1);
