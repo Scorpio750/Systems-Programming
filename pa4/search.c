@@ -201,6 +201,8 @@ void readIndex(FILE *file, TNode *root){
 		}
 	}while(i != EOF);
 	fclose(file);
+    free(buffer);
+    return;
 }
 
 
@@ -394,9 +396,7 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			if (flag == 0){
 				return LL;
 			}
-			if (flag == 1){
-				return NULL;
-			}
+			return NULL;
 		}
 		if (ptr->children[index]->isWord && i == strlen(filename)-1) {
 			printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
@@ -411,9 +411,6 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 }
 
 int main (int argc, char **argv) {
-	int nbytes = 256;
-	char * query_answer = malloc(nbytes * sizeof(char) + 1);
-	char * token;
 	// LinkedList *searchterms = NULL;
 
 	if (argc != 2) {
@@ -426,6 +423,9 @@ int main (int argc, char **argv) {
 		fprintf(stderr, "File does not exist.\n");
 		return 1;
 	}
+	int nbytes = 256;
+	char * query_answer = malloc(nbytes * sizeof(char) + 1);
+	char * token;
 
 	Tree *tree = createRoot();
 	LinkedList *list = NULL;
@@ -444,13 +444,13 @@ int main (int argc, char **argv) {
 		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
 		if (n == -1) {
 			fprintf(stderr, "Error: unable to read from input stream");
-			exit(1);
+            goto end;
 		}
 		query_answer[n-1] = '\0';
 		printf("QUERY ANSWER IS : %s\n", query_answer);
 		if (!strcmp(query_answer,"q")) {
 			puts("Exiting program");
-			exit(1);
+			goto end;
 		}
 		else {
 			list = NULL;
@@ -477,11 +477,8 @@ int main (int argc, char **argv) {
 					printf("%s\n", token);
 					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
 					printf("TOKEN = %s\n", token);
+
 					list = printFiles(list, token, tree->root, 1);
-					if (list == NULL){
-						//printf("Search terms cannot be found.");
-						break;
-					}
 					if(list->head == NULL){
 						printLinkedList(list);
 						continue;
@@ -493,11 +490,11 @@ int main (int argc, char **argv) {
 			// only one word to be searched
 			else {
 				puts("Invalid Input.");
-				exit(1);
+                goto end;
 			}
 		}
 	}
-
+end:
 	if (tree != NULL && tree->root != NULL){
 		puts("DESTROY TREE");
 		destroyNode(tree->root);
@@ -506,12 +503,7 @@ int main (int argc, char **argv) {
 		puts("DESTROY TREE STRUCT");
 		free(tree);
 	}
-	if(list != NULL){
-		puts("DESTROY LL STRUCT");
-		free(list);
-	}
 
 	free(query_answer);
 	return 0;
 }
-
