@@ -103,8 +103,8 @@ void destroyNode(TNode *node){
 // Data Structures functions
 void destroyFileNode(FileNode *node){
 	puts(">> ENTERING destroyFileNode");
-	if (node->pathname != NULL){
-		puts("For some reason, the FileNode->pathname is NULL");
+	if (node != NULL && node->pathname != NULL){
+		puts("The FileNode && Fileode->pathname is not NULL");
 		free(node->pathname);
 	}
 	if (node != NULL){
@@ -210,7 +210,7 @@ void readIndex(FILE *file, TNode *root){
 
 
 void printLinkedList(LinkedList *LL) {
-	puts(">> ENTERING printLinkedList");
+	puts(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ENTERING printLinkedList");
 	FileNode *ptr;
 	if(LL == NULL) {
 		puts("Search terms cannot be found");
@@ -223,6 +223,7 @@ void printLinkedList(LinkedList *LL) {
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
 		printf("%s\n",ptr->pathname);
 	}
+	puts(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FINISHED PRINTING LIST");
 	return;
 }
 
@@ -319,6 +320,9 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 		// making temporary copy of LL
 		puts("THE FLAG IS [SA]");
 		puts("CREATING A TEMPORARY LINKED LIST TO TRAVERSE THROUGH");
+		if (LL->head == NULL){
+			return LL;
+		}
 		for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
 			printf("This is the pathname of the FileNode in the LL [%s]\n", ptr2->pathname);
 			if (tmp == NULL){
@@ -354,7 +358,8 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 					//printf("We've reached the end of the TNode FileNode linkedlist:: Remove the node from LL\n");
 					LL = removeNode(prev2, ptr2, LL);
 					if (LL->head == NULL){
-						return NULL;
+						puts("does it come here?");
+						return LL;
 					}
 				}
 			}
@@ -386,7 +391,7 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 	int index;
 	char c;
 	for (i = 0; i < strlen(filename); i++){
-		c = filename[i];
+		c = tolower(filename[i]);
 		index = hash(c);
 		if (ptr->children[index] == NULL) {
 			if (flag == 0){
@@ -394,7 +399,7 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			}
 			return NULL;
 		}
-		if (ptr->children[index]->isWord && ( i == strlen(filename)-1)) {
+		if (ptr->children[index]->isWord && (i == strlen(filename)-1)) {
 			printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 			return LL;
@@ -449,6 +454,7 @@ int main (int argc, char **argv) {
 			exit(1);
 		}
 		else {
+			list = NULL;
 			char * flag = strsep(&query_answer, " ");
 			printf("FLAG: %s\n", flag);
 
@@ -466,11 +472,16 @@ int main (int argc, char **argv) {
 			
 			//sa
 			else if (!strcmp("sa", flag)) {
+				list = NULL;
 				for (token = strsep(&query_answer, " ");
 						token;
 						token = strsep(&query_answer, " ")) {
 					printf("%s\n", token);
 					list = printFiles(list, token, tree->root, 1);
+					if(list->head == NULL){
+						printLinkedList(list);
+						continue;
+					}
 				}
 				printLinkedList(list);
 			}
