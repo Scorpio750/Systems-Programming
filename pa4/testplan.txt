@@ -89,7 +89,7 @@ so mouse
 	case/bii
 -------------------------
 
-Test Case 5: (FAILING - free/corrupt)
+Test Case 5:
 -------------------------
 Description:
 sa - Given multiple tokens

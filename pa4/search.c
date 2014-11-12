@@ -68,9 +68,10 @@ void destroyList(FileNode *head){
 	}
 	destroyList(head->next);
 	if (head->pathname != NULL){
-		printf("Removing [%s]\n", head->pathname);
-		free(head->pathname);
-		head->pathname = NULL;
+		if ((int)strlen(head->pathname) != 0){
+			free(head->pathname);
+			head->pathname = NULL;
+		}
 	}
 	free(head);
 	head = NULL;
@@ -222,44 +223,43 @@ void printLinkedList(LinkedList *LL) {
 		return;
 	}	
 	if(LL->head == NULL) {
-		puts("LL is not NULL, BUT the head is...not good.");
+	//	puts("LL is not NULL, BUT the head is...not good.");
 		return;
 	}
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
+		if (strlen(ptr->pathname) == 0){
+			continue;
+		}
 		printf("%s\n",ptr->pathname);
 	}
-	puts("FINISHED PRINTING LIST");
+	//puts("FINISHED PRINTING LIST");
 	return;
 }
 
 // Removes FileNode curr
 LinkedList *removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
-	puts(">> ENTERING removeNode");
 	if (prev == NULL && curr == NULL){
-		puts("The prev node and the node that should be removed is NULL");
 		return NULL;
 	}
 	if (prev == NULL) {
-		puts("The Node that should be removed is the head of the LL");
 		prev = curr;
 		curr = curr->next;
 		LL->head = curr;
 		if (prev != NULL){
-			puts("The node that we are removing is not NULL");
 			destroyFileNode(prev);
 		}
 	}
 	else {
-		puts("The node that should be removed is not the head of the Linked List");
 		prev->next = curr->next;
 		destroyFileNode(curr);
-		puts("just added line above ln244");
 	}
-	return LL;
+	//	free(head->pathname);
+	//	head->pathname = NULL;
+return LL;
 }
 
 LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
-	puts(">> ENTERING insertFile");
+//	puts(">> ENTERING insertFile");
 	FileNode *ptr = NULL;
 	FileNode *ptr2 = NULL;
 	FileNode *prev2 = NULL;
@@ -269,17 +269,17 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 
 	// creates new result LL if none exists
 	if (LL == NULL){
-		puts("The Linked List is NULL: Create a New Linked List");
+	//	puts("The Linked List is NULL: Create a New Linked List");
 		for (ptr = node; ptr != NULL; ptr = ptr->next){
-			printf("This is the pathname of the FileNode in the TNode: [%s]\n", ptr->pathname);
+		//	printf("This is the pathname of the FileNode in the TNode: [%s]\n", ptr->pathname);
 			if (LL == NULL){
-				puts("LL struct IS NULL: Create a NEW LinkedList struct && head");
+			//	puts("LL struct IS NULL: Create a NEW LinkedList struct && head");
 				LL = createLL(ptr->pathname);
 				ptr2 = LL->head;
-				printf("This is PTR2(LL->head)->pathname [%s]\n", ptr2->pathname);
+			//	printf("This is PTR2(LL->head)->pathname [%s]\n", ptr2->pathname);
 			}else{
 			//	puts("LL struct is no longer NULL: add to front");
-				puts("Time to create a newFileNode");
+			//	puts("Time to create a newFileNode");
 				/*	
 			  newnode = createFileNode(ptr->pathname);
 				newnode->next = ptr2;
@@ -287,11 +287,11 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 				printf("This is the newly reassigned LL head pathname [%s]\n", LL->head->pathname);
 				*/
 				
-				puts("LL struct is no longer NULL: add to end");
+		//		puts("LL struct is no longer NULL: add to end");
 				newnode = createFileNode(ptr->pathname);
 				ptr2->next = newnode;
 				ptr2 = ptr2->next;	
-				printf("THE PATH NAME THAT SHOULD BE ADDED [%s]\n",ptr2->pathname);
+			//	printf("THE PATH NAME THAT SHOULD BE ADDED [%s]\n",ptr2->pathname);
 			
 			}
 		}
@@ -303,16 +303,16 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	//printf("LL IS NOT NULL: This is the LL->head->pathname [%s]\n", LL->head->pathname);
 	if (sa == 0){
 		// compares the filenodes in your indexed list to avoid duplicates
-		puts("THE FLAG IS [SO]");
+	//	puts("THE FLAG IS [SO]");
 		for (ptr = node; ptr != NULL; ptr = ptr->next){
 			for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
 				if (strcmp(ptr->pathname, ptr2->pathname) == 0) {
-					printf("The TNode FileNode [%s] and the Ll FileNode [%s] are EQUAL\n", ptr->pathname, ptr2->pathname);
+		//			printf("The TNode FileNode [%s] and the Ll FileNode [%s] are EQUAL\n", ptr->pathname, ptr2->pathname);
 					break;
 				}
 				//prev2 = ptr2;
 				if (ptr2->next == NULL){
-					puts("We've reached the end of the list, add a newnode to the end");
+			//		puts("We've reached the end of the list, add a newnode to the end");
 					newnode = createFileNode(ptr->pathname);
 					ptr2->next = newnode;
 					//prev2->next = newnode;
@@ -324,18 +324,18 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	// state is sa
 	if (sa == 1){
 		// making temporary copy of LL
-		puts("THE FLAG IS [SA]");
-		puts("CREATING A TEMPORARY LINKED LIST TO TRAVERSE THROUGH");
+	//	puts("THE FLAG IS [SA]");
+	//	puts("CREATING A TEMPORARY LINKED LIST TO TRAVERSE THROUGH");
 		if (LL->head == NULL){
 			return LL;
 		}
 		for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
-			printf("This is the pathname of the FileNode in the LL [%s]\n", ptr2->pathname);
+		//	printf("This is the pathname of the FileNode in the LL [%s]\n", ptr2->pathname);
 			if (tmp == NULL){
-				puts("tmp LL struct is NULL");
+			//	puts("tmp LL struct is NULL");
 				tmp = createLL(ptr2->pathname);
 				tptr = tmp->head;
-				printf("This is the new head for for the tmp LL Struct  [%s]\n", tptr->pathname);
+			//	printf("This is the new head for for the tmp LL Struct  [%s]\n", tptr->pathname);
 				continue;
 			}else{
 				newnode = createFileNode(ptr2->pathname);
@@ -358,67 +358,60 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 				if (ptr->next == NULL){
 					LL = removeNode(prev2, ptr2, LL);
 					if (LL->head == NULL){
-						puts("does it come here??????????????");
-                        if (tmp->head){
-                            puts("DESTROY THE TEMPORARY LINKED LIST");
-                            destroyList(tmp->head);
-                        }
-                        if (tmp){
-                            puts("FREE THE TEMP LL STRUCT");
-                            free(tmp);
-                        }
-                        return LL;
-                    }
-                }
-            }
-            prev2 = ptr2;
-            ptr2 = ptr2->next;
-        }
+				//		puts("does it come here??????????????");
+						return LL;
+					}
+				}
+			}
+			prev2 = ptr2;
+			ptr2 = ptr2->next;
+		}
 
-        if (tmp->head){
-            puts("DESTROY THE TEMPORARY LINKED LIST");
-            destroyList(tmp->head);
-        }
-        if (tmp){
-            puts("FREE THE TEMP LL STRUCT");
-            free(tmp);
-        }
-    }
-    return LL;
+		if (tmp->head != NULL){
+		//	puts("DESTROY THE TEMPORARY LINKED LIST");
+			destroyList(tmp->head);
+		}
+		if (tmp != NULL){
+		//	puts("FREE THE TEMP LL STRUCT");
+			free(tmp);
+		}
+	}
+	puts("Exited states");
+	return LL;
 }
 
 LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
-    puts("Inside printFiles");
-    TNode *ptr = root;
-    if (ptr == NULL){
-        fprintf(stderr, "Indexer does not exist\n");
-        return NULL;
-    }
+//	puts("Inside printFiles");
+	TNode *ptr = root;
+	if (ptr == NULL){
+		fprintf(stderr, "Indexer does not exist\n");
+		return NULL;
+	}
 
     int i;
     int index;
     char c;
 
-    // goes through each char of the filename, hashes it, and compares it to the tree
-    for (i = 0; i < strlen(filename); i++){
-        c = tolower(filename[i]);
-        index = hash(c);
-        if (ptr->children[index] == NULL) {
-            if (flag == 0){
-                return LL;
-            }
-            return NULL;
-        }
-        if (ptr->children[index]->isWord && i == strlen(filename)-1) {
-            printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
-            LL = insertFile(LL, ptr->children[index]->head, flag);
-            return LL;
-        }
-        ptr = ptr->children[index];
-        printf("THIS IS THE CHARCTER AS WE TRAVERSE THROUGH [%c]\n", ptr->c);
-
-    }
-    return LL;
+	// goes through each char of the filename, hashes it, and compares it to the tree
+	for (i = 0; i < strlen(filename); i++){
+		c = tolower(filename[i]);
+		index = hash(c);
+		if (ptr->children[index] == NULL) {
+			if (flag == 0){
+				return LL;
+			}
+			return NULL;
+		}
+		if (ptr->children[index]->isWord && i == strlen(filename)-1) {
+	//		printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
+			LL = insertFile(LL, ptr->children[index]->head, flag);
+			return LL;
+		}
+		ptr = ptr->children[index];
+	//	printf("THIS IS THE CHARCTER AS WE TRAVERSE THROUGH [%c]\n", ptr->c);
+		
+	}
+	return LL;
 }
 
 int main (int argc, char **argv) {
