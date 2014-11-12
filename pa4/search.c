@@ -93,8 +93,8 @@ void destroyNode(TNode *node){
 
 // Data Structures functions
 void destroyFileNode(FileNode *node){
-	// puts(">> ENTERING destroyFileNode");
-	if (node->pathname != NULL){
+	puts(">> ENTERING destroyFileNode");
+	if (node != NULL && node->pathname != NULL){
 		free(node->pathname);
 	}
 	if (node != NULL){
@@ -216,6 +216,7 @@ void printLinkedList(LinkedList *LL) {
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
 		printf("%s\n",ptr->pathname);
 	}
+	puts("FINISHED PRINTING LIST");
 	return;
 }
 
@@ -311,6 +312,9 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 		// making temporary copy of LL
 		puts("THE FLAG IS [SA]");
 		puts("CREATING A TEMPORARY LINKED LIST TO TRAVERSE THROUGH");
+		if (LL->head == NULL){
+			return LL;
+		}
 		for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
 			printf("This is the pathname of the FileNode in the LL [%s]\n", ptr2->pathname);
 			if (tmp == NULL){
@@ -344,7 +348,8 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 					//printf("We've reached the end of the TNode FileNode linkedlist:: Remove the node from LL\n");
 					LL = removeNode(prev2, ptr2, LL);
 					if (LL->head == NULL){
-						return NULL;
+						puts("does it come here?");
+						return LL;
 					}
 				}
 			}
@@ -379,7 +384,7 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 
 	// goes through each char of the filename, hashes it, and compares it to the tree
 	for (i = 0; i < strlen(filename); i++){
-		c = filename[i];
+		c = tolower(filename[i]);
 		index = hash(c);
 		if (ptr->children[index] == NULL) {
 			if (flag == 0){
@@ -442,6 +447,7 @@ int main (int argc, char **argv) {
 			exit(1);
 		}
 		else {
+			list = NULL;
 			char * flag = strsep(&query_answer, " ");
 			printf("FLAG: %s\n", flag);
 
@@ -458,6 +464,7 @@ int main (int argc, char **argv) {
 			
 			//sa
 			else if (!strcmp("sa", flag)) {
+				list = NULL;
 				for (token = strsep(&query_answer, " ");
 						token;
 						token = strsep(&query_answer, " ")) {
@@ -466,6 +473,10 @@ int main (int argc, char **argv) {
 					printf("TOKEN = %s\n", token);
 
 					list = printFiles(list, token, tree->root, 1);
+					if(list->head == NULL){
+						printLinkedList(list);
+						continue;
+					}
 				}
 				printLinkedList(list);
 			}
