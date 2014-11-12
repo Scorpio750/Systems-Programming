@@ -71,8 +71,10 @@ void destroyList(FileNode *head){
 		puts("HEELO");
 		printf("[%s]\n", head->pathname);
 		free(head->pathname);
+		head->pathname = NULL;
 	}
 	free(head);
+	head = NULL;
 	return;
 }
 
@@ -88,7 +90,9 @@ void destroyNode(TNode *node){
 	}
 	destroyList(node->head);
 	free(node->children);
+	node->children = NULL;
 	free(node);
+	node = NULL;
 }
 
 // Data Structures functions
@@ -97,11 +101,14 @@ void destroyFileNode(FileNode *node){
 	if (node != NULL && node->pathname != NULL){
 		free(node->pathname);
 		node->pathname = NULL;
-	}
+		free(node);
+		node = NULL;
+	}/*
 	if (node != NULL){
 		free(node);
 		node = NULL;
 	}
+	*/
 	return;
 }
 
@@ -479,6 +486,9 @@ int main (int argc, char **argv) {
 					printf("TOKEN = %s\n", token);
 
 					list = printFiles(list, token, tree->root, 1);
+					if (list == NULL){
+						break;
+					}
 					if(list->head == NULL){
 						printLinkedList(list);
 						continue;
