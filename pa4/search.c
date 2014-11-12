@@ -70,9 +70,7 @@ void destroyList(FileNode *head){
 	if (head->pathname != NULL){
 		free(head->pathname);
 	}
-	if (head != NULL){
-		free(head);
-	}
+	free(head);
 	return;
 }
 
@@ -199,6 +197,8 @@ void readIndex(FILE *file, TNode *root){
 		}
 	}while(i != EOF);
 	fclose(file);
+    free(buffer);
+    return;
 }
 
 
@@ -390,9 +390,7 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			if (flag == 0){
 				return LL;
 			}
-			if (flag == 1){
-				return NULL;
-			}
+			return NULL;
 		}
 		if (ptr->children[index]->isWord && i == strlen(filename)-1) {
 			printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
@@ -475,10 +473,6 @@ int main (int argc, char **argv) {
 					printf("TOKEN = %s\n", token);
 
 					list = printFiles(list, token, tree->root, 1);
-					if (list == NULL){
-						//printf("Search terms cannot be found.");
-						break;
-					}
 					if(list->head == NULL){
 						printLinkedList(list);
 						continue;
@@ -506,4 +500,3 @@ end:
 	free(query_answer);
 	return 0;
 }
-
