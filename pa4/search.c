@@ -260,7 +260,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	}
 
 	printf("MADE the TEMPORARY LINKEDLIST\n");
-
+    printf("STATE : %d\n", sa);
     // state is so
 	if (sa == 0){
 		for (ptr = node; ptr != NULL; ptr = ptr->next){
@@ -366,7 +366,6 @@ int main (int argc, char **argv) {
 
 	readIndex(index,tree->root);
 
-	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PRINTING THE TREE<<<<<<<<<<<<<<<\n");
 	printTree(tree->root);
 
 	// Query Menu
