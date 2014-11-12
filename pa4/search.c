@@ -68,11 +68,11 @@ void destroyList(FileNode *head){
 	}
 	destroyList(head->next);
 	if (head->pathname != NULL){
+		puts("HEELO");
+		printf("[%s]\n", head->pathname);
 		free(head->pathname);
 	}
-	if (head != NULL){
-		free(head);
-	}
+	free(head);
 	return;
 }
 
@@ -96,9 +96,11 @@ void destroyFileNode(FileNode *node){
 	puts(">> ENTERING destroyFileNode");
 	if (node != NULL && node->pathname != NULL){
 		free(node->pathname);
+		node->pathname = NULL;
 	}
 	if (node != NULL){
 		free(node);
+		node = NULL;
 	}
 	return;
 }
@@ -240,6 +242,8 @@ LinkedList *removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
 	else {
 		puts("The node that should be removed is not the head of the Linked List");
 		prev->next = curr->next;
+		destroyFileNode(curr);
+		puts("just added line above ln244");
 	}
 	return LL;
 }
@@ -348,7 +352,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 					//printf("We've reached the end of the TNode FileNode linkedlist:: Remove the node from LL\n");
 					LL = removeNode(prev2, ptr2, LL);
 					if (LL->head == NULL){
-						puts("does it come here?");
+						puts("does it come here??????????????");
 						return LL;
 					}
 				}
@@ -484,6 +488,7 @@ int main (int argc, char **argv) {
 					}
 				}
 				printLinkedList(list);
+				puts("LINE 492");
 			}
 			// only one word to be searched
 			else {
@@ -496,10 +501,6 @@ int main (int argc, char **argv) {
 	if (tree != NULL && tree->root != NULL){
 		puts("DESTROY TREE");
 		destroyNode(tree->root);
-	}
-	if(list != NULL && list->head != NULL){
-		puts("DESTROY LIST");
-		destroyList(list->head);
 	}
 	if(tree != NULL){
 		puts("DESTROY TREE STRUCT");
