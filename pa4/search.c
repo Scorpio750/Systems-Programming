@@ -227,6 +227,9 @@ void printLinkedList(LinkedList *LL) {
 		return;
 	}
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
+		if (strlen(ptr->pathname) == 0){
+			continue;
+		}
 		printf("%s\n",ptr->pathname);
 	}
 	//puts("FINISHED PRINTING LIST");
@@ -235,28 +238,24 @@ void printLinkedList(LinkedList *LL) {
 
 // Removes FileNode curr
 LinkedList *removeNode(FileNode *prev, FileNode *curr, LinkedList *LL) {
-	//puts(">> ENTERING removeNode");
 	if (prev == NULL && curr == NULL){
-	//	puts("The prev node and the node that should be removed is NULL");
 		return NULL;
 	}
 	if (prev == NULL) {
-	//	puts("The Node that should be removed is the head of the LL");
 		prev = curr;
 		curr = curr->next;
 		LL->head = curr;
 		if (prev != NULL){
-	//		puts("The node that we are removing is not NULL");
 			destroyFileNode(prev);
 		}
 	}
 	else {
-	//	puts("The node that should be removed is not the head of the Linked List");
 		prev->next = curr->next;
 		destroyFileNode(curr);
-	//	puts("just added line above ln244");
 	}
-	return LL;
+	//	free(head->pathname);
+	//	head->pathname = NULL;
+return LL;
 }
 
 LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
@@ -355,7 +354,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 			for (ptr = node; ptr != NULL; ptr = ptr->next){
 				//printf("This is the FileNode pathname in the TNode [%s]\n", ptr->pathname);
 				if (strcmp(tptr->pathname, ptr->pathname) == 0){
-					puts("THE LL FileNode pathname && The FileNode pathname of TNode is EQUIVALENT: Should go into the next interation of the tmp LL");
+	//				puts("THE LL FileNode pathname && The FileNode pathname of TNode is EQUIVALENT: Should go into the next interation of the tmp LL");
 					//printf("The LL FileNode pathname [%s] = The FileNode pathname of TNode [%s]\n", tptr->pathname, ptr->pathname);
 					break;		
 				}
@@ -386,7 +385,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 }
 
 LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
-	puts("Inside printFiles");
+//	puts("Inside printFiles");
 	TNode *ptr = root;
 	if (ptr == NULL){
 		fprintf(stderr, "Indexer does not exist\n");
@@ -465,7 +464,7 @@ int main (int argc, char **argv) {
 		}
 		else {
 			char * flag = strsep(&query_answer, " ");
-			printf("FLAG: %s\n", flag);
+		//	printf("FLAG: %s\n", flag);
 
 			//so
 			if (!strcmp("so", flag)) {
@@ -474,7 +473,7 @@ int main (int argc, char **argv) {
 						token = strsep(&query_answer, " ")) {
 					list = printFiles(list, token, tree->root, 0);
 				}	
-				puts("Out of printFiles");
+		//		puts("Out of printFiles");
 				printLinkedList(list);
 			}
 			
@@ -484,9 +483,9 @@ int main (int argc, char **argv) {
 				for (token = strsep(&query_answer, " ");
 						token;
 						token = strsep(&query_answer, " ")) {
-					printf("%s\n", token);
-					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
-					printf("TOKEN = %s\n", token);
+				//	printf("%s\n", token);
+				//	printf("QUERY ANSWER IS NOW : %s\n", query_answer);
+			//		printf("TOKEN = %s\n", token);
 
 					list = printFiles(list, token, tree->root, 1);
 					if (!list){
@@ -498,7 +497,7 @@ int main (int argc, char **argv) {
 					}
 				}
 				printLinkedList(list);
-				puts("LINE 492");
+		//		puts("LINE 492");
 			}
 			// only one word to be searched
 			else {
