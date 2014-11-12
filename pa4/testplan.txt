@@ -95,8 +95,7 @@ Description:
 sa - Given multiple tokens
 
 sa a named
-	case/x/boo 
-	case/y/baa
+	case/bii 
 -------------------------
 
 Test Case 6:
@@ -130,7 +129,7 @@ so name name
 	case/x/boo case/y/baa
 -------------------------
 
-Test Case 9: (CAPITAL LETTERS SEGFAULT)
+Test Case 9:
 -------------------------
 Description:
 Mixed tokens (tokens that exist & don't exist)

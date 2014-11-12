@@ -390,7 +390,9 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			if (flag == 0){
 				return LL;
 			}
-			return NULL;
+			if (flag == 1){
+				return NULL;
+			}
 		}
 		if (ptr->children[index]->isWord && i == strlen(filename)-1) {
 			printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
@@ -472,6 +474,10 @@ int main (int argc, char **argv) {
 					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
 					printf("TOKEN = %s\n", token);
 					list = printFiles(list, token, tree->root, 1);
+					if (list == NULL){
+						//printf("Search terms cannot be found.");
+						break;
+					}
 					if(list->head == NULL){
 						printLinkedList(list);
 						continue;
