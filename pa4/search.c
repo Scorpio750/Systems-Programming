@@ -31,17 +31,17 @@ Tree *createRoot(){
 }
 
 FileNode *createFileNode(char *pathname){
-	puts(">> Entering createFileNode");
+	//puts(">> Entering createFileNode");
 	if (pathname == NULL) {
 		return NULL;
 	}
 	FileNode *newnode = (FileNode*)calloc(1, sizeof(FileNode));
-	puts("Created new FileNode");
+	//puts("Created new FileNode");
 	newnode->pathname = (char*)calloc((strlen(pathname)+1),sizeof(char));
 	strcpy(newnode->pathname, pathname);
 	newnode->next = NULL;
 	if (newnode != NULL) {
-		printf("PathName of new FileNode [%s]\n",newnode->pathname);
+		// printf("PathName of new FileNode [%s]\n",newnode->pathname);
 		return newnode;
 	}
 	if (newnode->next->pathname == NULL){
@@ -55,38 +55,29 @@ FileNode *createFileNode(char *pathname){
 }
 
 LinkedList *createLL(char *pathname){
-	puts(">> ENTERING createLL");
 	LinkedList *newhead = (LinkedList*)malloc(sizeof(LinkedList));
-	puts("Created New LinkedList Struct");
 	newhead->head = createFileNode(pathname);
-	puts("Create new  FileNode head for new LinkedList");
-	printf("This should be the pathname of the newhead of LL [%s]\n",newhead->head->pathname);
+	// printf("This should be the pathname of the newhead of LL [%s]\n",newhead->head->pathname);
 	return newhead;
 }
 
 //Destroy Functions
 void destroyList(FileNode *head){
-	puts(">> ENTERING destroyList");
 	if(head == NULL){
-		puts("The FileNode head that is to be destroyed is NULL");
 		return;
 	}
 	destroyList(head->next);
 	if (head->pathname != NULL){
-		puts("FREEING THE PATHNAME");
-		printf("This is the pathnamed that is going to be freed [%s]\n", head->pathname);
 		free(head->pathname);
 	}
 	if (head != NULL){
-		puts("FREEING THE HEAD");
 		free(head);
 	}
-	puts("END OF DESTROYLIST");
 	return;
 }
 
 void destroyNode(TNode *node){
-	puts(">> ENTERING destroyNode");
+	// puts(">> ENTERING destroyNode");
 	int i;
 	if (node == NULL)
 		return;
@@ -102,7 +93,7 @@ void destroyNode(TNode *node){
 
 // Data Structures functions
 void destroyFileNode(FileNode *node){
-	puts(">> ENTERING destroyFileNode");
+	// puts(">> ENTERING destroyFileNode");
 	if (node->pathname != NULL){
 		free(node->pathname);
 	}
@@ -121,7 +112,7 @@ int hash(char c){
 }
 
 TNode *addNode(char *buffer, TNode *root){
-	puts(">> ENTERING addNode");
+	// puts(">> ENTERING addNode");
 	int index;
 	TNode *ptr = root;
 	int i;
@@ -142,7 +133,7 @@ TNode *addNode(char *buffer, TNode *root){
 }
 
 FileNode *addList(FileNode *node, char *buffer){
-	puts(">> ENTERING addList");
+	// puts(">> ENTERING addList");
 	FileNode *newnode = createFileNode(buffer);
 	node->next = newnode;
 	return newnode;
@@ -212,7 +203,7 @@ void readIndex(FILE *file, TNode *root){
 
 
 void printLinkedList(LinkedList *LL) {
-	puts(">> ENTERING printLinkedList");
+	// puts(">> ENTERING printLinkedList");
 	FileNode *ptr;
 	if(LL == NULL) {
 		puts("Search terms cannot be found");
@@ -293,16 +284,13 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 	}
 
 	printf("MADE the TEMPORARY LINKEDLIST\n");
-    printf("STATE : %d\n", sa);
     // state is so
 	//printf("LL IS NOT NULL: This is the LL->head->pathname [%s]\n", LL->head->pathname);
 	if (sa == 0){
 		// compares the filenodes in your indexed list to avoid duplicates
 		puts("THE FLAG IS [SO]");
 		for (ptr = node; ptr != NULL; ptr = ptr->next){
-			printf("This is the pathname of the FileNode in the TNode [%s]\n", ptr->pathname);
 			for (ptr2 = LL->head; ptr2 != NULL; ptr2 = ptr2->next){
-				printf("This if the pathname of the FileNode in the LL [%s]\n", ptr2->pathname);	
 				if (strcmp(ptr->pathname, ptr2->pathname) == 0) {
 					printf("The TNode FileNode [%s] and the Ll FileNode [%s] are EQUAL\n", ptr->pathname, ptr2->pathname);
 					break;
@@ -337,8 +325,6 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 				tmp->head = newnode;
 			}
 		}
-
-		puts("Made the temporary LinkedList");
 
 		prev2 = NULL;
 		if (LL != NULL){
@@ -442,7 +428,6 @@ int main (int argc, char **argv) {
 		puts("Enter your query:");
 		if (list != NULL && list->head != NULL){
 			destroyList(list->head);
-			puts("RESET list equal to NULL");
 			list = NULL;
 		}
 		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
@@ -465,8 +450,6 @@ int main (int argc, char **argv) {
 				for (token = strsep(&query_answer, " ");
 						token; 
 						token = strsep(&query_answer, " ")) {
-					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
-					printf("TOKEN = %s\n", token);
 					list = printFiles(list, token, tree->root, 0);
 				}	
 				puts("Out of printFiles");
@@ -479,13 +462,14 @@ int main (int argc, char **argv) {
 						token;
 						token = strsep(&query_answer, " ")) {
 					printf("%s\n", token);
+					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
+					printf("TOKEN = %s\n", token);
 					list = printFiles(list, token, tree->root, 1);
 				}
 				printLinkedList(list);
 			}
 			// only one word to be searched
 			else {
-				printf("Query = %s\nToken = %s\n",query_answer, token);
 				puts("Invalid Input.");
 				exit(1);
 			}
