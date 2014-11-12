@@ -68,8 +68,7 @@ void destroyList(FileNode *head){
 	}
 	destroyList(head->next);
 	if (head->pathname != NULL){
-		puts("HEELO");
-		printf("[%s]\n", head->pathname);
+		printf("Removing [%s]\n", head->pathname);
 		free(head->pathname);
 		head->pathname = NULL;
 	}
@@ -170,6 +169,8 @@ void printTree(TNode *root){
 	char *buffer = (char *)calloc(105, sizeof(char));
 	TNode *ptr = root;
 	recursivePrint(buffer,ptr);
+    free(buffer);
+    return;
 }
 
 // File I/O Functions
@@ -433,6 +434,7 @@ int main (int argc, char **argv) {
 	int nbytes = 256;
 	char * query_answer = malloc(nbytes * sizeof(char) + 1);
 	char * token;
+    char * garbage = query_answer;
 
 	Tree *tree = createRoot();
 	LinkedList *list = NULL;
@@ -446,6 +448,7 @@ int main (int argc, char **argv) {
 		puts("Enter your query:");
 		if (list != NULL && list->head != NULL){
 			destroyList(list->head);
+            free(list);
 			list = NULL;
 		}
 		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
@@ -460,7 +463,6 @@ int main (int argc, char **argv) {
 			goto end;
 		}
 		else {
-			list = NULL;
 			char * flag = strsep(&query_answer, " ");
 			printf("FLAG: %s\n", flag);
 
@@ -486,7 +488,7 @@ int main (int argc, char **argv) {
 					printf("TOKEN = %s\n", token);
 
 					list = printFiles(list, token, tree->root, 1);
-					if (list == NULL){
+					if (!list){
 						break;
 					}
 					if(list->head == NULL){
@@ -505,15 +507,20 @@ int main (int argc, char **argv) {
 		}
 	}
 end:
-	if (tree != NULL && tree->root != NULL){
+	if (tree && tree->root){
 		puts("DESTROY TREE");
 		destroyNode(tree->root);
 	}
-	if(tree != NULL){
+	if(tree){
 		puts("DESTROY TREE STRUCT");
 		free(tree);
 	}
-
+    if (list) {
+        free(list);    
+    }
+    if (garbage != query_answer) {
+        free(garbage);
+    }
 	free(query_answer);
 	return 0;
 }
