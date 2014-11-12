@@ -104,12 +104,12 @@ void destroyNode(TNode *node){
 void destroyFileNode(FileNode *node){
 	puts(">> ENTERING destroyFileNode");
 	if (node->pathname != NULL){
-		puts("For some reason, the FileNode->pathname is NULL");
 		free(node->pathname);
 	}
 	if (node != NULL){
 		free(node);
 	}
+	return;
 }
 
 int hash(char c){
@@ -378,6 +378,7 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 }
 
 LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
+	puts("Inside printFiles");
 	TNode *ptr = root;
 	if (ptr == NULL){
 		fprintf(stderr, "Indexer does not exist\n");
@@ -387,6 +388,8 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 	int i;
 	int index;
 	char c;
+
+	// goes through each char of the filename, hashes it, and compares it to the tree
 	for (i = 0; i < strlen(filename); i++){
 		c = filename[i];
 		index = hash(c);
@@ -396,15 +399,14 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 			}
 			return NULL;
 		}
-		if (ptr->children[index]->isWord) {
-			//puts("ENTERING INSERTFILE");
-		if (ptr->children[index]->isWord && ( i == strlen(filename)-1)) {
+		if (ptr->children[index]->isWord && i == strlen(filename)-1) {
 			printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
 			LL = insertFile(LL, ptr->children[index]->head, flag);
 			return LL;
 		}
 		ptr = ptr->children[index];
 		printf("THIS IS THE CHARCTER AS WE TRAVERSE THROUGH [%c]\n", ptr->c);
+		
 	}
 	return LL;
 }
@@ -465,6 +467,7 @@ int main (int argc, char **argv) {
 					printf("TOKEN = %s\n", token);
 					list = printFiles(list, token, tree->root, 0);
 				}	
+				puts("Out of printFiles");
 				printLinkedList(list);
 			}
 			
@@ -506,6 +509,5 @@ int main (int argc, char **argv) {
 
 	free(query_answer);
 	return 0;
-
 }
 
