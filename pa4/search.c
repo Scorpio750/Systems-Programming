@@ -350,177 +350,181 @@ LinkedList *insertFile(LinkedList *LL, FileNode *node, int sa){
 		}
 
 		for (tptr = ptr2; tptr != NULL; tptr = tptr->next){
-			//printf("This is the FileNode pathname in the tmp LL [%s]\n", ptr2->pathname);
 			for (ptr = node; ptr != NULL; ptr = ptr->next){
-				//printf("This is the FileNode pathname in the TNode [%s]\n", ptr->pathname);
 				if (strcmp(tptr->pathname, ptr->pathname) == 0){
 					puts("THE LL FileNode pathname && The FileNode pathname of TNode is EQUIVALENT: Should go into the next interation of the tmp LL");
-					//printf("The LL FileNode pathname [%s] = The FileNode pathname of TNode [%s]\n", tptr->pathname, ptr->pathname);
 					break;		
 				}
 				if (ptr->next == NULL){
-					//printf("We've reached the end of the TNode FileNode linkedlist:: Remove the node from LL\n");
 					LL = removeNode(prev2, ptr2, LL);
 					if (LL->head == NULL){
 						puts("does it come here??????????????");
-						return LL;
-					}
-				}
-			}
-			prev2 = ptr2;
-			ptr2 = ptr2->next;
-		}
+                        if (tmp->head){
+                            puts("DESTROY THE TEMPORARY LINKED LIST");
+                            destroyList(tmp->head);
+                        }
+                        if (tmp){
+                            puts("FREE THE TEMP LL STRUCT");
+                            free(tmp);
+                        }
+                        return LL;
+                    }
+                }
+            }
+            prev2 = ptr2;
+            ptr2 = ptr2->next;
+        }
 
-		if (tmp->head != NULL){
-			puts("DESTROY THE TEMPORARY LINKED LIST");
-			destroyList(tmp->head);
-		}
-		if (tmp != NULL){
-			puts("FREE THE TEMP LL STRUCT");
-			free(tmp);
-		}
-	}
-	puts("Exited states");
-	return LL;
+        if (tmp->head){
+            puts("DESTROY THE TEMPORARY LINKED LIST");
+            destroyList(tmp->head);
+        }
+        if (tmp){
+            puts("FREE THE TEMP LL STRUCT");
+            free(tmp);
+        }
+    }
+    return LL;
 }
 
 LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
-	puts("Inside printFiles");
-	TNode *ptr = root;
-	if (ptr == NULL){
-		fprintf(stderr, "Indexer does not exist\n");
-		return NULL;
-	}
+    puts("Inside printFiles");
+    TNode *ptr = root;
+    if (ptr == NULL){
+        fprintf(stderr, "Indexer does not exist\n");
+        return NULL;
+    }
 
-	int i;
-	int index;
-	char c;
+    int i;
+    int index;
+    char c;
 
-	// goes through each char of the filename, hashes it, and compares it to the tree
-	for (i = 0; i < strlen(filename); i++){
-		c = tolower(filename[i]);
-		index = hash(c);
-		if (ptr->children[index] == NULL) {
-			if (flag == 0){
-				return LL;
-			}
-			return NULL;
-		}
-		if (ptr->children[index]->isWord && i == strlen(filename)-1) {
-			printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
-			LL = insertFile(LL, ptr->children[index]->head, flag);
-			return LL;
-		}
-		ptr = ptr->children[index];
-		printf("THIS IS THE CHARCTER AS WE TRAVERSE THROUGH [%c]\n", ptr->c);
-		
-	}
-	return LL;
+    // goes through each char of the filename, hashes it, and compares it to the tree
+    for (i = 0; i < strlen(filename); i++){
+        c = tolower(filename[i]);
+        index = hash(c);
+        if (ptr->children[index] == NULL) {
+            if (flag == 0){
+                return LL;
+            }
+            return NULL;
+        }
+        if (ptr->children[index]->isWord && i == strlen(filename)-1) {
+            printf("WE HAVE REACHED THE WORD, this is the chara [%c]\n", ptr->children[index]->c);
+            LL = insertFile(LL, ptr->children[index]->head, flag);
+            return LL;
+        }
+        ptr = ptr->children[index];
+        printf("THIS IS THE CHARCTER AS WE TRAVERSE THROUGH [%c]\n", ptr->c);
+
+    }
+    return LL;
 }
 
 int main (int argc, char **argv) {
-	// LinkedList *searchterms = NULL;
+    // LinkedList *searchterms = NULL;
 
-	if (argc != 2) {
-		fprintf(stderr, "Invalid number of arguments.\n");
-		return 1;
-	}
+    if (argc != 2) {
+        fprintf(stderr, "Invalid number of arguments.\n");
+        return 1;
+    }
 
-	FILE *index = fopen(argv[1], "r");
-	if (index == NULL){
-		fprintf(stderr, "File does not exist.\n");
-		return 1;
-	}
-	int nbytes = 256;
-	char * query_answer = malloc(nbytes * sizeof(char) + 1);
-	char * token;
+    FILE *index = fopen(argv[1], "r");
+    if (index == NULL){
+        fprintf(stderr, "File does not exist.\n");
+        return 1;
+    }
+    int nbytes = 256;
+    char * query_answer = malloc(nbytes * sizeof(char) + 1);
+    char * token;
     char * garbage = query_answer;
 
-	Tree *tree = createRoot();
-	LinkedList *list = NULL;
+    Tree *tree = createRoot();
+    LinkedList *list = NULL;
 
-	readIndex(index,tree->root);
+    readIndex(index,tree->root);
 
-	printTree(tree->root);
+    printTree(tree->root);
 
-// Query Menu
-	for (;;) {
-		puts("Enter your query:");
-		if (list != NULL && list->head != NULL){
-			destroyList(list->head);
+    // Query Menu
+    for (;;) {
+        puts("Enter your query:");
+        if (list != NULL && list->head != NULL){
+            destroyList(list->head);
             free(list);
-			list = NULL;
-		}
-		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
-		if (n == -1) {
-			fprintf(stderr, "Error: unable to read from input stream");
+            list = NULL;
+        }
+        // if (query_answer) free(query_answer);
+        int n = getline(&query_answer, (size_t *)&nbytes, stdin);
+        if (n == -1) {
+            fprintf(stderr, "Error: unable to read from input stream");
             goto end;
-		}
-		query_answer[n-1] = '\0';
-		printf("QUERY ANSWER IS : %s\n", query_answer);
-		if (!strcmp(query_answer,"q")) {
-			puts("Exiting program");
-			goto end;
-		}
-		else {
-			char * flag = strsep(&query_answer, " ");
-			printf("FLAG: %s\n", flag);
+        }
+        query_answer[n-1] = '\0';
+        printf("QUERY ANSWER IS : %s\n", query_answer);
+        if (!strcmp(query_answer,"q")) {
+            puts("Exiting program");
+            goto end;
+        }
+        else {
+            char * flag = strsep(&query_answer, " ");
+            printf("FLAG: %s\n", flag);
 
-			//so
-			if (!strcmp("so", flag)) {
-				for (token = strsep(&query_answer, " ");
-						token; 
-						token = strsep(&query_answer, " ")) {
-					list = printFiles(list, token, tree->root, 0);
-				}	
-				puts("Out of printFiles");
-				printLinkedList(list);
-			}
-			
-			//sa
-			else if (!strcmp("sa", flag)) {
-				list = NULL;
-				for (token = strsep(&query_answer, " ");
-						token;
-						token = strsep(&query_answer, " ")) {
-					printf("%s\n", token);
-					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
-					printf("TOKEN = %s\n", token);
+            //so
+            if (!strcmp("so", flag)) {
+                for (token = strsep(&query_answer, " ");
+                        token; 
+                        token = strsep(&query_answer, " ")) {
+                    list = printFiles(list, token, tree->root, 0);
+                }	
+                puts("Out of printFiles");
+                printLinkedList(list);
+            }
 
-					list = printFiles(list, token, tree->root, 1);
-					if (!list){
-						break;
-					}
-					if(list->head == NULL){
-						printLinkedList(list);
-						continue;
-					}
-				}
-				printLinkedList(list);
-				puts("LINE 492");
-			}
-			// only one word to be searched
-			else {
-				puts("Invalid Input.");
-                goto end;
-			}
-		}
-	}
+            //sa
+            else if (!strcmp("sa", flag)) {
+                list = NULL;
+                for (token = strsep(&query_answer, " ");
+                        token;
+                        token = strsep(&query_answer, " ")) {
+                    printf("%s\n", token);
+                    printf("QUERY ANSWER IS NOW : %s\n", query_answer);
+                    printf("TOKEN = %s\n", token);
+
+                    list = printFiles(list, token, tree->root, 1);
+                    if (!list){
+                        break;
+                    }
+                    if(list->head == NULL){
+                        printLinkedList(list);
+                        continue;
+                    }
+                }
+                printLinkedList(list);
+                puts("LINE 492");
+            }
+            // only one word to be searched
+            else {
+                puts("Invalid Input.");
+            }
+        }
+    }
+// frees all the things
 end:
-	if (tree && tree->root){
-		puts("DESTROY TREE");
-		destroyNode(tree->root);
-	}
-	if(tree){
-		puts("DESTROY TREE STRUCT");
-		free(tree);
-	}
+    if (tree && tree->root){
+        puts("DESTROY TREE");
+        destroyNode(tree->root);
+    }
+    if(tree){
+        puts("DESTROY TREE STRUCT");
+        free(tree);
+    }
     if (list) {
         free(list);    
     }
     if (garbage != query_answer) {
-        free(garbage);
-    }
-	free(query_answer);
-	return 0;
+        if (garbage) free(garbage);
+    } 
+    free(query_answer);
+    return 0;
 }
