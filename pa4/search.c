@@ -464,6 +464,7 @@ int main (int argc, char **argv) {
 					printf("%s\n", token);
 					printf("QUERY ANSWER IS NOW : %s\n", query_answer);
 					printf("TOKEN = %s\n", token);
+
 					list = printFiles(list, token, tree->root, 1);
 				}
 				printLinkedList(list);
