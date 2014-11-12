@@ -405,9 +405,6 @@ LinkedList *printFiles(LinkedList *LL, char *filename, TNode *root, int flag) {
 }
 
 int main (int argc, char **argv) {
-	int nbytes = 256;
-	char * query_answer = malloc(nbytes * sizeof(char) + 1);
-	char * token;
 	// LinkedList *searchterms = NULL;
 
 	if (argc != 2) {
@@ -420,6 +417,9 @@ int main (int argc, char **argv) {
 		fprintf(stderr, "File does not exist.\n");
 		return 1;
 	}
+	int nbytes = 256;
+	char * query_answer = malloc(nbytes * sizeof(char) + 1);
+	char * token;
 
 	Tree *tree = createRoot();
 	LinkedList *list = NULL;
@@ -438,13 +438,13 @@ int main (int argc, char **argv) {
 		int n = getline(&query_answer, (size_t *)&nbytes, stdin);
 		if (n == -1) {
 			fprintf(stderr, "Error: unable to read from input stream");
-			exit(1);
+            goto end;
 		}
 		query_answer[n-1] = '\0';
 		printf("QUERY ANSWER IS : %s\n", query_answer);
 		if (!strcmp(query_answer,"q")) {
 			puts("Exiting program");
-			exit(1);
+			goto end;
 		}
 		else {
 			list = NULL;
@@ -483,26 +483,18 @@ int main (int argc, char **argv) {
 			// only one word to be searched
 			else {
 				puts("Invalid Input.");
-				exit(1);
+                goto end;
 			}
 		}
 	}
-
+end:
 	if (tree != NULL && tree->root != NULL){
 		puts("DESTROY TREE");
 		destroyNode(tree->root);
 	}
-	if(list != NULL && list->head != NULL){
-		puts("DESTROY LIST");
-		destroyList(list->head);
-	}
 	if(tree != NULL){
 		puts("DESTROY TREE STRUCT");
 		free(tree);
-	}
-	if(list != NULL){
-		puts("DESTROY LL STRUCT");
-		free(list);
 	}
 
 	free(query_answer);
