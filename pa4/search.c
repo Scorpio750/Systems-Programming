@@ -4,7 +4,9 @@
  */
 #include "search.h"
 
-bool isEmpty(TNode **array){
+/*
+ 
+bool isEmpty(TNode **array) {
 	int i;
 	for (i=0; i <36; i++){
 		if (array[i] != NULL)
@@ -13,8 +15,10 @@ bool isEmpty(TNode **array){
 	return true;
 }
 
+*/
+
 //Create Functions
-TNode *createNode(char c){
+TNode *createNode(char c) {
 	TNode *node = (TNode*)malloc(sizeof(TNode));
 	node->c = c;
 	node->children = (TNode**)calloc(36, sizeof(TNode*));
@@ -24,13 +28,13 @@ TNode *createNode(char c){
 	return node;
 }
 
-Tree *createRoot(){
+Tree *createRoot() {
 	Tree *tree = malloc(sizeof(Tree));
 	tree->root = createNode(' ');
 	return tree;
 }
 
-FileNode *createFileNode(char *pathname){
+FileNode *createFileNode(char *pathname) {
 	if (pathname == NULL) {
 		return NULL;
 	}
@@ -41,14 +45,14 @@ FileNode *createFileNode(char *pathname){
 	return newnode;
 }
 
-LinkedList *createLL(char *pathname){
+LinkedList *createLL(char *pathname) {
 	LinkedList *newhead = (LinkedList*)malloc(sizeof(LinkedList));
 	newhead->head = createFileNode(pathname);
 	return newhead;
 }
 
 //Destroy Functions
-void destroyList(FileNode *head){
+void destroyList(FileNode *head) {
 	if(head == NULL){
 		return;
 	}
@@ -64,7 +68,7 @@ void destroyList(FileNode *head){
 	return;
 }
 
-void destroyNode(TNode *node){
+void destroyNode(TNode *node) {
 	int i;
 	if (node == NULL)
 		return;
@@ -81,7 +85,7 @@ void destroyNode(TNode *node){
 }
 
 // Data Structures functions
-void destroyFileNode(FileNode *node){
+void destroyFileNode(FileNode *node) {
 	if (node != NULL && node->pathname != NULL){
 		free(node->pathname);
 		node->pathname = NULL;
@@ -91,7 +95,7 @@ void destroyFileNode(FileNode *node){
 	return;
 }
 
-int hash(char c){
+int hash(char c) {
 	char * index = strchr(acceptable, c);
 	if (index == NULL) {
 		return -1;
@@ -99,7 +103,7 @@ int hash(char c){
 	return (int)(index - acceptable);
 }
 
-TNode *addNode(char *buffer, TNode *root){
+TNode *addNode(char *buffer, TNode *root) {
 	int index;
 	TNode *ptr = root;
 	int i;
@@ -118,11 +122,13 @@ TNode *addNode(char *buffer, TNode *root){
 	return ptr;
 }
 
-FileNode *addList(FileNode *node, char *buffer){
+FileNode *addList(FileNode *node, char *buffer) {
 	FileNode *newnode = createFileNode(buffer);
 	node->next = newnode;
 	return newnode;
 }
+
+/*
 
 void recursivePrint(char *buffer, TNode *node){
 	if(isEmpty(node->children) == true)
@@ -142,7 +148,8 @@ void recursivePrint(char *buffer, TNode *node){
 	return;
 }
 
-void printTree(TNode *root){
+
+void printTree(TNode *root) {
 	char *buffer = (char *)calloc(105, sizeof(char));
 	TNode *ptr = root;
 	recursivePrint(buffer,ptr);
@@ -150,8 +157,10 @@ void printTree(TNode *root){
     return;
 }
 
+*/
+
 // File I/O Functions
-void readIndex(FILE *file, TNode *root){
+void readIndex(FILE *file, TNode *root) {
 	int state = 0;
 	char *buffer = (char *)malloc(sizeof(char) * 1024);
 	char i;
@@ -184,8 +193,8 @@ void readIndex(FILE *file, TNode *root){
 		}
 	}while(i != EOF);
 	fclose(file);
-    free(buffer);
-    return;
+  free(buffer);
+  return;
 }
 
 
@@ -201,7 +210,6 @@ void printLinkedList(LinkedList *LL) {
 
 	for (ptr = LL->head; ptr != NULL; ptr = ptr->next){
 		if (strlen(ptr->pathname) == 0){
-			puts("DOES THIS LINE RUN?");
 			continue;
 		}
 		printf("%s\n",ptr->pathname);
