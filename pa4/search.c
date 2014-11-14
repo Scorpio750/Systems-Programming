@@ -456,7 +456,7 @@ end:
         free(list);    
     }
     if (query_answer) { 
-        free(query_answer);
+//        free(query_answer);
         }
     return 0;
 }
