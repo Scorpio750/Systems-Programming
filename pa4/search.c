@@ -430,7 +430,6 @@ int main (int argc, char **argv) {
     int nbytes = 256;
     char * query_answer = malloc(nbytes * sizeof(char) + 1);
     char * token;
-    char * garbage = query_answer;
 
     Tree *tree = createRoot();
     LinkedList *list = NULL;
@@ -515,9 +514,8 @@ end:
     if (list) {
         free(list);    
     }
-    if (garbage != query_answer) {
-        if (garbage) free(garbage);
-    } 
-    free(query_answer);
+    if (query_answer) { 
+        free(query_answer);
+        }
     return 0;
 }
