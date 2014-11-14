@@ -402,14 +402,12 @@ int main (int argc, char **argv) {
             goto end;
         }
         query_answer[n-1] = '\0';
-        //printf("QUERY ANSWER IS : %s\n", query_answer);
         if (!strcmp(query_answer,"q")) {
             puts("Exiting program");
             goto end;
         }
         else {
             char * flag = strsep(&query_answer, " ");
-            //printf("FLAG: %s\n", flag);
 
             //so
             if (!strcmp("so", flag)) {
@@ -427,9 +425,6 @@ int main (int argc, char **argv) {
                 for (token = strsep(&query_answer, " ");
                         token;
                         token = strsep(&query_answer, " ")) {
-                    //printf("%s\n", token);
-                    //printf("QUERY ANSWER IS NOW : %s\n", query_answer);
-                    //printf("TOKEN = %s\n", token);
 
                     list = printFiles(list, token, tree->root, 1);
 										if (list == NULL){
