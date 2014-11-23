@@ -7,7 +7,7 @@
 
 Database *create_database(){
 	Database *database = malloc(sizeof(Database));
-	database->revenue = 0;
+	database->revenue = 0.0;
 	database->head = NULL;
 	return database;
 }
@@ -21,6 +21,8 @@ Customer *create_customer(){
 	customer->state = NULL;
 	customer->zipcode = NULL;
 	customer->next = NULL;
+	customer->successful = NULL;
+	customer->rejected = NULL;
 	return customer;
 }
 
@@ -29,6 +31,7 @@ Queue *create_queue(char *category){
 	q->category = category;
 	q->head = NULL;
 	q->tail = NULL;
+	return q;
 }
 
 Order *create_order(){
@@ -36,8 +39,20 @@ Order *create_order(){
 	order->title = NULL;
 	order->id = 0;
 	order->category = NULL;
+	order->balance = 0.0;
 	order->prev = NULL;
 	order->next = NULL;
+	return order;
+}
+
+Structures *create_structures(Database *db, Queue **category_q, FILE *orders, FILE *categories, int num_category){
+	Structures *structure = malloc(sizeof(Structures));
+	structure->database = db;
+	structure->category_q = category_q;
+	structure->orders = orders;
+	structure->categories = categories;
+	structure->num_category = num_category;
+	return structure;
 }
 
 void enqueue(Queue *q, Order *order){
@@ -46,6 +61,7 @@ void enqueue(Queue *q, Order *order){
 		q->tail = order;
 	}else{
 		order->next = q->head;
+		q->head->prev = order;
 		q->head = order;
 	}
 }
@@ -54,6 +70,9 @@ Order *dequeue(Queue *q){
 	Order *order = q->tail;
 	if (order == NULL){
 		return NULL;
+	}else if(order->prev == NULL && order->next == NULL){
+		q->tail = NULL;
+		return order;
 	}else{
 		order->prev->next = NULL;
 		q->tail = order->prev;
@@ -163,6 +182,14 @@ void add_to_category_q(Queue **category_q, Order *order, int num_category){
 }
 
 void fnc(FILE *orders, FILE *categories, Queue **category_q, int num_category){
+/*
+  void *produce(void *arg){
+	Structures *structure = (Structures *)arg;
+	FILE *orders = structure->orders;
+	FILE *categories = structure->categories;
+	Queue **category_q = structure->category_q;
+	int num_category = structure->num_category;
+*/
 	char *token = calloc(500, sizeof(char));
 	char *lineptr = NULL;
 	size_t len = 0;
@@ -199,9 +226,116 @@ void fnc(FILE *orders, FILE *categories, Queue **category_q, int num_category){
 		num = getline(&lineptr, &len, orders);
 		printf("num :[%d]\n", num);
 	}
+//	return NULL;
 }
 
-void print_linked_list(Database *db){
+Customer *find_customer(Customer *head, int id){
+	Customer *ptr;
+	if (head == NULL){
+		return NULL;
+	}else{
+		for(ptr = head; ptr != NULL; ptr = ptr->next){
+			if (ptr->id == id){
+				return ptr;
+			}
+		}
+	}
+}
+
+int check_credit(Customer *customer, double cost){
+	if (customer->credit < cost){
+		//credit limit is too low
+		return 0;
+	}else{
+		//credit limit checks out
+		return 1;
+	}
+}
+
+Customer *add_to_success(Customer *customer, Order *node){
+	Order *ptr = create_order();
+	ptr->title = node->title;
+	ptr->cost = node->cost;
+	ptr->id = node->id;
+	ptr->category = node->category;
+	ptr->balance = node->balance;
+	if (customer->successful == NULL){
+		customer->successful = ptr;
+		customer->successful_tail = ptr;
+		return customer;
+	}else{
+		customer->successful_tail->next = ptr;
+		customer->successful_tail = ptr;
+		return customer;
+	}
+}
+
+Customer *add_to_reject(Customer *customer, Order *node){
+	Order *ptr = create_order();
+	ptr->title = node->title;
+	ptr->cost = node->cost;
+	ptr->id = node->id;
+	ptr->category = node->category;
+	ptr->balance = node->balance;
+	if (customer->rejected == NULL){
+		customer->rejected = ptr;
+		customer->rejected_tail = ptr;
+		return customer;
+	}else{
+		customer->rejected_tail->next = ptr;
+		customer->rejected_tail = ptr;
+		return customer;
+	}
+}
+
+
+void consume (Queue *q, Database *database){
+	if (q == NULL){
+		return;
+	}
+
+	Order *ptr;
+	Customer *customer;
+	int credit_check;
+	while(q->head != NULL){
+		ptr = dequeue(q);
+		if(ptr == NULL){
+			return;
+		}
+		customer = find_customer(database->head, ptr->id);
+		credit_check = check_credit(customer, ptr->cost);
+		if (credit_check == 1){
+			//credit limit checks out
+			printf("Order Confirmation: %s|%.2f\n", ptr->title, ptr->cost);
+			printf("Shipping Information: %s|%s|%s|%d\n", customer->name, customer->address, customer->state, customer->zipcode);
+			customer->credit = (customer->credit - ptr->cost);
+			database->revenue = (database->revenue + ptr->cost);
+			ptr->balance = customer->credit;
+			customer = add_to_success(customer, ptr);
+		}else{
+			//credit limit is too low
+			printf("REJECTED:\n");
+			printf("Name: %s\n", customer->name);
+			printf("Book Order Details: %s | %.2f \n", ptr->title, ptr->cost);
+			printf("Remaining Credit Limit: %.2f \n", customer->credit);
+			ptr->balance = customer->credit;
+			customer = add_to_reject(customer, ptr);
+		}
+	}
+}
+
+void print_orders(Order *head){
+	Order *ptr;
+	if (head == NULL){
+		return;
+	}else{
+		for(ptr = head; ptr != NULL; ptr = ptr->next){
+			printf("%s|%.2f|%.2f\n", ptr->title, ptr->cost, ptr->balance);
+		}
+	}
+}
+
+void final_report(Database *db){
 	Customer *ptr;
 	if (db == NULL){
 		printf("The database is NULL.\n");
@@ -211,12 +345,16 @@ void print_linked_list(Database *db){
 	}
 
 	for(ptr = db->head; ptr != NULL; ptr= ptr->next){
-		printf(">> Name [%s]\n", ptr->name);
-		printf("   ID [%d]\n", ptr->id);	
-		printf("   Credit: [%.2f]\n", ptr->credit);
-		printf("   Address: [%s]\n", ptr->address);
-		printf("   State: [%s]\n", ptr->state);
-		printf("   Zipcode: [%s]\n", ptr->zipcode);
+		printf("=== BEGIN CUSTOMER INFO ===\n");
+		printf("Customer Name: %s\n", ptr->name);
+		printf("Customer ID number: %d\n", ptr->id);	
+		printf("Remaining credit: [%.2f]\n", ptr->credit);
+		printf("### SUCCESSFUL ORDERS ###\n");
+		print_orders(ptr->successful);
+		printf("### REJECTED ORDERS\n");
+		print_orders(ptr->rejected);
+		printf("=== END CUSTOMER INFO ===\n");
+		printf("\n");
 	}
 }
 
@@ -267,19 +405,35 @@ int main (int argc, char **argv) {
 		return 1;
 	}
 
+	int i;
 	Database *database = create_database();
 	read_db_file(db_file, database);
 
 	//print_linked_list(database);
 	int num_categories = count_categories(categories);
 	Queue **category_q = malloc(num_categories * sizeof(Queue *));
+
 	
 	fnc(orders, categories, category_q, num_categories);
-	print_category_q(category_q, num_categories);
+	print_category_q(category_q, num_categories);	
+ 	
+	for(i = 0; i < num_categories; i++){	
+		consume(category_q[i], database);
+	}
+
+	final_report(database);
+	/*
+	Structures *structure = create_structures(database, category_q, orders, categories, num_categories);
 
 	pthread_t producer;
-//	pthread_create(&producer, NULL, producerfnc, "Producer Thread");
+	pthread_create(&producer, NULL, produce, structure);
+	print_category_q(category_q, num_categories);
 
+	for (i = 0; i < num_categories; i++){
+		pthread_t t;
+		pthread_create(&t, NULL, consume, category_q[i]);
+	}
+*/
 	fclose(db_file);
 	fclose(orders);
 	fclose(categories);
