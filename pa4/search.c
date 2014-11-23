@@ -445,11 +445,9 @@ int main (int argc, char **argv) {
 // frees all the things
 end:
     if (tree && tree->root){
-        puts("DESTROY TREE");
         destroyNode(tree->root);
     }
     if(tree){
-        puts("DESTROY TREE STRUCT");
         free(tree);
     }
     if (list) {
