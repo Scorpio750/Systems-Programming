@@ -11,7 +11,7 @@
 #include <string.h>
 #include <pthread.h>
 
-struct Order{
+struct Order_{
 	char *title;
 	double cost;
 	int id;
@@ -20,16 +20,16 @@ struct Order{
 	struct Order *prev;
 	struct Order *next;
 };
-typedef struct Order Order;
+typedef struct Order_ Order;
 
-struct Queue{
+struct Queue_{
 	char *category;
 	Order *head;
 	Order *tail;
 };
-typedef struct Queue Queue;
+typedef struct Queue_ Queue;
 
-struct Customer{
+struct Customer_{
 	char *name;
 	int id;
 	double credit;
@@ -42,22 +42,22 @@ struct Customer{
 	Order *rejected;
 	Order *rejected_tail;
 };
-typedef struct Customer Customer;
+typedef struct Customer_ Customer;
 
-struct Database{
+struct Database_{
 	double revenue;
 	Customer *head;	
 };
-typedef struct Database Database;
+typedef struct Database_ Database;
 
-struct Structures{
+struct Structures_{
 	Database *database;
 	Queue **category_q;
 	FILE *orders;
 	FILE *categories;
 	int num_category;
 };
-typedef struct Structures Structures;
+typedef struct Structures_ Structures;
 
 Database *create_database();
 Customer *create_customer();
