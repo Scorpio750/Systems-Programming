@@ -12,18 +12,18 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-struct Order{
+struct Order_{
 	char *title;
 	double cost;
 	int id;
 	char *category;
 	double balance;
-	struct Order *prev;
-	struct Order *next;
+	struct Order_ *prev;
+	struct Order_ *next;
 };
-typedef struct Order Order;
+typedef struct Order_ Order;
 
-struct Queue{
+struct Queue_{
 	char *category;
 	int flag;
 	int count;
@@ -32,51 +32,59 @@ struct Queue{
 	Order *head;
 	Order *tail;
 };
-typedef struct Queue Queue;
+typedef struct Queue_ Queue;
 
-struct Customer{
+struct Customer_{
 	char *name;
 	int id;
 	double credit;
 	char *address;
 	char *state;
 	char *zipcode;
-	struct Customer *next;
+	struct Customer_ *next;
 	Order *successful;
 	Order *successful_tail;
 	Order *rejected;
 	Order *rejected_tail;
 	pthread_mutex_t lock;
 };
-typedef struct Customer Customer;
+typedef struct Customer_ Customer;
 
-struct Database{
+struct Database_{
 	pthread_mutex_t lock;
 	double revenue;
 	Customer *head;	
 };
-typedef struct Database Database;
+typedef struct Database_ Database;
 
-struct Structures{
+struct Structures_{
 	Database *database;
 	Queue **category_q;
 	FILE *orders;
 	FILE *categories;
 	int num_category;
 };
-typedef struct Structures Structures;
+typedef struct Structures_ Structures;
 
+// create functions
 Database *create_database();
 Customer *create_customer();
 Queue *create_queue();
 Order *create_order();
 Structures *create_structures(Database *db, Queue **category_q, FILE *orders, FILE *categories, int num_category);
+
+// thread operations
 void enqueue(Queue *q, Order *order);
 Order *dequeue(Queue *q);
+
+// I/O functions
 void read_db_file(FILE *db_file, Database *database);
 int count_categories(FILE *categories);
 void add_to_category_q(Queue **category_q, Order *order, int  num_category);
 void *produce(void *arg);
+void fnc(FILE *orders, FILE *categories, Queue **category_q, int num_category);
+
+// customer functions
 Customer *find_customer(Customer *head, int id);
 int check_credit(Customer *customer, double cost);
 Customer *add_to_success(Customer *customer, Order *node);
