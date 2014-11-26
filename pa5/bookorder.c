@@ -380,7 +380,7 @@ void print_category_q(Queue **category_q, int num_category){
 // destroy functions
 
 void destroyOrder(Order *order) {
-	if (head == NULL) {
+	if (order == NULL) {
 		return;
 	}
 	destroyOrder(order->next);
@@ -389,8 +389,9 @@ void destroyOrder(Order *order) {
 	free(order);
 }
 
+// not sure how to walk through and free this
 void destroyQueue(Queue *q) {
-	if (head == NULL) {
+	if (q == NULL) {
 		return;
 	}
 	free(q->category);
@@ -414,18 +415,15 @@ void destroyCustomer(Customer *cust) {
 }
 
 void destroyDatabase(Database *db) {
-	if (db->head == NULL) }return;
-	for (i = 0; i < num_categories; i++) {
-		destroyQueue(db->category_q[i]);
-	}
-	destroyConsumer(db->head);
+	if (db->head == NULL) return;
+	destroyCustomer(db->head);
 	free(db);
 }
 
 void destroyStructure(Structures *structure) {
 	int i;
 	destroyDatabase(structure->database);
-	for (i = 0; i < num_category; i++); {
+	for (i = 0; i < structure->num_category; i++) {
 		destroyQueue(structure->category_q[i]);
 	}
 	free(structure->orders);
