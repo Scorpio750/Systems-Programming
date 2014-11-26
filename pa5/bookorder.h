@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <semaphore.h>
 
 struct Order{
 	char *title;
@@ -24,6 +25,10 @@ typedef struct Order Order;
 
 struct Queue{
 	char *category;
+	int flag;
+	int count;
+	pthread_mutex_t lock;
+	sem_t mutex;
 	Order *head;
 	Order *tail;
 };
@@ -41,10 +46,12 @@ struct Customer{
 	Order *successful_tail;
 	Order *rejected;
 	Order *rejected_tail;
+	pthread_mutex_t lock;
 };
 typedef struct Customer Customer;
 
 struct Database{
+	pthread_mutex_t lock;
 	double revenue;
 	Customer *head;	
 };
@@ -61,7 +68,7 @@ typedef struct Structures Structures;
 
 Database *create_database();
 Customer *create_customer();
-Queue *create_queue(char *category);
+Queue *create_queue();
 Order *create_order();
 Structures *create_structures(Database *db, Queue **category_q, FILE *orders, FILE *categories, int num_category);
 void enqueue(Queue *q, Order *order);
@@ -69,13 +76,12 @@ Order *dequeue(Queue *q);
 void read_db_file(FILE *db_file, Database *database);
 int count_categories(FILE *categories);
 void add_to_category_q(Queue **category_q, Order *order, int  num_category);
-void fnc(FILE *orders, FILE *categories, Queue **category_q, int num_category);
-//void *produce(void *arg);
+void *produce(void *arg);
 Customer *find_customer(Customer *head, int id);
 int check_credit(Customer *customer, double cost);
 Customer *add_to_success(Customer *customer, Order *node);
 Customer *add_to_reject(Customer *customer, Order *node);
-void consume(Queue *q, Database *database);
+void *consume(void *arg);
 void print_orders(Order *head);
 void final_report(Database *db);
 void print_category_q(Queue **category_q, int num_category);

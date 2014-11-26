@@ -5,8 +5,12 @@
 
 #include "bookorder.h"
 
+Database *database;
+sem_t mutex;
+
 Database *create_database(){
 	Database *database = malloc(sizeof(Database));
+	pthread_mutex_init(&(database->lock), NULL);
 	database->revenue = 0.0;
 	database->head = NULL;
 	return database;
@@ -23,12 +27,17 @@ Customer *create_customer(){
 	customer->next = NULL;
 	customer->successful = NULL;
 	customer->rejected = NULL;
+	pthread_mutex_init(&(customer->lock), NULL);
 	return customer;
 }
 
-Queue *create_queue(char *category){
+Queue *create_queue(){
 	Queue *q = malloc(sizeof(Queue));
-	q->category = category;
+	q->category = NULL;
+	q->flag = 0;
+	q->count = 0;
+	pthread_mutex_init(&(q->lock), NULL);
+	sem_init(&(q->mutex), 0, 1);
 	q->head = NULL;
 	q->tail = NULL;
 	return q;
@@ -56,13 +65,18 @@ Structures *create_structures(Database *db, Queue **category_q, FILE *orders, FI
 }
 
 void enqueue(Queue *q, Order *order){
+	
 	if (q->head == NULL){
 		q->head = order;
 		q->tail = order;
+		q->count++;
+		sem_post(&(q->mutex));
 	}else{
 		order->next = q->head;
 		q->head->prev = order;
 		q->head = order;
+		q->count++;
+		sem_post(&(q->mutex));
 	}
 }
 
@@ -72,10 +86,13 @@ Order *dequeue(Queue *q){
 		return NULL;
 	}else if(order->prev == NULL && order->next == NULL){
 		q->tail = NULL;
+		q->head = NULL;
+		q->count--;
 		return order;
 	}else{
 		order->prev->next = NULL;
 		q->tail = order->prev;
+		q->count--;
 		return order;
 	}
 }
@@ -87,38 +104,31 @@ void read_db_file(FILE *db_file, Database *database){
 	char *lineptr = NULL;
 	size_t len = 0;
 	ssize_t num = getline(&lineptr, &len, db_file);
-	printf("num : [%d]\n", num);
 	while (num != -1){
 		customer = create_customer();
 
 		token = strtok(lineptr, "|");
 		customer->name = (char *)calloc((strlen(token)+1),sizeof(char));
 		strcpy(customer->name, token);
-		printf("Name: [%s]\n", customer->name);
 
 		token = strtok(NULL, "|");
 		customer->id = atoi(token);
-		printf("ID: [%d]\n", customer->id);
 
 		token = strtok(NULL, "|");
 		customer->credit = atof(token);
-		printf("Credit: [%.2f]\n", customer->credit);
 
 		token = strtok(NULL, "|");
 		customer->address = (char *)calloc((strlen(token)+1),sizeof(char));
 		strcpy(customer->address, token);
-		printf("Address: [%s]\n", customer->address);
 
 		token = strtok(NULL, "|");
 		customer->state = (char *)calloc((strlen(token)+1),sizeof(char));
 		strcpy(customer->state, token);
-		printf("State: [%s]\n", customer->state);
 
 		token = strtok(NULL, "|");
 		token = strtok(token, "\n");
 		customer->zipcode = (char *)calloc((strlen(token)+1),sizeof(char));
 		strcpy(customer->zipcode, token);
-		printf("Zipcode: [%s]\n", customer->zipcode);
 
 		if (ptr == NULL){
 			database->head = customer;
@@ -132,7 +142,6 @@ void read_db_file(FILE *db_file, Database *database){
 			lineptr = NULL;
 		}
 		num = getline(&lineptr, &len, db_file);
-		printf("num : [%d]\n", num);
 	}
 }
 
@@ -140,7 +149,6 @@ int count_categories(FILE *categories){
 	char *lineptr = NULL;
 	size_t len = 0;
 	ssize_t num = getline(&lineptr, &len, categories);
-	printf("num :[%d]\n", num);
 	int count = 0;
 	while (num != -1){
 		count++;
@@ -149,10 +157,8 @@ int count_categories(FILE *categories){
 			lineptr = NULL;
 		}
 		num = getline(&lineptr, &len, categories);
-		printf("num :[%d]\n", num);
 	}
 	rewind(categories);
-	printf("Count: [%d]\n", count);
 	return count;
 }
 
@@ -160,63 +166,55 @@ void add_to_category_q(Queue **category_q, Order *order, int num_category){
 	Queue *q;
 	int i;
 	for(i = 0; i < num_category; i++){
-		if (category_q[i] == NULL){
-			fprintf(stderr, "Category_q[%d] is NULL\n", i);
-			q = create_queue(order->category);
-			fprintf(stderr, "Category: [%s]\n");
-			enqueue(q, order);
-			category_q[i] = q;
-			fprintf(stderr, "Category: [%s]\n", q->category);
-			return;
-		}
-		fprintf(stderr, "queue: %s\n", category_q[i]->category);
-		fprintf(stderr, "order: %s\n", order->category);
-		if (strcmp(category_q[i]->category, order->category) == 0){
-			fprintf(stderr, "Category_q[%d] has found a match!\n", i);
+		pthread_mutex_lock(&(q->lock)); //lock q
+		if (category_q[i]->category == NULL){
+			category_q[i]->category = order->category;
 			q = category_q[i];
 			enqueue(q, order);
+			category_q[i] = q;
+			pthread_mutex_unlock(&(q->lock)); //unlock q
 			return;
 		}
-		fprintf(stderr, "Category_q[%d] did not find a match\n", i);
+		if (strcmp(category_q[i]->category, order->category) == 0){
+			q = category_q[i];
+			enqueue(q, order);
+			category_q[i] = q;
+			pthread_mutex_unlock(&(q->lock)); //unlock q
+			return;
+		}
 	}
 }
 
-void fnc(FILE *orders, FILE *categories, Queue **category_q, int num_category){
-/*
-  void *produce(void *arg){
+void *produce(void *arg){
 	Structures *structure = (Structures *)arg;
 	FILE *orders = structure->orders;
 	FILE *categories = structure->categories;
 	Queue **category_q = structure->category_q;
 	int num_category = structure->num_category;
-*/
+
+	int i;
 	char *token = calloc(500, sizeof(char));
 	char *lineptr = NULL;
 	size_t len = 0;
 	ssize_t num = getline(&lineptr, &len, orders);
-	printf("num :[%d]\n", num);
 	while (num != -1){
 		Order *order = create_order();
 
 		token = strtok(lineptr, "|");
 		order->title = (char *)calloc((strlen(token)+1),sizeof(char));	
 		strcpy(order->title, token);
-		printf("Title :[%s]\n", order->title);
 		
 		token = strtok(NULL, "|");
 		order->cost = atof(token);
-		printf("Cost :[%.2f]\n", order->cost);
 
 		token = strtok(NULL, "|");
 		order->id = atoi(token);
-		printf("ID :[%d]\n", order->id);
 
 		token = strtok(NULL, "|");
 		token = strtok(token, "\n");
 		order->category = (char *)calloc((strlen(token)+1),sizeof(char));
 		strcpy(order->category, token);
-		printf("Category :[%s]\n", order->category);
-
+		
 		add_to_category_q(category_q, order, num_category);
 
 		if (lineptr){
@@ -224,9 +222,15 @@ void fnc(FILE *orders, FILE *categories, Queue **category_q, int num_category){
 			lineptr = NULL;
 		}
 		num = getline(&lineptr, &len, orders);
-		printf("num :[%d]\n", num);
 	}
-//	return NULL;
+
+	for (i = 0; i < num_category; i++){
+		//sets all the flags to 1 = done
+		pthread_mutex_lock(&(category_q[i]->lock)); //lock the q in category_q[i]
+		category_q[i]->flag = 1;	
+		pthread_mutex_unlock(&(category_q[i]->lock)); //unlock the q in category_q[i]
+	}
+	return NULL;
 }
 
 Customer *find_customer(Customer *head, int id){
@@ -240,6 +244,7 @@ Customer *find_customer(Customer *head, int id){
 			}
 		}
 	}
+	return NULL; 
 }
 
 int check_credit(Customer *customer, double cost){
@@ -288,30 +293,55 @@ Customer *add_to_reject(Customer *customer, Order *node){
 	}
 }
 
-
-void consume (Queue *q, Database *database){
-	if (q == NULL){
-		return;
-	}
-
+void *consume(void *arg){
+	Queue *q = (Queue *)arg;	
 	Order *ptr;
 	Customer *customer;
 	int credit_check;
-	while(q->head != NULL){
-		ptr = dequeue(q);
-		if(ptr == NULL){
-			return;
+	int value;
+
+	sem_getvalue(&(q->mutex), &value);
+
+	if (value == 1){
+		printf("Consumer waits because queue is empty.\n");
+	}
+	while(value == 1){
+		if (q->flag == 1) {
+			sem_getvalue(&(q->mutex), &value);
+			if (value == 1){
+				sem_post(&mutex);
+				return NULL;
+			}else if (value != 1){
+				printf("Consumer resumes because there are orders ready for processing.\n");
+				break;
+			}
+		}	
+		sem_getvalue(&(q->mutex), &value);
+		if (value != 1){
+			printf("Consumer resumes because there are orders ready for processing.\n");
 		}
+	}
+
+while (value != 1){	
+		pthread_mutex_lock(&(q->lock)); //lock the q
+		ptr = dequeue(q);
+		sem_wait(&(q->mutex));
+		pthread_mutex_unlock(&(q->lock)); //unlock the q
+		
 		customer = find_customer(database->head, ptr->id);
+		pthread_mutex_lock(&(customer->lock)); //lock the customer
 		credit_check = check_credit(customer, ptr->cost);
 		if (credit_check == 1){
 			//credit limit checks out
 			printf("Order Confirmation: %s|%.2f\n", ptr->title, ptr->cost);
 			printf("Shipping Information: %s|%s|%s|%d\n", customer->name, customer->address, customer->state, customer->zipcode);
 			customer->credit = (customer->credit - ptr->cost);
+			pthread_mutex_lock(&(database->lock)); //lock database
 			database->revenue = (database->revenue + ptr->cost);
+			pthread_mutex_unlock(&(database->lock)); //unlock database
 			ptr->balance = customer->credit;
 			customer = add_to_success(customer, ptr);
+			pthread_mutex_unlock(&(customer->lock)); //unlock the customer
 		}else{
 			//credit limit is too low
 			printf("REJECTED:\n");
@@ -320,8 +350,32 @@ void consume (Queue *q, Database *database){
 			printf("Remaining Credit Limit: %.2f \n", customer->credit);
 			ptr->balance = customer->credit;
 			customer = add_to_reject(customer, ptr);
+			pthread_mutex_unlock(&(customer->lock)); //unlock the customer
+		}
+		sem_getvalue(&(q->mutex), &value);
+
+		if (value == 1){
+			printf("Consumer waits because queue is empty.\n");
+		}
+
+		while(value == 1){
+			if (q->flag == 1) {
+				sem_getvalue(&(q->mutex), &value);
+			if (value == 1){
+				sem_post(&mutex);
+				return NULL;
+			}else if (value != 1){
+				printf("Consumer resumes because there are orders ready for processing.\n");
+				break;
+			}
+		}	
+		sem_getvalue(&(q->mutex), &value);
+		if (value != 1){
+			printf("Consumer resumes because there are orders ready for processing.\n");
 		}
 	}
+}
+	return NULL;
 }
 
 void print_orders(Order *head){
@@ -345,6 +399,7 @@ void final_report(Database *db){
 	}
 
 	for(ptr = db->head; ptr != NULL; ptr= ptr->next){
+		printf("\n");
 		printf("=== BEGIN CUSTOMER INFO ===\n");
 		printf("Customer Name: %s\n", ptr->name);
 		printf("Customer ID number: %d\n", ptr->id);	
@@ -354,9 +409,9 @@ void final_report(Database *db){
 		printf("### REJECTED ORDERS\n");
 		print_orders(ptr->rejected);
 		printf("=== END CUSTOMER INFO ===\n");
-		printf("\n");
 	}
 }
+
 
 void print_category_q(Queue **category_q, int num_category){
 	int i;
@@ -376,6 +431,7 @@ void print_category_q(Queue **category_q, int num_category){
 		}
 	}
 }
+
 
 int main (int argc, char **argv) {
 
@@ -406,34 +462,39 @@ int main (int argc, char **argv) {
 	}
 
 	int i;
-	Database *database = create_database();
+	database = create_database();
 	read_db_file(db_file, database);
 
-	//print_linked_list(database);
 	int num_categories = count_categories(categories);
 	Queue **category_q = malloc(num_categories * sizeof(Queue *));
-
-	
-	fnc(orders, categories, category_q, num_categories);
-	print_category_q(category_q, num_categories);	
- 	
-	for(i = 0; i < num_categories; i++){	
-		consume(category_q[i], database);
-	}
-
-	final_report(database);
-	/*
+	Queue *q;
 	Structures *structure = create_structures(database, category_q, orders, categories, num_categories);
+	sem_init(&mutex, 0, 1);
+	
+	
+	for (i = 0; i < num_categories; i++){
+		category_q[i] = create_queue();
+	}
 
 	pthread_t producer;
 	pthread_create(&producer, NULL, produce, structure);
-	print_category_q(category_q, num_categories);
+
+
 
 	for (i = 0; i < num_categories; i++){
-		pthread_t t;
-		pthread_create(&t, NULL, consume, category_q[i]);
+		pthread_t consumer;
+		q = category_q[i];
+		pthread_create(&consumer, NULL, consume, q);
 	}
-*/
+
+	pthread_join(producer, NULL);
+
+	for (i = 0; i < num_categories+1; i++){
+		sem_wait(&mutex);	//semwait
+	}
+
+	sem_destroy(&mutex);
+	final_report(database);
 	fclose(db_file);
 	fclose(orders);
 	fclose(categories);

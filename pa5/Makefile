@@ -1,5 +1,5 @@
 COMPILE = gcc
-FLAGS = -Wall -g
+FLAGS = -Wall -g -lpthread
 
 all: bookorder
 
