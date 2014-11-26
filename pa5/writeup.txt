@@ -49,4 +49,5 @@ l = number of orders
 O(ml + nl) = 
 O(l(m + n))
 
-For every cusomter we have l orders and or every category we have l orders.  
+For every n customers in the linked list, it has l orders. and for every 
+m category queue we have l orders. 
