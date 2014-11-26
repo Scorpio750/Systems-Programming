@@ -59,18 +59,25 @@ struct Structures_{
 };
 typedef struct Structures_ Structures;
 
+// create functions
 Database *create_database();
 Customer *create_customer();
 Queue *create_queue(char *category);
 Order *create_order();
 Structures *create_structures(Database *db, Queue **category_q, FILE *orders, FILE *categories, int num_category);
+
+// thread operations
 void enqueue(Queue *q, Order *order);
 Order *dequeue(Queue *q);
+
+// I/O functions
 void read_db_file(FILE *db_file, Database *database);
 int count_categories(FILE *categories);
 void add_to_category_q(Queue **category_q, Order *order, int  num_category);
 void fnc(FILE *orders, FILE *categories, Queue **category_q, int num_category);
 //void *produce(void *arg);
+
+// customer functions
 Customer *find_customer(Customer *head, int id);
 int check_credit(Customer *customer, double cost);
 Customer *add_to_success(Customer *customer, Order *node);

@@ -289,7 +289,7 @@ Customer *add_to_reject(Customer *customer, Order *node){
 }
 
 
-void consume (Queue *q, Database *database){
+void consume(Queue *q, Database *database){
 	if (q == NULL){
 		return;
 	}
@@ -375,6 +375,62 @@ void print_category_q(Queue **category_q, int num_category){
 			printf("   Category [%s]\n", ptr->category);
 		}
 	}
+}
+
+// destroy functions
+
+void destroyOrder(Order *order) {
+	if (head == NULL) {
+		return;
+	}
+	destroyOrder(order->next);
+	free(order->title);
+	free(order->category);
+	free(order);
+}
+
+void destroyQueue(Queue *q) {
+	if (head == NULL) {
+		return;
+	}
+	free(q->category);
+	destroyOrder(q->head);
+	destroyOrder(q->tail);
+}
+
+void destroyCustomer(Customer *cust) {
+	if (cust == NULL) {
+		return;
+	}
+	destroyCustomer(cust->next);
+	free(cust->name);
+	free(cust->address);
+	free(cust->state);
+	free(cust->zipcode);
+	destroyOrder(cust->successful);
+	destroyOrder(cust->successful_tail);
+	destroyOrder(cust->rejected);
+	destroyOrder(cust->rejected_tail);
+}
+
+void destroyDatabase(Database *db) {
+	if (db->head == NULL) }return;
+	for (i = 0; i < num_categories; i++) {
+		destroyQueue(db->category_q[i]);
+	}
+	destroyConsumer(db->head);
+	free(db);
+}
+
+void destroyStructure(Structures *structure) {
+	int i;
+	destroyDatabase(structure->database);
+	for (i = 0; i < num_category; i++); {
+		destroyQueue(structure->category_q[i]);
+	}
+	free(structure->orders);
+	free(structure->categories);
+	free(structure);
 }
 
 int main (int argc, char **argv) {
