@@ -469,7 +469,7 @@ void destroyCustomer(Customer *cust) {
 }
 
 void destroyDatabase(Database *db) {
-	if (db->head == NULL) return;
+	if (db == NULL) return;
 	destroyCustomer(db->head);
 	free(db);
 }
@@ -531,8 +531,6 @@ int main (int argc, char **argv) {
 	pthread_t producer;
 	pthread_create(&producer, NULL, produce, structure);
 
-
-
 	for (i = 0; i < num_categories; i++){
 		pthread_t consumer;
 		q = category_q[i];
@@ -545,10 +543,13 @@ int main (int argc, char **argv) {
 		sem_wait(&mutex);	//semwait
 	}
 
+
 	sem_destroy(&mutex);
 	final_report(database);
 	fclose(db_file);
 	fclose(orders);
 	fclose(categories);
+    // destroy all the things
+    destroyStructure(structure);
 	return 0;
 }
