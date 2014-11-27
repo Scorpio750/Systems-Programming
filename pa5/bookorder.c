@@ -432,57 +432,103 @@ void print_category_q(Queue **category_q, int num_category){
 	}
 }
 
-// destroy functions
-void destroyOrder(Order *order) {
-	if (order == NULL) {
+//destroy functions
+void destroy_order(Order *head){
+	if (head == NULL){
 		return;
 	}
-	destroyOrder(order->next);
-	free(order->title);
-	free(order->category);
-	free(order);
+	destroy_order(head->next);
+	if (head->prev != NULL){
+		head->prev = NULL;
+	}
+	if (head->title != NULL){
+		free(head->title);
+		head->title = NULL;
+	}
+	if (head->category != NULL){
+		free(head->category);
+		head->category = NULL;
+	}
+	head->cost = 0;
+	head->id = 0;
+	head->balance = 0;
+	free(head);
+	head = NULL;
+	return;
 }
 
-// not sure how to walk through and free this
-void destroyQueue(Queue *q) {
-	if (q == NULL) {
-		return;
+void destroy_queue(Queue *q){
+	if (q->category != NULL){
+		free(q->category);
+		q->category = NULL;
+	}	
+	q->flag = 0;
+	q->count = 0;
+	pthread_mutex_destroy(&(q->lock));
+	sem_destroy(&(q->mutex));
+	destroy_order(q->head);
+	if (q->tail != NULL){
+		q->tail = NULL;
 	}
-	free(q->category);
-	destroyOrder(q->head);
-	destroyOrder(q->tail);
 }
 
-void destroyCustomer(Customer *cust) {
-	if (cust == NULL) {
-		return;
+void destroy_category_q(Queue **category_q, int num_categories){
+	int i;
+	for (i = 0; i < num_categories; i++){
+		destroy_queue(category_q[i]);
 	}
-	destroyCustomer(cust->next);
-	free(cust->name);
-	free(cust->address);
-	free(cust->state);
-	free(cust->zipcode);
-	destroyOrder(cust->successful);
-	destroyOrder(cust->successful_tail);
-	destroyOrder(cust->rejected);
-	destroyOrder(cust->rejected_tail);
+	free(category_q);
+	category_q = NULL;
 }
 
 void destroyDatabase(Database *db) {
 	if (db == NULL) return;
-	destroyCustomer(db->head);
+	destroy_customer(db->head);
 	free(db);
 }
 
-void destroyStructure(Structures *structure) {
-	int i;
-	destroyDatabase(structure->database);
-	for (i = 0; i < structure->num_category; i++) {
-		destroyQueue(structure->category_q[i]);
+void destroy_customer(Customer *head){
+	if (head == NULL){
+		return;
 	}
-	free(structure->orders);
-	free(structure->categories);
-	free(structure);
+	destroy_customer(head->next);
+	if (head->name != NULL){
+		free(head->name);
+		head->name = NULL;
+	}
+	if (head->address != NULL){
+		free(head->address);
+		head->address = NULL;
+	}
+	if (head->state != NULL){
+		free(head->state);
+		head->state = NULL;
+	}
+	if (head->zipcode != NULL){
+		free(head->zipcode);
+		head->zipcode = NULL;
+	}
+	head->id = 0;
+	head->credit = 0;
+	if (head->successful != NULL){
+		destroy_order(head->successful);
+	}
+	head->successful_tail = NULL;
+	if (head->rejected != NULL){
+		destroy_order(head->rejected);
+	}
+	head->successful_tail = NULL;
+	pthread_mutex_destroy(&(database->lock));
+	free(head);
+	head = NULL;
+	return;
+}
+
+void destroy_database(Database *database){
+	destroy_customer(database->head);
+	pthread_mutex_destroy(&(database->lock));
+	free(database);
+	database = NULL;
 }
 
 int main (int argc, char **argv) {
@@ -545,11 +591,19 @@ int main (int argc, char **argv) {
 
 
 	sem_destroy(&mutex);
-	final_report(database);
+	final_report(database);	
+
+	destroy_category_q(category_q, num_categories);
+	destroy_database(database);
+
 	fclose(db_file);
 	fclose(orders);
 	fclose(categories);
     // destroy all the things
     destroyStructure(structure);
+
+	structure->num_category = 0;
+	free(structure);
+	structure = NULL;
 	return 0;
 }
