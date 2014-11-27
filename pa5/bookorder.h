@@ -93,4 +93,11 @@ void *consume(void *arg);
 void print_orders(Order *head);
 void final_report(Database *db);
 void print_category_q(Queue **category_q, int num_category);
+
+//destroy functions
+void destroy_order(Order *head);
+void destroy_queue(Queue *q);
+void destroy_category_q(Queue **category_q, int num_categories);
+void destroy_customer(Customer *head);
+void destroy_database(Database *database);
 #endif
