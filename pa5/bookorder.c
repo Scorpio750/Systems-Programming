@@ -531,6 +531,10 @@ void destroy_database(Database *database){
 	database = NULL;
 }
 
+void destroy_structures(Structures *structure) {
+
+}
+
 int main (int argc, char **argv) {
 
 	if (argc != 4) {
@@ -593,14 +597,14 @@ int main (int argc, char **argv) {
 	sem_destroy(&mutex);
 	final_report(database);	
 
+    // destroy all the things
 	destroy_category_q(category_q, num_categories);
 	destroy_database(database);
 
 	fclose(db_file);
 	fclose(orders);
 	fclose(categories);
-    // destroy all the things
-    //destroyStructure(structure);
+    destroy_structures(structure);
 
 	structure->num_category = 0;
 	free(structure);
