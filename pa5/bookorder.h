@@ -100,4 +100,5 @@ void destroy_queue(Queue *q);
 void destroy_category_q(Queue **category_q, int num_categories);
 void destroy_customer(Customer *head);
 void destroy_database(Database *database);
+// void destroy_structures(Structures *structure);
 #endif

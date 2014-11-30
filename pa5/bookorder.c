@@ -481,12 +481,6 @@ void destroy_category_q(Queue **category_q, int num_categories){
 	category_q = NULL;
 }
 
-void destroyDatabase(Database *db) {
-	if (db == NULL) return;
-	destroy_customer(db->head);
-	free(db);
-}
-
 void destroy_customer(Customer *head){
 	if (head == NULL){
 		return;
@@ -525,15 +519,32 @@ void destroy_customer(Customer *head){
 }
 
 void destroy_database(Database *database){
-	destroy_customer(database->head);
+	if (database == NULL) return;
+    destroy_customer(database->head);
 	pthread_mutex_destroy(&(database->lock));
 	free(database);
 	database = NULL;
 }
 
-void destroy_structures(Structures *structure) {
-
-}
+/* void destroy_structures(Structures *structure) {
+   if (structure == NULL) {
+        return;
+   }
+   if (structure->database != NULL) {
+       puts("Freeing database");
+       destroy_database(structure->database); 
+   }
+   if (structure->category_q != NULL) {
+       puts("Freeing categories");
+       destroy_category_q(structure->category_q, structure->num_category);
+   }
+   fclose(structure->orders);
+   if (structure->categories != NULL) {
+       free(structure->categories);
+   }
+   free(structure);
+   structure = NULL;
+} */
 
 int main (int argc, char **argv) {
 
@@ -604,7 +615,7 @@ int main (int argc, char **argv) {
 	fclose(db_file);
 	fclose(orders);
 	fclose(categories);
-    destroy_structures(structure);
+    // destroy_structures(structure);
 
 	structure->num_category = 0;
 	free(structure);
