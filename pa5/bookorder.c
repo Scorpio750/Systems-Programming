@@ -600,7 +600,7 @@ int main (int argc, char **argv) {
 	fclose(orders);
 	fclose(categories);
     // destroy all the things
-    destroyStructure(structure);
+    //destroyStructure(structure);
 
 	structure->num_category = 0;
 	free(structure);
