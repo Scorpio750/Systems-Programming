@@ -917,3 +917,109 @@ int sem_post(sem_t *);
 - Mutexes only have two states: locked and unlocked
 	- Semaphore can take on $$$\mid \mathbb N \mid$$$ states
 		- With the right counter value it can have multiple concurrent accessors
+		
+---
+## 12/2/14
+
+# Shell Scripting
+
+	$* all command line arguments
+	$@ is a list of words that match the command line arguments
+	$# number of command line arguments
+	$? return value of the last program that gets run
+	$$ pid of the shell
+	$! pid of last background command
+	
+## Simple Command
+
+A sequence of words separated by blanks
+
+## Redirection
+
+	somecommand	< myinput
+				> myoutput [overwrite]
+				>> myoutput [append]
+				2> myoutput [file descriptor for stderr]
+				2>> myoutput 
+				2>&1 [routes stderr to stdout]
+				cmd > xxx 2>&1
+				cmd 2>&1 >xxx
+
+### A Simple Program
+
+	# loop over all files in directory
+	for i in * ; do 
+		if [ -x $i ] ; then
+			echo $i is executable
+		else
+			echo $i is NOT executable
+		fi
+	done
+	
+### Switch Statements
+
+	case $# in
+	0)	set 'date'
+	esac
+	
+Shell commands **nest**
+
+## Pipelines
+
+	output | input
+
+## List
+
+A list is a sequence of pipelines
+
+	In order of precedence:
+	&& 	||
+	&	;
+	
+## Shell Variables
+
+Name-value pairs
+	
+	x="ggod bye"
+	echo $x
+	> ggod bye
+	undef x # undefines x
+
+- Exported variables remain invisible in subshells
+
+- All commands return `exit status` to the shell
+	- returns 0 for success, 1 for failure
+
+### Sample Programs
+
+	# Even creepier shell script. Monitors who logs in and out of system
+	new=/tmp/busybody1.$$
+	old=/tmp/busybody2.$$
+	touch $old				#make empty file
+	
+	while : # while true
+	do
+		who > $new
+		diff $old $new
+		mv $new $old
+		sleep 20
+	done
+	
+<br />
+	
+	# Still creepy shell script, now with signal handling!
+	
+	new=/tmp/busybody1.$$
+	old=/tmp/busybody2.$$
+	touch $old
+	
+	trap "echo cleaning up; rm -rf $old $new ; exit 0" 1 2 9
+	echo trap returned $?
+	
+	while :
+	do
+		who > $new
+		diff $old $new
+		mv $new $old
+		sleep 20
+	done
