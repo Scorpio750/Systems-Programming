@@ -1,0 +1,53 @@
+Alison Wong
+Patrick Wu
+
+Design:
+--------------------
+The Customers are put in to a Database Struct into a form of a linked list. 
+The database has its own mutex as does each Customer. There is also an array 
+of queues that have as man indexes as there are categories. There is a 
+designated queue for each category. Each queue has a mutex and a sempahore.
+A producer thread is spawned from the main thead. The producer enqueues the
+orders into the correct queue based on the category of the order. The main
+thread than spawns as many threads as there are categories, one for each 
+queue. The consumer threads use a semaphore to check whether or not the queue
+is empty. If the queue is empty it will wait until there is something in the
+queue or until it recieves a flag from the producer that there will be no more
+orders coming into the queue. If the queue is not empty, it will dequeue and
+take that order and find the corresponding customer and check the credit limit.
+Depending on the the credit limit it will put the order into the Customer's
+reject or succcessful linked list and increse the revenue accordingly.
+
+Efficiency:
+--------------------
+m = number of categories
+n = number of customers
+l = number of orders
+
+Efficiency of Producer
+O(lm)
+For every order, we go through m categories within the array and enqueue.
+
+Efficiency of Consumer
+O(ln)
+For every order, we go through n customers within the linked list and enqueue.
+
+Efficiency of Final Report
+O(nl)
+For every customer in the linked list, we printout the orders.
+
+O(lm) + O(ln) + O(nl) = 
+O(l(m + 2n)) =
+O(l(m+n))
+
+Space Complexity:
+--------------------
+m = number of categories
+n = number of customers
+l = number of orders
+
+O(ml + nl) = 
+O(l(m + n))
+
+For every n customers in the linked list, it has l orders. and for every 
+m category queue we have l orders. 
