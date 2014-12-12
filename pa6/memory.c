@@ -120,26 +120,33 @@ void *mycalloc (unsigned int size, char *file, unsigned int line){
 	for (i = 0; i < size; i++){
 		ptr2[i] = 0;
 	}
-
 	return ptr;
 }
 
 char *test_func(){
 	char *test;
 	test = malloc (50);
-	strcpy(test, "BANZAI");
+	strcpy(test, "Malloc Success");
 	return test;
 }
 
 int main (int argc, char **argv) {
-	char *test = test_func();
-	char *test1;
-	//free(test + 10);
-	//free(test1);
-	//free(test);
-	//free(test);
-	printf("%s\n", test);
-	free(test);
+	char *malloc_check = test_func();
+	printf("%s\n", malloc_check);
+	free(malloc_check);
+
+	char *never_allocated;
+	free(never_allocated);
+	
+	char *redundant_free = test_func();
+	free(redundant_free);
+	free(redundant_free);
+	
+	char *not_returned_malloc = test_func();
+	free(not_returned_malloc + 10);
+	free(not_returned_malloc);
+
+	char *leak = test_func();
 	atexit(leak_detection);
 	return 0;
 }
