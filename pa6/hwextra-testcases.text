@@ -1,0 +1,69 @@
+Alison Wong
+Patrick Wu
+
+Test Case 1:
+Description: Malloc
+Line 134
+
+char *malloc_check = test_func();
+printf("%s\n", malloc_check);
+
+Expected Output:
+Malloc Success
+
+Test Case 2:
+Description: Free
+Line 136
+
+char *malloc_check = test_func();
+printf("%s\n", malloc_check);
+free(malloc_check);
+
+Expected Output:
+There should be no output since there are no errors.
+
+Test Case 3:
+Description: Free pointer - never allocated
+Line 139
+
+char *never_allocated;
+free(never_allocated);
+
+Expected Output:
+[ERROR] [Line: 139 File: memory.c] Freeing a pointer that was never allocated
+
+Test Case 4:
+Description: Redundant free
+Line 143
+
+char *redundant_free = test_func();
+free(redundant_free);
+free(redundant_free);
+
+Expected Output:
+[ERROR] [Line: 143 File: memory.c] Redundant free()ing of the same pointer
+
+Test Case 5:
+Description: Free pointer no returned from malloc()
+Line 146
+
+char *not_returned_malloc = test_func();
+free(not_returned_malloc +10);
+free(not_returned_malloc);
+
+Expected Output:
+[ERROR] [Line: 146 File: memory.c] Freeing pointers to dynamic memory that were not returned from malloc()
+
+Test Case 6:
+Description: Leak detection
+Line 150
+
+char *leak = test_func();
+atexit(leak_detection);
+
+Expected Output:
+[Leak Detection] [Bytes: 50 Blocks: 1]
+
+Test Case 7:
+Description: calloc
+
