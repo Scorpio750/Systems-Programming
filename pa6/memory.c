@@ -74,7 +74,6 @@ void *mymalloc (unsigned int size, char *file, unsigned int line) {
 	static struct MemEntry *last = 0;
 	struct MemEntry *p;
 	struct MemEntry *succ;
-
 	if (!initialized) {
 		root = (struct MemEntry *) Big_Block;
 		root->prev = root->succ = 0;
@@ -83,7 +82,6 @@ void *mymalloc (unsigned int size, char *file, unsigned int line) {
 		initialized = 1;
 		root->FLAG = INT_MAX;
 	}
-
 	p  = root;
 	while (p != 0) {
 		if (p->size < size || !p->isFree) { //large enough? taken?
@@ -109,6 +107,8 @@ void *mymalloc (unsigned int size, char *file, unsigned int line) {
 			return (char *)p + MESIZE;
 		}
 	}
+	
+	fprintf(stderr, "[ERROR] [Line: %d File: %s] Malloc Failed: Could not find space for allocation\n", line, file);
 	return 0;
 }
 
@@ -147,6 +147,9 @@ int main (int argc, char **argv) {
 	free(not_returned_malloc);
 
 	char *leak = test_func();
+	char *too_much = malloc(10000);
+	char *way_too_much = malloc(1000000);
+	char *no_space = malloc(100003);
 	atexit(leak_detection);
 	return 0;
 }

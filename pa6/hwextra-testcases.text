@@ -55,14 +55,29 @@ Expected Output:
 [ERROR] [Line: 146 File: memory.c] Freeing pointers to dynamic memory that were not returned from malloc()
 
 Test Case 6:
-Description: Leak detection
-Line 150
+Description: Malloc Failed
+Line 152
 
-char *leak = test_func();
+char *leak = test_func(); //should allocated 50
+char *too_much = malloc(10000);
+char *way_too_much = malloc(1000000);
+char *no_space = malloc(100003); //should not allocate - not enough space
+
+Expected Output:
+[ERROR] [Line: 152 File: memory.c] Malloc Failed: Could not find space for allocation
+
+Test Case 7:
+Description: Leak detection
+Line 153
+
+char *leak = test_func(); //should allocated 50
+char *too_much = malloc(10000);
+char *way_too_much = malloc(1000000);
+char *no_space = malloc(100003); //should not allocate - not enough space
 atexit(leak_detection);
 
 Expected Output:
-[Leak Detection] [Bytes: 50 Blocks: 1]
+[Leak Detection] [Bytes: 1010050 Blocks: 3]
 
 Test Case 7:
 Description: calloc
