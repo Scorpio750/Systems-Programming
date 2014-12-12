@@ -5,7 +5,7 @@
 
 #include "memory.h"
 
-void leak_detection(){
+void leak_detection() {
 	struct MemEntry *ptr = (struct MemEntry *)(&Big_Block);
 	unsigned int size = 0;
 	unsigned int blocks = 0;
@@ -112,7 +112,7 @@ void *mymalloc (unsigned int size, char *file, unsigned int line) {
 	return 0;
 }
 
-void *mycalloc (unsigned int size, char *file, unsigned int line){
+void *mycalloc (unsigned int size, char *file, unsigned int line) {
 	void *ptr = mymalloc(size, file, line);
 	
 	char *ptr2 = (char *)ptr;
@@ -123,7 +123,7 @@ void *mycalloc (unsigned int size, char *file, unsigned int line){
 	return ptr;
 }
 
-char *test_func(){
+char *test_func() {
 	char *test;
 	test = malloc (50);
 	strcpy(test, "Malloc Success");
