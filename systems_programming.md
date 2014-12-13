@@ -1023,3 +1023,26 @@ Name-value pairs
 		mv $new $old
 		sleep 20
 	done
+	
+---
+## 12/4/14
+
+# More Shell Scripting
+
+	test -x $i
+	or 
+	[ -x $i ]
+`test` evaluates the expression. Returns 0 if true, 1 if false. 
+
+## hxc stuff
+
+`:` is true
+`[ ]` is false 
+`#` comment
+
+### String operations
+
+-n str_1
+-z str_1
+s_1 = s_2
+s_1 != s_2

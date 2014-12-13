@@ -125,7 +125,7 @@ void *mycalloc (unsigned int size, char *file, unsigned int line){
 
 char *test_func(){
 	char *test;
-	test = malloc (50);
+	test = malloc(50);
 	strcpy(test, "Malloc Success");
 	return test;
 }
