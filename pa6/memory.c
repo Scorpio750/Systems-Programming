@@ -129,27 +129,3 @@ char *test_func() {
 	strcpy(test, "Malloc Success");
 	return test;
 }
-
-int main (int argc, char **argv) {
-	char *malloc_check = test_func();
-	printf("%s\n", malloc_check);
-	free(malloc_check);
-
-	char *never_allocated;
-	free(never_allocated);
-	
-	char *redundant_free = test_func();
-	free(redundant_free);
-	free(redundant_free);
-	
-	char *not_returned_malloc = test_func();
-	free(not_returned_malloc + 10);
-	free(not_returned_malloc);
-
-	char *leak = test_func();
-	char *too_much = malloc(10000);
-	char *way_too_much = malloc(1000000);
-	char *no_space = malloc(100003);
-	atexit(leak_detection);
-	return 0;
-}

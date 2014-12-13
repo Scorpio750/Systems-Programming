@@ -13,6 +13,7 @@
 
 #define malloc( x ) mymalloc( x, __FILE__, __LINE__)
 #define free( x ) myfree( x, __FILE__, __LINE__)
+#define calloc( x ) mycalloc( x, __FILE__, __LINE__)
 #define MESIZE sizeof(struct MemEntry)
 #define BLOCKSIZE (1024 * 1024)
 
