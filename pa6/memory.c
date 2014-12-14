@@ -18,7 +18,8 @@ void leak_detection() {
 		ptr = ptr->succ;
 	}
 	if (size != 0){
-		fprintf(stderr, "[Leak Detection] [Bytes: %d Blocks: %d]\n", size, blocks);
+		fprintf(stderr, ANSI_COLOR_RED "[Leak Detection] [Bytes: %d Blocks: %d]\n", size, blocks);
+		fprintf(stderr, ANSI_COLOR_RESET "");
 	}
 }
 
@@ -32,7 +33,8 @@ void myfree (void *p, char *file, unsigned int line) {
 	void *end = &Big_Block + 1;
 	
 	if (p < start || p >= end) {
-		fprintf(stderr, "[ERROR] [Line: %d File: %s] Freeing a pointer that was never allocated\n", line, file);
+		fprintf(stderr, ANSI_COLOR_RED "[ERROR] [Line: %d File: %s] Freeing a pointer that was never allocated\n", line, file);
+		fprintf(stderr, ANSI_COLOR_RESET "");
 		return;
 	}
 
@@ -40,11 +42,13 @@ void myfree (void *p, char *file, unsigned int line) {
 
 	if (ptr->FLAG == INT_MAX){
 		if (ptr->isFree == 1){
-			fprintf(stderr, "[ERROR] [Line: %d File: %s] Redundant free()ing of the same pointer\n", line, file);
+			fprintf(stderr, ANSI_COLOR_RED "[ERROR] [Line: %d File: %s] Redundant free()ing of the same pointer\n", line, file);
+			fprintf(stderr, ANSI_COLOR_RESET "");
 			return;
 		}
 	}else{
-		fprintf(stderr, "[ERROR] [Line: %d File: %s] Freeing pointers to dynamic memory that were not reutrned from malloc()\n", line, file);
+		fprintf(stderr, ANSI_COLOR_RED "[ERROR] [Line: %d File: %s] Freeing pointers to dynamic memory that were not reutrned from malloc()\n", line, file);
+		fprintf(stderr, ANSI_COLOR_RESET "");
 		return;
 	}
 
@@ -108,24 +112,21 @@ void *mymalloc (unsigned int size, char *file, unsigned int line) {
 		}
 	}
 	
-	fprintf(stderr, "[ERROR] [Line: %d File: %s] Malloc Failed: Could not find space for allocation\n", line, file);
+	fprintf(stderr, ANSI_COLOR_RED "[ERROR] [Line: %d File: %s] Malloc Failed: Could not find space for allocation\n", line, file);
+	fprintf(stderr, ANSI_COLOR_RESET "");
 	return 0;
 }
 
 void *mycalloc (unsigned int size, char *file, unsigned int line) {
 	void *ptr = mymalloc(size, file, line);
-	
-	char *ptr2 = (char *)ptr;
-	int i;
-	for (i = 0; i < size; i++){
-		ptr2[i] = 0;
-	}
+	memset(ptr, size, 0);  
 	return ptr;
 }
 
 char *test_func() {
 	char *test;
-	test = malloc (50);
+	test = malloc(50);
 	strcpy(test, "Malloc Success");
 	return test;
 }
+
