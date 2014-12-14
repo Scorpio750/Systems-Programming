@@ -18,7 +18,7 @@ void leak_detection() {
 		ptr = ptr->succ;
 	}
 	if (size != 0){
-		fprintf(stderr, "[Leak Detection] [Bytes: %d Blocks: %d]\n", size, blocks);
+		fprintf(stderr, ANSI_COLOR_RESET "[Leak Detection] [Bytes: %d Blocks: %d]\n", size, blocks);
 	}
 }
 
@@ -32,7 +32,7 @@ void myfree (void *p, char *file, unsigned int line) {
 	void *end = &Big_Block + 1;
 	
 	if (p < start || p >= end) {
-		fprintf(stderr, "[ERROR] [Line: %d File: %s] Freeing a pointer that was never allocated\n", line, file);
+		fprintf(stderr, ANSI_COLOR_RED "[ERROR] [Line: %d File: %s] Freeing a pointer that was never allocated\n", line, file);
 		return;
 	}
 
@@ -40,11 +40,11 @@ void myfree (void *p, char *file, unsigned int line) {
 
 	if (ptr->FLAG == INT_MAX){
 		if (ptr->isFree == 1){
-			fprintf(stderr, "[ERROR] [Line: %d File: %s] Redundant free()ing of the same pointer\n", line, file);
+			fprintf(stderr, ANSI_COLOR_RED "[ERROR] [Line: %d File: %s] Redundant free()ing of the same pointer\n", line, file);
 			return;
 		}
 	}else{
-		fprintf(stderr, "[ERROR] [Line: %d File: %s] Freeing pointers to dynamic memory that were not reutrned from malloc()\n", line, file);
+		fprintf(stderr, ANSI_COLOR_RED "[ERROR] [Line: %d File: %s] Freeing pointers to dynamic memory that were not reutrned from malloc()\n", line, file);
 		return;
 	}
 
@@ -108,18 +108,18 @@ void *mymalloc (unsigned int size, char *file, unsigned int line) {
 		}
 	}
 	
-	fprintf(stderr, "[ERROR] [Line: %d File: %s] Malloc Failed: Could not find space for allocation\n", line, file);
+	fprintf(stderr, ANSI_COLOR_RED "[ERROR] [Line: %d File: %s] Malloc Failed: Could not find space for allocation\n", line, file);
 	return 0;
 }
 
 void *mycalloc (unsigned int size, char *file, unsigned int line) {
 	void *ptr = mymalloc(size, file, line);
-	
-	char *ptr2 = (char *)ptr;
+	memset(ptr, size, 0);  
+	/* char *ptr2 = (char *)ptr;
 	int i;
 	for (i = 0; i < size; i++){
 		ptr2[i] = 0;
-	}
+	}*/
 	return ptr;
 }
 
@@ -130,10 +130,22 @@ char *test_func() {
 	return test;
 }
 
+char *calloc_test() {
+    char *test;
+    test = calloc(50);
+	strcpy(test, "Calloc Success");
+    return test;
+}
+
 int main (int argc, char **argv) {
 	char *malloc_check = test_func();
 	printf("%s\n", malloc_check);
 	free(malloc_check);
+
+    //calloc
+    char *calloc_check = calloc_test();
+    printf("%s\n", calloc_check);
+    free(calloc_check);
 
 	char *never_allocated;
 	free(never_allocated);
@@ -150,6 +162,7 @@ int main (int argc, char **argv) {
 	char *too_much = malloc(10000);
 	char *way_too_much = malloc(1000000);
 	char *no_space = malloc(100003);
+
 	atexit(leak_detection);
 	return 0;
 }
